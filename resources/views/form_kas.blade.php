@@ -126,9 +126,6 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="{{url('/mutasi')}}" class="btn btn-info btn-sm" style="float:right;">
-                            <span class="text">Input Daftar Mutasi</span>
-                        </a>
                         </div>
                     
                         <div class="card-body" width="100%">
@@ -147,15 +144,6 @@
                                     <label for="kredit">Nominal :</label>
                                     <input type="number" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="mutasi">Mutasi :</label>
-                                    <select name="mutasi" id="mutasi" class="form-control">
-                                        <option value="">--</option>
-                                        @foreach ($rekening as $sumber)
-                                            <option value="{{$sumber->id}}">{{$sumber->nama_rekening}}</option>
-                                        @endforeach
-                                    </select>
-                                </div> 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             </div>

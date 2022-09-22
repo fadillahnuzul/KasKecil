@@ -198,11 +198,10 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
-                                            <th>Debit</th>
-                                            <th>Kredit</th>
-                                            <th>Riwayat Saldo</th>
-                                            <th>Mutasi</th>
-                                            <th>Aksi</th>
+                                            <th>Saldo Masuk</th>
+                                            <th>Status</th>
+                                            <th>Saldo Akhir</th>
+                                            <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -210,21 +209,10 @@
                                         <tr>
                                             <td>{{$row->tanggal}}</td>
                                             <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->debit)}}</td>
-                                            <td>Rp. {{number_format($row->kredit)}}</td>
+                                            <td>Rp. {{number_format($row->jumlah)}}</td>
+                                            <td>{{$row->Status->nama_status}}</td>
                                             <td>Rp. {{number_format($row->riwayat_saldo)}}</td>                            
-                                            <td>@if ($row->mutasi == NULL) 
-                                                -
-                                                @endif
-                                                @if ($row->mutasi != NULL)
-                                                    {{$row->rekening['nama_rekening']}}
-                                                @endif
-                                            </td>
-                                            <td><a href="/kas-edit/{{$row->id}}" class="btn btn-primary btn-circle btn-sm">
-                                                <i class="fas fa-pen"></i></a> 
-                                                <a onclick="return confirm('Apakah data akan dihapus?')" href="/kas-delete/{{$row->id}}" class="btn btn-danger btn-circle btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                                </a>
+                                            <td><a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                             </td>
                                         </tr>
                                         @endforeach 

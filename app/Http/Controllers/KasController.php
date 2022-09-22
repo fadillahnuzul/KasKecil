@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class KasController extends Controller
 {
+    public function index_admin(){
+        $divisi = Auth::user()->id;
+        $data_kas = Kas::with('rekening')->get();
+        return view ('main', ['dataKas' => $data_kas]);
+    }
+
     public function index(){
         $divisi = Auth::user()->id;
         $data_kas = Kas::with('rekening')->where('divisi_id', $divisi)->get();

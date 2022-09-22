@@ -157,10 +157,28 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Admin Kas Kecil</h1>
+                        <h1 class="h3 mb-2 text-gray-800">Kas Kecil</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div>
+                    <!-- Card Saldo -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Saldo</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format(Auth::user()->saldo)}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Saldo -->
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -179,35 +197,23 @@
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
-                                            <th>Divisi</th>
                                             <th>Keterangan</th>
-                                            <th>Pengajuan</th>
-                                            <th>Sumber Dana</th>
+                                            <th>Saldo Masuk</th>
                                             <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th>Saldo Akhir</th>
+                                            <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
                                             <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->Divisi->nama_divisi}}</td>
                                             <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>                           
-                                            <td>@if ($row->sumber == NULL) 
-                                                -
-                                                @endif
-                                                @if ($row->sumber != NULL)
-                                                    {{$row->Sumber->sumber_dana}}
-                                                @endif
+                                            <td>Rp. {{number_format($row->jumlah)}}</td>
+                                            <td>Rp. {{number_format($row->status)}}</td>
+                                            <td>Rp. {{number_format($row->riwayat_saldo)}}</td>                            
+                                            <td><a href="#" class="btn btn-primary btn-sm">Detail</a>
                                             </td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td><a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
-                                                Approve</a> 
-                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
-                                                Decline</a>
-                                            </td>
-                                            
                                         </tr>
                                         @endforeach 
                                     </tbody>

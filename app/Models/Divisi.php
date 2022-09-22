@@ -58,4 +58,8 @@ class Divisi extends Authenticatable
     {
         return $this->hasMany(Kas::class, 'divisi_id', 'id');
     }
+    public function pengajuan()
+    {
+        return $this->hasMany(Pengajuan::class, 'divisi_id', 'id');
+    }
 }

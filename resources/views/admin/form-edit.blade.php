@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Home</title>
+    <title>Persetujuan Pengajuan</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -20,6 +20,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
+
     
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
@@ -45,8 +46,8 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+             <!-- Nav Item - Dashboard -->
+             <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -89,46 +90,8 @@
                         </button>
                     </form>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
@@ -157,64 +120,49 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Admin Kas Kecil</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
+                        <h1 class="h3 mb-2 text-gray-800">Form Persetujuan</h1>
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="{{url('/pengajuan')}}" class="btn btn-success btn-icon-split">
-                            <span class="text">Buat Pengajuan</span>
-                        </a>
-                        <a href="{{url('/kas')}}" class="btn btn-warning btn-icon-split">
-                            <span class="text">Catat Kas</span>
+                        <a href="{{url('/sumber-dana')}}" class="btn btn-info btn-sm" style="float:right;">
+                            <span class="text">Input Daftar Sumber Dana</span>
                         </a>
                         </div>
-                        
-                        <div class="card-body">
+                    
+                        <div class="card-body" width="100%">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Tanggal</th>
-                                            <th>Divisi</th>
-                                            <th>Keterangan</th>
-                                            <th>Pengajuan</th>
-                                            <th>Sumber Dana</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($dataKas as $row)
-                                        <tr>
-                                            <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->Divisi->nama_divisi}}</td>
-                                            <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>                           
-                                            <td>@if ($row->sumber == NULL) 
-                                                -
-                                                @endif
-                                                @if ($row->sumber != NULL)
-                                                    {{$row->Sumber->sumber_dana}}
-                                                @endif
-                                            </td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td><a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
-                                                Approve</a> 
-                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
-                                                Decline</a>
-                                            </td>
-                                            
-                                        </tr>
-                                        @endforeach 
-                                    </tbody>
-                                </table>
+                            <form action="/setujui/{{$pengajuan->id}}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group">
+                                    <label for="tanggal">Tanggal :</label>
+                                    <input type="date" class="form-control" placeholder="Tanggal Pengajuan" id="tanggal" name="tanggal" value="{{$pengajuan->tanggal}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deskripsi">Keterangan :</label>
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" value="{{$pengajuan->deskripsi}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="debit">Jumlah Pengajuan :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Debit" id="jumlah" name="jumlah" value="{{$pengajuan->jumlah}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="mutasi">Sumber Dana :</label>
+                                    <select name="sumber" id="sumber" class="form-control">
+                                        <option value="">--</option>
+                                        @foreach ($sumber as $sumber)
+                                            <option value="{{$sumber->id}}">{{$sumber->sumber_dana}}</option>
+                                        @endforeach
+                                    </select>
+                                </div> 
+                                <button type="submit" class="btn btn-primary">Setujui</button>
+                                </form>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <!-- /.container-fluid -->
 

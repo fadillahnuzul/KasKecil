@@ -154,7 +154,7 @@
                         
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/simpan_kas" method="POST">
+                            <form action="/simpan_pengajuan" method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <label for="tanggal">Tanggal Pengajuan :</label>
@@ -165,8 +165,8 @@
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="debit">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" id="debit" name="debit" required>
+                                    <label for="jumlah">Nominal :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" id="jumlah" name="jumlah" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
