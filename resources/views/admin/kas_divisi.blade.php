@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pengajuan Dana</title>
+    <title>Kas Divisi</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -20,7 +20,6 @@
 
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
-
     
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
@@ -46,18 +45,20 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-             <!-- Nav Item - Dashboard -->
-             <li class="nav-item">
-                <a class="nav-link" href="{{url('/home')}}">
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="/home/admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            @foreach ($divisi as $divisi)
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/pengajuan')}}">
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>Pengajuan</span></a>
+                <a class="nav-link" href="kas_divisi/{{$divisi->id}}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>{{$divisi->nama_divisi}}</span></a>
             </li>
-            
+            @endforeach
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -84,6 +85,20 @@
                             <i class="fa fa-bars"></i>
                         </button>
                     </form>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -139,36 +154,70 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Form Pengajuan Dana</h1>
+                        <h1 class="h3 mb-2 text-gray-800">Admin Kas Kecil</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                    </div>
+                        </div>
                         
-                        <div class="card-body" width="100%">
+                        <div class="card-body">
                             <div class="table-responsive">
-                            <form action="/simpan_pengajuan" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="tanggal">Tanggal Pengajuan :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Pengajuan" id="tanggal" name="tanggal" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="jumlah">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" id="jumlah" name="jumlah" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Divisi</th>
+                                            <th>Keterangan</th>
+                                            <th>Pengajuan</th>
+                                            <th>Sumber Dana</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dataKas as $row)
+                                        <tr>
+                                            <td>{{$row->tanggal}}</td>
+                                            <td>{{$row->Divisi->nama_divisi}}</td>
+                                            <td>{{$row->deskripsi}}</td>
+                                            <td>Rp. {{number_format($row->jumlah)}}</td>                           
+                                            <td>@if ($row->sumber == NULL) 
+                                                -
+                                                @endif
+                                                @if ($row->sumber != NULL)
+                                                    {{$row->Sumber->sumber_dana}}
+                                                @endif
+                                            </td>
+                                            <td>{{$row->Status->nama_status}}</td>
+                                            <td>
+                                            @if ($row->Status->id == 1)
+                                                <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
+                                                Approve</a> 
+                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
+                                                Decline</a>
+                                            @endif
+                                            @if ($row->Status->id == 2 OR $row->Status->id == 4)
+                                                <a href="#" class="btn btn-primary btn-sm">
+                                                Detail</a> 
+                                                <a onclick="return confirm ('Apakah yakin transaksi telah selesai?')" href="/done/{{$row->id}}" class="btn btn-danger btn-sm">
+                                                Done</a>
+                                            @endif
+                                            @if ($row->Status->id == 5)
+                                                <a href="#" class="btn btn-primary btn-sm">
+                                                Detail</a> 
+                                            @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach 
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 

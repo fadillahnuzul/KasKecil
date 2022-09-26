@@ -47,20 +47,17 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/home')}}">
+                <a class="nav-link" href="/home/admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            @foreach ($divisi as $divisi)
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/pengajuan')}}">
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>Pengajuan</span></a>
+                <a class="nav-link" href="/kas_divisi/{{$divisi->id}}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>{{$divisi->nama_divisi}}</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/kas')}}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Catat Kas</span></a>
-            </li>
+            @endforeach
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -90,7 +87,7 @@
                     </form>
 
                     <!-- Topbar Search -->
-                    <form
+                    <!-- <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
@@ -101,7 +98,7 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -165,12 +162,6 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="{{url('/pengajuan')}}" class="btn btn-success btn-icon-split">
-                            <span class="text">Buat Pengajuan</span>
-                        </a>
-                        <a href="{{url('/kas')}}" class="btn btn-warning btn-icon-split">
-                            <span class="text">Catat Kas</span>
-                        </a>
                         </div>
                         
                         <div class="card-body">
@@ -202,12 +193,24 @@
                                                 @endif
                                             </td>
                                             <td>{{$row->Status->nama_status}}</td>
-                                            <td><a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
+                                            <td>
+                                            @if ($row->Status->id == 1)
+                                                <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
                                                 Approve</a> 
                                                 <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
                                                 Decline</a>
+                                            @endif
+                                            @if ($row->Status->id == 2 OR $row->Status->id == 4)
+                                                <a href="#" class="btn btn-primary btn-sm">
+                                                Detail</a> 
+                                                <a onclick="return confirm ('Apakah yakin transaksi telah selesai?')" href="/done/{{$row->id}}" class="btn btn-danger btn-sm">
+                                                Done</a>
+                                            @endif
+                                            @if ($row->Status->id == 5)
+                                                <a href="#" class="btn btn-primary btn-sm">
+                                                Detail</a> 
+                                            @endif
                                             </td>
-                                            
                                         </tr>
                                         @endforeach 
                                     </tbody>

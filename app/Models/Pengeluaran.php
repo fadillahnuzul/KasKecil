@@ -14,4 +14,14 @@ class Pengeluaran extends Model
     {
         return $this->belongsTo(Pengajuan::class, 'pemasukan', 'id');
     }
+
+    public function Divisi() 
+    {
+        return $this->belongsTo(Divisi::class, 'divisi_id', 'id');
+    }
+
+    public function Status() 
+    {
+        return $this->belongsTo(Status::class, 'status', 'id');
+    }
 }

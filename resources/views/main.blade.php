@@ -56,11 +56,6 @@
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/kas')}}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Catat Kas</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -90,7 +85,7 @@
                     </form>
 
                     <!-- Topbar Search -->
-                    <form
+                    <!-- <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
@@ -101,7 +96,7 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -186,9 +181,6 @@
                         <a href="{{url('/pengajuan')}}" class="btn btn-success btn-icon-split">
                             <span class="text">Buat Pengajuan</span>
                         </a>
-                        <a href="{{url('/kas')}}" class="btn btn-warning btn-icon-split">
-                            <span class="text">Catat Kas</span>
-                        </a>
                         </div>
                         
                         <div class="card-body">
@@ -200,7 +192,8 @@
                                             <th>Keterangan</th>
                                             <th>Saldo Masuk</th>
                                             <th>Status</th>
-                                            <th>Saldo Akhir</th>
+                                            <th>Total Belanja</th>
+                                            <th>Sisa</th>
                                             <th>Detail</th>
                                         </tr>
                                     </thead>
@@ -211,8 +204,12 @@
                                             <td>{{$row->deskripsi}}</td>
                                             <td>Rp. {{number_format($row->jumlah)}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
-                                            <td>Rp. {{number_format($row->riwayat_saldo)}}</td>                            
-                                            <td><a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                            @if ($row->Status->id != 1 AND $row->Status->id != 3)
+                                                <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
+                                            @endif
                                             </td>
                                         </tr>
                                         @endforeach 

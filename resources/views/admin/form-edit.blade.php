@@ -48,20 +48,12 @@
 
              <!-- Nav Item - Dashboard -->
              <li class="nav-item">
-                <a class="nav-link" href="{{url('/home')}}">
+                <a class="nav-link" href="/home/admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/pengajuan')}}">
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>Pengajuan</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/kas')}}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Catat Kas</span></a>
-            </li>
+            
+            
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

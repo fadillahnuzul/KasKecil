@@ -57,11 +57,6 @@
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/kas')}}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Catat Kas</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

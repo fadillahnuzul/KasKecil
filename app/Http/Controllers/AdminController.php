@@ -15,8 +15,9 @@ class AdminController extends Controller
 {
     public function index(){
         $data_kas = Pengajuan::with('Sumber','Divisi', 'Status')->get();
+        $divisi = Divisi::get();
     
-        return view('admin/main', ['dataKas' => $data_kas]);
+        return view('admin/main', ['dataKas' => $data_kas], ['divisi' => $divisi]);
     }
 
     public function acc(Request $request, $id)
@@ -29,15 +30,20 @@ class AdminController extends Controller
 
     public function setujui(Request $request, $id)
     {
-        $pengajuan = Pengajuan::findOrFail($id);
+        $pengajuan = Pengajuan::with('Divisi')->findOrFail($id);
 
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->deskripsi = $request->deskripsi;
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->jumlah = $request->jumlah;
         $pengajuan->sumber = $request->sumber;
-        $pengajuan->status = "2";
+        $pengajuan->status = "2";        
 
+        $saldo_awal = $pengajuan->Divisi->saldo;
+        $saldo_akhir = $saldo_awal + $request->jumlah;
+        $pengajuan->Divisi->saldo = $saldo_akhir;
+        
+        $pengajuan->Divisi->save();
         $pengajuan->save();
 
         return redirect('home/admin');
@@ -53,5 +59,26 @@ class AdminController extends Controller
         $pengajuan->save();
 
         return redirect('home/admin');
+    }
+
+    public function done($id)
+    {
+        $pengajuan = Pengajuan::with('Divisi')->findOrFail($id);
+        $pengajuan->status = "5";
+        $pengajuan->Divisi->saldo = 0;
+
+        $pengajuan->Divisi->save();
+        $pengajuan->save();
+        
+        return redirect('home/admin');
+    }
+
+    public function kas_divisi($id)
+    {
+        $data_kas = Pengajuan::with('Sumber','Divisi', 'Status')->where('divisi_id', $id)->get();
+        $divisi = Divisi::get();
+        session(['key' => $id]);
+
+        return view('admin/kas_divisi', ['dataKas' => $data_kas], ['divisi' => $divisi]);
     }
 }

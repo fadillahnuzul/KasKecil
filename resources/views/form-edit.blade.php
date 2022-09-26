@@ -57,11 +57,6 @@
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/kas')}}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Catat Kas</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -126,14 +121,11 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="{{url('/mutasi')}}" class="btn btn-info btn-sm" style="float:right;">
-                            <span class="text">Input Daftar Mutasi</span>
-                        </a>
                         </div>
                     
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/kas-update/{{$kas->id}}" method="POST">
+                            <form action="/kas_update/{{$kas->id}}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
@@ -145,21 +137,8 @@
                                     <input type="text" class="form-control" placeholder="Keterangan Kas" id="deskripsi" name="deskripsi" value="{{$kas->deskripsi}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="kredit">Kredit :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Kredit" id="kredit" name="kredit" value="{{$kas->kredit}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="debit">Debit :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Debit" id="debit" name="debit" value="{{$kas->debit}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="mutasi">Mutasi :</label>
-                                    <select name="mutasi" id="mutasi" class="form-control">
-                                        <option value="{{$kas->rekening->id}}">{{$kas->rekening->nama_rekening}}</option>
-                                        @foreach ($rekening as $mutasi)
-                                            <option value="{{$mutasi->id}}">{{$mutasi->nama_rekening}}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="jumlah">Kas Keluar :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="{{$kas->jumlah}}">
                                 </div> 
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
