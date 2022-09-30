@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\SumberController;
 
 
 /*
@@ -19,6 +20,20 @@ use App\Http\Controllers\PengeluaranController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [PengajuanController::class, 'index']);
+    Route::post('/simpan_pengajuan', [PengajuanController::class, 'save']);
+    Route::get('/home', [PengajuanController::class, 'index']);
+    Route::get('/pengajuan', [PengajuanController::class, 'create']);
+
+    Route::get('/detail_pengajuan/{id}', [PengeluaranController::class, 'index']);
+    Route::get('/hapus_kas_keluar/{id}', [PengeluaranController::class, 'delete']);
+    Route::get('/edit_kas_keluar/{id}', [PengeluaranController::class, 'edit']);
+    Route::put('/kas_update/{id}', [PengeluaranController::class, 'update']);
+    Route::get('/kas', [PengeluaranController::class, 'create']);
+    Route::post('/simpan_kas', [PengeluaranController::class, 'save']);
+    Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
+});
 Route::get('/', [KasController::class, 'index'])->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
@@ -40,17 +55,9 @@ Route::put('/setujui/{id}', [AdminController::class, 'setujui'])->middleware('au
 Route::get('/tolak/{id}', [AdminController::class, 'tolak'])->middleware('auth');
 Route::get('/done/{id}', [AdminController::class, 'done'])->middleware('auth');
 Route::get('/kas_divisi/{id}', [AdminController::class, 'kas_divisi'])->middleware('auth');
+Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi'])->middleware('auth');
 
-Route::get('/home', [PengajuanController::class, 'index'])->middleware('auth');
-Route::post('/simpan_pengajuan', [PengajuanController::class, 'save'])->middleware('auth');
-Route::get('/home', [PengajuanController::class, 'index'])->middleware('auth');
-Route::get('/pengajuan', [PengajuanController::class, 'create'])->middleware('auth');
+Route::post('/input_sumber', [SumberController::class, 'save']);
 
-Route::get('/detail_pengajuan/{id}', [PengeluaranController::class, 'index'])->middleware('auth');
-Route::get('/hapus_kas_keluar/{id}', [PengeluaranController::class, 'delete'])->middleware('auth');
-Route::get('/edit_kas_keluar/{id}', [PengeluaranController::class, 'edit'])->middleware('auth');
-Route::put('/kas_update/{id}', [PengeluaranController::class, 'update'])->middleware('auth');
-Route::get('/kas', [PengeluaranController::class, 'create'])->middleware('auth');
-Route::post('/simpan_kas', [PengeluaranController::class, 'save'])->middleware('auth');
-Route::post('/kas_selesai', [PengeluaranController::class, 'done'])->middleware('auth');
+
 

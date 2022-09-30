@@ -12,7 +12,7 @@ class Pengajuan extends Model
 
     public function pengeluaran()
     {
-        return $this->hasMany(Pengeluaran::class);
+        return $this->hasMany(Pengeluaran::class, 'pemasukan', 'id');
     }
 
     public function Sumber() 

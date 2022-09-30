@@ -8,6 +8,7 @@ use App\Models\Kas;
 use App\Models\Rekening;
 use App\Models\Divisi;
 use App\Models\Pengajuan;
+use App\Models\Pengeluaran;
 use App\Models\Sumber;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,8 +16,36 @@ class AdminController extends Controller
 {
     public function index(){
         $data_kas = Pengajuan::with('Sumber','Divisi', 'Status')->get();
-        $divisi = Divisi::get();
-    
+        $divisi = Divisi::where('role_id', '!=', '1')->get();
+       
+        // Status done otomatis
+        // foreach ($data_kas as $masuk) {
+        //     $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
+        //     if ($data_pengeluaran) {
+        //         $status = TRUE;
+        //         foreach ($data_pengeluaran as $keluar){
+        //             if ($keluar->status != 5) {
+        //                 $status = FALSE;
+        //             }
+        //         }
+        //         if ($status == TRUE) {
+        //             $masuk->status = "5";
+        //             $masuk->save();
+        //         }
+        //     }
+        // }
+
+        // Perhitungan sisa dan total belanja
+        foreach ($data_kas as $masuk) {
+            $total = 0;
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
+            foreach ($data_pengeluaran as $keluar){
+                $total = $total + $keluar->jumlah;
+            }
+            $masuk->total_belanja = $total;
+            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
+        }
+
         return view('admin/main', ['dataKas' => $data_kas], ['divisi' => $divisi]);
     }
 
@@ -63,22 +92,39 @@ class AdminController extends Controller
 
     public function done($id)
     {
-        $pengajuan = Pengajuan::with('Divisi')->findOrFail($id);
-        $pengajuan->status = "5";
-        $pengajuan->Divisi->saldo = 0;
-
-        $pengajuan->Divisi->save();
-        $pengajuan->save();
+        $pengeluaran = Pengeluaran::with('Divisi', 'pengajuan')->findOrFail($id);
+        $pengeluaran->status = 5;
         
-        return redirect('home/admin');
+        $pengeluaran->save();
+
+        $pengeluaran2 = Pengeluaran::with('pengajuan')->where('pemasukan',$pengeluaran->pemasukan)->get();
+        $count_pengeluaran = $pengeluaran2->filter(function($item, $key){
+            return $item->status == 5;
+        });
+
+        if (count($count_pengeluaran) == count($pengeluaran2)) {
+            $pengeluaran->pengajuan->status = 5;
+            $pengeluaran->pengajuan->save();
+        }
+        
+
+        return back();
     }
 
     public function kas_divisi($id)
     {
         $data_kas = Pengajuan::with('Sumber','Divisi', 'Status')->where('divisi_id', $id)->get();
-        $divisi = Divisi::get();
+        $divisi = Divisi::where('role_id', '!=', '1')->get();
         session(['key' => $id]);
 
-        return view('admin/kas_divisi', ['dataKas' => $data_kas], ['divisi' => $divisi]);
+        return view('admin/main', ['dataKas' => $data_kas], ['divisi' => $divisi]);
+    }
+
+    public function detail_divisi($id)
+    {
+        $kas = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->get();
+        session(['key' => $id]);
+        
+        return view ('admin/detail_pengajuan', ['dataKas' => $kas]);
     }
 }

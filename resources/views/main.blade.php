@@ -153,8 +153,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">Kas Kecil</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
+                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
                     </div>
                     <!-- Card Saldo -->
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -188,6 +188,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>No.</th>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
                                             <th>Saldo Masuk</th>
@@ -198,20 +199,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
+                                            <td>{{$no}}</td>
                                             <td>{{$row->tanggal}}</td>
                                             <td>{{$row->deskripsi}}</td>
                                             <td>Rp. {{number_format($row->jumlah)}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Rp. {{number_format($row->total_belanja)}}</td>
+                                            <td>Rp. {{number_format($row->sisa)}}</td>
                                             <td>
-                                            @if ($row->Status->id != 1 AND $row->Status->id != 3)
+                                            @if ($row->Status->id != 1 AND $row->Status->id != 3 AND $row->Status->id != 5)
+                                                <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
+                                                <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-warning btn-sm">Buat Kas</a>
+                                            @endif
+                                            @if ($row->Status->id == 5)
                                                 <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                             @endif
                                             </td>
                                         </tr>
+                                        <?php $no++ ;?>
                                         @endforeach 
                                     </tbody>
                                 </table>

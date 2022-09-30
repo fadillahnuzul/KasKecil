@@ -118,7 +118,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="{{url('/sumber-dana')}}" class="btn btn-info btn-sm" style="float:right;">
+                        <a  data-toggle="modal" data-target="#SumberModal" class="btn btn-info btn-sm" style="float:right;">
                             <span class="text">Input Daftar Sumber Dana</span>
                         </a>
                         </div>
@@ -201,7 +201,32 @@
             </div>
         </div>
     </div>
-
+    <!-- Done Modal -->
+    <div class="modal fade" id="SumberModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Form Sumber</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form action="/input_sumber" method="POST">
+                    @csrf
+                        <div class="form-group">
+                            <label for="sumber">Input sumber :</label>
+                            <input type="text" class="form-control" placeholder="Input nama sumber" id="sumber" name="sumber" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div> 
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

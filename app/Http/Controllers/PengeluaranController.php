@@ -40,7 +40,7 @@ class PengeluaranController extends Controller
 
         $kas->save();
         
-        return back();
+        return redirect ('home');
     }
 
     public function edit(Request $request, $id)
@@ -52,20 +52,21 @@ class PengeluaranController extends Controller
 
     public function update(Request $request, $id)
     {
-        $kas = Pengeluaran::with('pengajuan')->findOrFail($id);
+        $kas = Pengeluaran::with('pengajuan', 'Divisi')->findOrFail($id);
 
         $kas_awal = $kas->jumlah;
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
         $kas->jumlah = $request->jumlah;
 
-        $saldo_awal = Auth::user()->saldo;
+        $saldo_awal = $kas->Divisi->saldo;
         $saldo_akhir = $saldo_awal + $kas_awal - $kas->jumlah;
-        Auth::user()->saldo = $saldo_akhir;
+        $kas->Divisi->saldo = $saldo_akhir;
 
+        $kas->Divisi->save();
         $kas->save();
 
-        return back();
+        return redirect ('home');
     }
 
     public function delete($id)
@@ -83,12 +84,15 @@ class PengeluaranController extends Controller
     public function done(Request $request)
     {
         $pengeluaran = Pengeluaran::with('pengajuan')->findOrFail($request->modal_id);
-        $pengeluaran->status = "5";
+        $pengeluaran->status = "4";
         $pengeluaran->pengajuan->status = "4";
         $pengeluaran->tanggal_respon = $request->tanggal;
+        
 
         $pengeluaran->pengajuan->save();
         $pengeluaran->save();
+
+
         
         return back();
     }

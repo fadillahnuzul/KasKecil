@@ -51,13 +51,6 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            @foreach ($divisi as $divisi)
-            <li class="nav-item">
-                <a class="nav-link" href="/kas_divisi/{{$divisi->id}}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>{{$divisi->nama_divisi}}</span></a>
-            </li>
-            @endforeach
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -155,13 +148,27 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">Admin Kas Kecil</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
+                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
+                        <!-- Dropdown Divisi -->
+                        <div class="dropdown" style="float:right;">
+                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Pilih Divisi
+                            </button>
+                            
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/home/admin">All</a>
+                            @foreach ($divisi as $divisi)
+                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->nama_divisi}}</a>
+                            @endforeach
+                            </div>
+                        </div>
+                        <!-- End Dropdown Divisi -->
                         </div>
                         
                         <div class="card-body">
@@ -169,18 +176,23 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>No.</th>
                                             <th>Tanggal</th>
                                             <th>Divisi</th>
                                             <th>Keterangan</th>
                                             <th>Pengajuan</th>
                                             <th>Sumber Dana</th>
+                                            <th>Total Belanja</th>
+                                            <th>Sisa</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
+                                            <td>{{$no}}</td>
                                             <td>{{$row->tanggal}}</td>
                                             <td>{{$row->Divisi->nama_divisi}}</td>
                                             <td>{{$row->deskripsi}}</td>
@@ -192,6 +204,8 @@
                                                     {{$row->Sumber->sumber_dana}}
                                                 @endif
                                             </td>
+                                            <td>Rp. {{number_format($row->total_belanja)}}</td>
+                                            <td>Rp. {{number_format($row->sisa)}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>
                                             @if ($row->Status->id == 1)
@@ -200,18 +214,13 @@
                                                 <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
                                                 Decline</a>
                                             @endif
-                                            @if ($row->Status->id == 2 OR $row->Status->id == 4)
-                                                <a href="#" class="btn btn-primary btn-sm">
-                                                Detail</a> 
-                                                <a onclick="return confirm ('Apakah yakin transaksi telah selesai?')" href="/done/{{$row->id}}" class="btn btn-danger btn-sm">
-                                                Done</a>
-                                            @endif
-                                            @if ($row->Status->id == 5)
-                                                <a href="#" class="btn btn-primary btn-sm">
+                                            @if ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
+                                                <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">
                                                 Detail</a> 
                                             @endif
                                             </td>
                                         </tr>
+                                        <?php $no++ ;?>
                                         @endforeach 
                                     </tbody>
                                 </table>

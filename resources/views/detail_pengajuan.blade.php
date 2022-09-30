@@ -202,15 +202,16 @@
                                         <tr>
                                         <td>{{$row->tanggal}}</td>
                                         <td>{{$row->deskripsi}}</td>
-                                        <td>{{$row->pengajuan->jumlah}}</td>
-                                        <td>{{$row->jumlah}}</td>
+                                        <td>Rp. {{number_format($row->pengajuan->jumlah)}}</td>
+                                        <td>Rp. {{number_format($row->jumlah)}}</td>
                                         <td>{{$row->Status->nama_status}}</td>
                                         <td>{{$row->tanggal_respon}}</td>
-                                        <td><a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
-                                                Edit</a> 
+                                        <td> 
+                                                @if ($row->status != 5)
+                                                <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
+                                                Edit</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">
                                                 Hapus</a>
-                                                @if ($row->status != 5)
                                                 <a onclick="set_modal_id({{$row->id}})" data-toggle="modal" data-target="#DoneModal" class="btn btn-success btn-sm" data-id="{{ $row->id }}">
                                                 Selesai</a>
                                                 @endif

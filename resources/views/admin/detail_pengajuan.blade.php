@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pencatatan Kas</title>
+    <title>Home</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -20,7 +20,6 @@
 
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
-
     
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
@@ -46,19 +45,12 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-             <!-- Nav Item - Dashboard -->
-             <li class="nav-item">
-                <a class="nav-link" href="/home/admin">
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{url('/home/admin')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            @foreach ($divisi as $divisi)
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/kas')}}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>{{$divisi->nama_divisi}}</span></a>
-            </li>
-            @endforeach
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -87,8 +79,46 @@
                         </button>
                     </form>
 
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
@@ -117,48 +147,55 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Form Pencatatan Kas</h1>
+                        <h1 class="h3 mb-2 text-gray-800">Detail Pengeluaran</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a href="{{url('/mutasi')}}" class="btn btn-info btn-sm" style="float:right;">
-                            <span class="text">Input Daftar Mutasi</span>
-                        </a>
                         </div>
-                    
-                        <div class="card-body" width="100%">
+                        
+                        <div class="card-body">
                             <div class="table-responsive">
-                            <form action="/simpan_kas" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="tanggal">Tanggal Pengeluaran :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="kredit">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="mutasi">Mutasi :</label>
-                                    <select name="mutasi" id="mutasi" class="form-control">
-                                        <option value="">--</option>
-                                        @foreach ($rekening as $sumber)
-                                            <option value="{{$sumber->id}}">{{$sumber->nama_rekening}}</option>
-                                        @endforeach
-                                    </select>
-                                </div> 
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal Transaksi</th>
+                                            <th>Keterangan</th>
+                                            <th>Saldo Masuk</th>
+                                            <th>Kas Keluar</th>
+                                            <th>Status</th>
+                                            <th>Tanggal Respon</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dataKas as $row)
+                                        <tr>
+                                        <td>{{$row->tanggal}}</td>
+                                        <td>{{$row->deskripsi}}</td>
+                                        <td>Rp. {{number_format($row->pengajuan->jumlah)}}</td>
+                                        <td>Rp. {{number_format($row->jumlah)}}</td>
+                                        <td>{{$row->Status->nama_status}}</td>
+                                        <td>{{$row->tanggal_respon}}</td>
+                                        <td>
+                                        @if ($row->status == 4)
+                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
+                                        @endif
+                                        @if ($row->status == 5)
+                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="" class="btn btn-primary btn-sm">Edit</a>
+                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="" class="btn btn-danger btn-sm">Batal</a>  
+                                        @endif 
+                                        </td>
+                                        </tr>
+                                        @endforeach 
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 
@@ -200,11 +237,42 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Done Modal -->
+    <div class="modal fade" id="DoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Inputkan tanggal penyerahan nota</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form action="/kas_selesai" method="POST">
+                    @csrf
+                    <input type="hidden" name="modal_id" id="modal_id">
+                        <div class="form-group">
+                            <label for="tanggal">Tanggal Serah Nota :</label>
+                                <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal" name="tanggal" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div> 
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>function set_modal_id(id) {
+        document.getElementById("modal_id").value = id;
+    } </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>

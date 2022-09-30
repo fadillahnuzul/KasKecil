@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('sumber', function (Blueprint $table) {
             $table->id();
             $table->string('sumber_dana');
+            $table->timestamps();
         });
     }
 
