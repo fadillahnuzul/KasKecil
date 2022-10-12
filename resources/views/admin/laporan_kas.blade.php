@@ -57,7 +57,7 @@
                     <span>Buat Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/home">
+                <a class="nav-link" href="/#">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Pengajuan Admin</span></a>
             </li>
@@ -71,6 +71,7 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -165,167 +166,65 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-2 text-gray-800">Detail Pengeluaran</h1>
                         <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
-                </div>
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            @if ($laporan == FALSE)
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format(Auth::user()->saldo)}}</div>
-                                            @endif
-                                            @if ($laporan == TRUE)
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Total Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan)}}</div>
-                                            @endif
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Saldo -->
-                        
-                        <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            @if ($laporan == FALSE AND $admin != NULL)
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai)}}</div>
-                                            @elseif ($laporan == FALSE)
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
-                                            @elseif ($laporan == TRUE)
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Dipakai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran)}}</div>
-                                            @endif
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Tunai -->
-                        <!-- Card Bank -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            @if ($laporan == FALSE AND $admin != NULL)
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->bank)}}</div>
-                                            @elseif ($laporan == FALSE)
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
-                                            @elseif ($laporan == TRUE)
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Sisa</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa)}}</div>
-                                            @endif
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Bank -->
-                    
+                    </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <!-- Dropdown Divisi -->
                         <div class="dropdown" style="float:right;">
                             <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Pilih Divisi
+                                Pilih Kategori
                             </button>
                             
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/home_admin">All</a>
-                            @foreach ($divisi as $divisi)
-                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->nama_divisi}}</a>
+                                <a class="dropdown-item" href="/admin_laporan_kas_keluar">All</a>
+                            @foreach ($kategori as $kategori)
+                                <a class="dropdown-item" href="/admin_kas_kategori/{{$kategori->id}}">{{$kategori->nama_kategori}}</a>
                             @endforeach
                             </div>
                         </div>
                         <!-- End Dropdown Divisi -->
-                        @include('sweetalert::alert')
                         </div>
-                        
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Kode</th>
                                             <th>Tanggal</th>
-                                            <th>Divisi</th>
                                             <th>Keterangan</th>
-                                            <th>Pengajuan</th>
-                                            <th>Sumber Dana</th>
-                                            <th>Total Belanja</th>
-                                            <th>Sisa</th>
+                                            <th>Kode Pengajuan</th>
+                                            <th>Kas Keluar</th>
+                                            <th>Kategori</th>
                                             <th>Status</th>
+                                            <th>Tanggal Respon</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td>{{$row->kode}}</td>
-                                            <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->Divisi->nama_divisi}}</td>
-                                            <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>                           
-                                            <td>@if ($row->sumber == NULL) 
-                                                -
-                                                @endif
-                                                @if ($row->sumber != NULL)
-                                                    {{$row->Sumber->sumber_dana}}
-                                                @endif
-                                            </td>
-                                            <td>Rp. {{number_format($row->total_belanja)}}</td>
-                                            <td>Rp. {{number_format($row->sisa)}}</td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td>
-                                            <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
-                                            @if ($row->Status->id == 1)
-                                                <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
-                                                Approve</a> 
-                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
-                                                Decline</a>
-                                            @endif
-                                            @if ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
-                                                
-                                                <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
-                                            @endif
-                                            </td>
+                                        <td>{{$row->tanggal}}</td>
+                                        <td>{{$row->deskripsi}}</td>
+                                        <td>{{$row->pengajuan->kode}}</td>
+                                        <td>Rp. {{number_format($row->jumlah)}}</td>
+                                        <td>{{$row->Kategori->nama_kategori}}</td>
+                                        <td>{{$row->Status->nama_status}}</td>
+                                        <td>{{$row->tanggal_respon}}</td>
+                                        <td>
+                                        @if ($row->status == 4)
+                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
+                                        @endif
+                                        @if ($row->status == 5)
+                                            <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
+                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-danger btn-sm">Batal</a>  
+                                        @endif 
+                                        </td>
                                         </tr>
-                                        <?php $no++ ;?>
                                         @endforeach 
                                     </tbody>
                                 </table>
@@ -378,6 +277,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Done Modal -->
+    <div class="modal fade" id="DoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Inputkan tanggal penyerahan nota</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form action="/kas_selesai" method="POST">
+                    @csrf
+                    <input type="hidden" name="modal_id" id="modal_id">
+                        <div class="form-group">
+                            <label for="tanggal">Tanggal Serah Nota :</label>
+                                <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal" name="tanggal" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div> 
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>function set_modal_id(id) {
+        document.getElementById("modal_id").value = id;
+    } </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>

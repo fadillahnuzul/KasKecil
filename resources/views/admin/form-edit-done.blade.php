@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pencatatan Kas</title>
+    <title>Edit Pengajuan</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -47,7 +47,6 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
-             @if (Auth::user()->role_id==1)
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -56,10 +55,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Pengajuan Dana</span></a>
+                    <span>Buat Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/home">
+                <a class="nav-link" href="/#">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Pengajuan Admin</span></a>
             </li>
@@ -73,29 +72,9 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
-             @endif
-             @if (Auth::user()->role_id!=1)
-             <li class="nav-item">
-                <a class="nav-link" href="{{url('/home')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('/pengajuan')}}">
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>Pengajuan</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/laporan">
-                    <i class="fas fa-fw fa-book"></i>
-                    <span>Laporan Pengajuan</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/laporan_kas_keluar">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Laporan Kas Keluar</span></a>
-            </li>
-            @endif
+
+            
+            
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -154,66 +133,37 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Form Pencatatan Kas</h1>
+                        <h1 class="h3 mb-2 text-gray-800">Form Persetujuan</h1>
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a  data-toggle="modal" data-target="#PembebananModal" class="btn btn-info btn-sm" style="float:right;">
-                            <span class="text">Input Pembebanan Baru</span>
-                        </a>
-                        @include('sweetalert::alert')
                         </div>
                     
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/simpan_kas" method="POST">
+                            <form action="/simpan_done/{{$pengeluaran->id}}" method="POST">
                                 @csrf
+                                @method('PUT')
                                 <div class="form-group">
-                                    <label for="tanggal">Tanggal Pengeluaran :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
+                                    <label for="tanggal">Tanggal :</label>
+                                    <input type="date" class="form-control" placeholder="Tanggal Pengajuan" id="tanggal" name="tanggal" value="{{$pengeluaran->tanggal}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
-                                </div>
-                                @if (Auth::user()->role_id == 1)
-                                <div class="form-group">
-                                    <label for="tunai">Pengeluaran Tunai :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran Bentuk Tunai" id="tunai" name="tunai">
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" value="{{$pengeluaran->deskripsi}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="bank">Pengeluaran Bank :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran Bentuk Saldo Bank" id="bank" name="bank">
-                                </div>
-                                @endif
-                                @if (Auth::user()->role_id != 1)
-                                <div class="form-group">
-                                    <label for="kredit">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
+                                    <label for="debit">Jumlah Pengeluaran :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran" id="jumlah" name="jumlah" value="{{$pengeluaran->jumlah}}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="kategori">Kategori :</label>
-                                    <select name="kategori" id="kategori" class="form-control">
-                                        <option value="">--</option>
-                                        @foreach ($kategori as $kategori)
-                                            <option value="{{$kategori->id}}">{{$kategori->nama_kategori}}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="tanggal_respon">Tanggal Penyerahan Nota :</label>
+                                    <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal_respon" name="tanggal_respon" value="{{$pengeluaran->tanggal_respon}}" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="pembebanan">Pembebanan :</label>
-                                    <select name="pembebanan" id="pembebanan" class="form-control">
-                                        <option value="">--</option>
-                                        @foreach ($pembebanan as $pembebanan)
-                                            <option value="{{$pembebanan->id}}">{{$pembebanan->nama_pembebanan}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @endif 
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -264,24 +214,23 @@
             </div>
         </div>
     </div>
-
     <!-- Done Modal -->
-    <div class="modal fade" id="PembebananModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="SumberModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Form Pembebanan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Form Sumber</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                <form action="/input_pembebanan" method="POST">
+                <form action="/input_sumber" method="POST">
                     @csrf
                         <div class="form-group">
-                            <label for="pembebanan">Input Pembebanan :</label>
-                            <input type="text" class="form-control" placeholder="Input nama pembebanan" id="pembebanan" name="pembebanan" required>
+                            <label for="sumber">Input sumber :</label>
+                            <input type="text" class="form-control" placeholder="Input nama sumber" id="sumber" name="sumber" required>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -291,7 +240,6 @@
             </div>
         </div>
     </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

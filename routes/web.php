@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\SumberController;
+use App\Http\Controllers\PembebananController;
 
 
 /*
@@ -22,6 +23,7 @@ use App\Http\Controllers\SumberController;
 */
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [PengajuanController::class, 'index']);
+    Route::get('/laporan', [PengajuanController::class, 'laporan']);
     Route::post('/simpan_pengajuan', [PengajuanController::class, 'save']);
     Route::get('/home', [PengajuanController::class, 'index']);
     Route::get('/pengajuan', [PengajuanController::class, 'create']);
@@ -33,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kas', [PengeluaranController::class, 'create']);
     Route::post('/simpan_kas', [PengeluaranController::class, 'save']);
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
+    Route::get('/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
 });
 Route::get('/', [KasController::class, 'index'])->middleware('auth');
 
@@ -49,15 +52,25 @@ Route::get('/rekening', [RekeningController::class, 'index'])->middleware('auth'
 // Route::get('/kas-delete/{id}', [KasController::class, 'delete'])->middleware('auth', 'admin');
 // Route::post('/simpan_kas', [KasController::class, 'save'])->middleware('auth');
 
-Route::get('/home/admin', [AdminController::class, 'index'])->middleware('auth');
+//Halaman admin
+Route::get('/home_admin', [AdminController::class, 'index'])->middleware('auth');
 Route::get('/acc/{id}', [AdminController::class, 'acc'])->middleware('auth');
 Route::put('/setujui/{id}', [AdminController::class, 'setujui'])->middleware('auth');
 Route::get('/tolak/{id}', [AdminController::class, 'tolak'])->middleware('auth');
 Route::get('/done/{id}', [AdminController::class, 'done'])->middleware('auth');
 Route::get('/kas_divisi/{id}', [AdminController::class, 'kas_divisi'])->middleware('auth');
 Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi'])->middleware('auth');
+Route::get('/admin_laporan', [AdminController::class, 'laporan'])->middleware('auth');
+Route::get('/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar'])->middleware('auth');
+Route::get('/admin_kas_kategori/{id}', [AdminController::class, 'kategori'])->middleware('auth');
+Route::get('/edit_done/{id}', [AdminController::class, 'edit_done'])->middleware('auth');
+Route::get('/edit_admin/{id}', [AdminController::class, 'edit'])->middleware('auth');
+Route::put('/simpan_done/{id}', [AdminController::class, 'simpan_done'])->middleware('auth');
+Route::put('/update/{id}', [AdminController::class, 'update'])->middleware('auth');
+Route::get('/batal_done/{id}', [AdminController::class, 'batal_done'])->middleware('auth');
 
 Route::post('/input_sumber', [SumberController::class, 'save']);
+Route::post('/input_pembebanan', [PembebananController::class, 'save']);
 
 
 

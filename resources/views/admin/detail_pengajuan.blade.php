@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Home</title>
+    <title>Detail Pengeluaran</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -47,10 +47,31 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="{{url('/home/admin')}}">
+                <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pengajuan">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Buat Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Pengajuan Admin</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -148,15 +169,15 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">Detail Pengeluaran</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
+                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
+                            <h5 style="float:right;">Kode Pengajuan : {{$pengajuan->kode}}</h5>
                         </div>
-                        
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -185,8 +206,8 @@
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
                                         @endif
                                         @if ($row->status == 5)
-                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="" class="btn btn-danger btn-sm">Batal</a>  
+                                            <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
+                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-danger btn-sm">Batal</a>  
                                         @endif 
                                         </td>
                                         </tr>
@@ -206,7 +227,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
                     </div>
                 </div>
             </footer>

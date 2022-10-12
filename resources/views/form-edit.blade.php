@@ -47,6 +47,34 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
+             @if (Auth::user()->role_id==1)
+             <li class="nav-item">
+                <a class="nav-link" href="/home_admin">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pengajuan">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Pengajuan Dana</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/home">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Pengajuan Admin</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+             @endif
+             @if (Auth::user()->role_id!=1)
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -57,6 +85,17 @@
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+            @endif
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -156,7 +195,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
                     </div>
                 </div>
             </footer>

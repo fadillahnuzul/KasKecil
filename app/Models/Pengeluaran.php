@@ -24,4 +24,14 @@ class Pengeluaran extends Model
     {
         return $this->belongsTo(Status::class, 'status', 'id');
     }
+
+    public function Kategori() 
+    {
+        return $this->belongsTo(Kategori::class, 'kategori', 'id');
+    }
+
+    public function Pembebanan() 
+    {
+        return $this->belongsTo(Pembebanan::class, 'pembebanan', 'id');
+    }
 }

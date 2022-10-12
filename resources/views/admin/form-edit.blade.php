@@ -48,10 +48,31 @@
 
              <!-- Nav Item - Dashboard -->
              <li class="nav-item">
-                <a class="nav-link" href="/home/admin">
+                <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pengajuan">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Buat Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Pengajuan Admin</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+
             
             
 
@@ -110,6 +131,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                @include('sweetalert::alert')
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">Form Persetujuan</h1>
@@ -125,7 +147,12 @@
                     
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
+                            @if ($edit == FALSE)
                             <form action="/setujui/{{$pengajuan->id}}" method="POST">
+                            @endif
+                            @if ($edit == TRUE)
+                            <form action="/update/{{$pengajuan->id}}" method="POST">
+                            @endif
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
@@ -136,9 +163,20 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" value="{{$pengajuan->deskripsi}}" required>
                                 </div>
+                                @if ($pengajuan->Divisi->role_id == 1)
                                 <div class="form-group">
-                                    <label for="debit">Jumlah Pengajuan :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Debit" id="jumlah" name="jumlah" value="{{$pengajuan->jumlah}}">
+                                    <label for="tunai">Pengajuan Tunai :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Tunai" id="tunai" name="tunai" value="{{$pengajuan->tunai}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bank">Pengajuan Bank :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Saldo Bank" id="bank" name="bank" value="{{$pengajuan->bank}}" required>
+                                </div>
+                                @endif
+                                @if ($pengajuan->Divisi->role_id != 1)
+                                <div class="form-group">
+                                    <label for="jumlah">Nominal :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="{{$pengajuan->jumlah}}" required />
                                 </div>
                                 <div class="form-group">
                                     <label for="mutasi">Sumber Dana :</label>
@@ -148,8 +186,14 @@
                                             <option value="{{$sumber->id}}">{{$sumber->sumber_dana}}</option>
                                         @endforeach
                                     </select>
-                                </div> 
+                                </div>
+                                @endif 
+                                @if ($edit == FALSE) 
                                 <button type="submit" class="btn btn-primary">Setujui</button>
+                                @endif
+                                @if ($edit == TRUE)
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                @endif
                                 </form>
                             </div>
                         </div>
@@ -165,7 +209,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
                     </div>
                 </div>
             </footer>

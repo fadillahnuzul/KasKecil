@@ -4,11 +4,30 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Alfa6661\AutoNumber\AutoNumberTrait;
 
 class Pengajuan extends Model
 {
     use HasFactory;
     protected $table = 'pengajuan';
+    use AutoNumberTrait;
+    
+    /**
+     * Return the autonumber configuration array for this model.
+     *
+     * @return array
+     */
+    public function getAutoNumberOptions()
+    {
+        return [
+            'kode' => [
+                'format' => function () {
+                    return 'PKK' . '/' . $this->divisi . '/?'; 
+                }, // Format kode yang akan digunakan.
+                'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
+            ]
+        ];
+    }
 
     public function pengeluaran()
     {
@@ -29,4 +48,6 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(Status::class, 'status', 'id');
     }
+
+
 }

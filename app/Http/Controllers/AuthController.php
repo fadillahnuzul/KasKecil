@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         if (Auth::guard('divisi')->attempt(['nama_divisi' => $request->divisi, 'password' => $request->password])) {
             if (Auth::user()->role_id == 1) {
-                return redirect('/home/admin');
+                return redirect('/home_admin');
             } else {
                 return redirect('/home');
             }

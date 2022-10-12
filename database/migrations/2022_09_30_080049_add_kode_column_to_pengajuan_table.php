@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rekening', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_rekening');
+        Schema::table('pengajuan', function (Blueprint $table) {
+            $table->string('kode')->nullable();
+            $table->string('divisi')->nullable();
         });
     }
 
@@ -26,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rekening');
+        Schema::table('pengajuan', function (Blueprint $table) {
+            $table->dropColumn('kode', 'divisi');
+        });
     }
 };

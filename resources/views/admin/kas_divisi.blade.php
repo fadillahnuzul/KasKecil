@@ -51,13 +51,11 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            @foreach ($divisi as $divisi)
             <li class="nav-item">
-                <a class="nav-link" href="kas_divisi/{{$divisi->id}}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>{{$divisi->nama_divisi}}</span></a>
+                <a class="nav-link" href="/admin/laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan</span></a>
             </li>
-            @endforeach
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -228,7 +226,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
                     </div>
                 </div>
             </footer>

@@ -47,6 +47,34 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
+             @if (Auth::user()->role_id==1)
+             <li class="nav-item">
+                <a class="nav-link" href="/home_admin">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pengajuan">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Pengajuan Dana</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/home">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Pengajuan Admin</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+             @endif
+             @if (Auth::user()->role_id!=1)
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -57,7 +85,17 @@
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan</span></a>
             </li>
-            
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+            @endif
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -159,10 +197,23 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" required>
                                 </div>
+                                @if (Auth::user()->role_id == 1)
+                                <div class="form-group">
+                                    <label for="tunai">Pengajuan Tunai :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Tunai" id="tunai" name="tunai" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bank">Pengajuan Bank :</label>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Saldo Bank" id="bank" name="bank" required>
+                                </div>
+                                @endif
+                                @if (Auth::user()->role_id != 1)
                                 <div class="form-group">
                                     <label for="jumlah">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" id="jumlah" name="jumlah" required>
+                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" required 
+                                    onkeyup="document.getElementById('format2').innerHTML = formatCurrency(this.value);"/>
                                 </div>
+                                @endif
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             </div>
@@ -179,7 +230,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
                     </div>
                 </div>
             </footer>
@@ -215,6 +266,7 @@
             </div>
         </div>
     </div>
+    
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
@@ -232,7 +284,22 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
+    <script type="text/javascript">
+        function formatCurrency(jumlah) {
+            jumlah = jumlah.toString().replace(/\$|\,/g,'');
+            if(isNaN(jumlah))
+            jumlah = "0";
+            sign = (jumlah == (jumlah = Math.abs(jumlah)));
+            jumlah = Math.floor(jumlah*100+0,50000000001);
+            cents = jumlah%100;
+            jumlah = Math.floor(jumlah/100).toString();
+            if(cents<10)
+            cents = "0" + cents;
+            for (var i=0; i < Math.floor((jumlah.length-(1+i))/3); i++)
+            jumlah = jumlah.substring(0,jumlah.length-(4*i+3))+'.'+jumlah.substring(jumlah.length-(4*i+3));
+            return (((sign)?'':'-') + 'Rp.' + jumlah + ',' + cents)
+        }
+    </script>
 </body>
 
 </html>

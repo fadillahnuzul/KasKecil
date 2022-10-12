@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Home</title>
+    <title>{{$title}}</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -46,7 +46,35 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
+            @if (Auth::user()->role_id==1)
+             <li class="nav-item">
+                <a class="nav-link" href="/home_admin">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
             <li class="nav-item">
+                <a class="nav-link" href="/pengajuan">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Pengajuan Dana</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/home">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Pengajuan Admin</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+             @endif
+             @if (Auth::user()->role_id!=1)
+             <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -56,6 +84,17 @@
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Laporan Pengajuan</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan_kas_keluar">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Laporan Kas Keluar</span></a>
+            </li>
+            @endif
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -152,17 +191,18 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Kas Kecil</h1>
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
                         <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
                     </div>
                     <!-- Card Saldo -->
+                    <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format(Auth::user()->saldo)}}</div>
                                         </div>
@@ -174,13 +214,65 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                    
+                        @if (Auth::user()->role_id==1)
+                        <!-- Card Tunai -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            @if ($admin != NULL)
+                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
+                                                Tunai</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai)}}</div>
+                                            @else
+                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
+                                                Tunai</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
+                                            @endif
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Tunai -->
+                        <!-- Card Bank -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            @if ($admin != NULL)
+                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
+                                                Bank</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->bank)}}</div>
+                                            @else
+                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
+                                                Bank</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
+                                            @endif
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Bank -->
+                        @endif
+                        </div>
+                        
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         <a href="{{url('/pengajuan')}}" class="btn btn-success btn-icon-split">
                             <span class="text">Buat Pengajuan</span>
                         </a>
+                        @include('sweetalert::alert')
                         </div>
                         
                         <div class="card-body">
@@ -188,7 +280,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
+                                            <th>Kode</th>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
                                             <th>Saldo Masuk</th>
@@ -202,7 +294,7 @@
                                     <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td>{{$no}}</td>
+                                            <td>{{$row->kode}}</td>
                                             <td>{{$row->tanggal}}</td>
                                             <td>{{$row->deskripsi}}</td>
                                             <td>Rp. {{number_format($row->jumlah)}}</td>
@@ -236,7 +328,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
                     </div>
                 </div>
             </footer>
