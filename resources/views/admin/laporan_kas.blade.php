@@ -168,16 +168,16 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Detail Pengeluaran</h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
+                        <h1 class="h3 mb-2 text-gray-800">Laporan Kas Keluar</h1>
+                        <a href="/export" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div>
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         <div class="dropdown" style="float:right;">
-                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Pilih Kategori
                             </button>
                             
@@ -189,6 +189,30 @@
                             </div>
                         </div>
                         <!-- End Dropdown Divisi -->
+                            <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        <div class="container">
+                            <div class="row">
+                                <form action="/filter_pengeluaran" method="POST">
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -216,12 +240,13 @@
                                         <td>{{$row->Status->nama_status}}</td>
                                         <td>{{$row->tanggal_respon}}</td>
                                         <td>
+                                        <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                         @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
                                         @endif
                                         @if ($row->status == 5)
                                             <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-danger btn-sm">Batal</a>  
+                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
                                         @endif 
                                         </td>
                                         </tr>

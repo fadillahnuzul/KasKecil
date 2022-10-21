@@ -177,10 +177,31 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="jumlah">Kas Keluar :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="{{$kas->jumlah}}">
+                                    <input type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="{{$kas->jumlah}}">
                                 </div> 
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
+                            <script type="text/javascript">
+                                var jumlah_keluar = document.getElementById('jumlah');
+                                    jumlah_keluar.addEventListener('keyup', function(e) {
+                                        jumlah_keluar.value = currencyIdr(this.value, 'Rp ');
+                                    });
+
+                                function currencyIdr(angka, prefix) {
+                                    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                    split = number_string.split(','),
+                                    sisa = split[0].length % 3,
+                                    rupiah = split[0].substr(0, sisa),
+                                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                                    if (ribuan) {
+                                        separator = sisa ?'.':'';
+                                        rupiah += separator + ribuan.join('.');
+                                    }
+                                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                    return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+                                }
+                            </script>
                             </div>
                         </div>
                     </div>

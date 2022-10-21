@@ -8,10 +8,21 @@ use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
 use App\Models\Kategori;
 use App\Models\Pembebanan;
+use App\Models\Divisi;
+use App\Exports\KasKecilExport;
 use Alert;
+use Carbon\Carbon;
 
 class PengeluaranController extends Controller
 {
+    public $startDate;
+    public $endDate;
+
+    public function __construct() {
+        $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $this->endDate = Carbon::now()->endOfMonth('Y-m-d');
+    }
+
     public function index(Request $request, $id)
     {
         $button_kas = TRUE;
@@ -25,12 +36,13 @@ class PengeluaranController extends Controller
 
     public function laporan()
     {
+        $startDate = $this->startDate; $endDate = $this->endDate; 
         $button_kas = FALSE;
         $divisi = Auth::user()->id;
         $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('divisi_id', $divisi)->where('status', 5)->get();
         $title = "Laporan Kas Kecil";
 
-        return view ('detail_pengajuan', ['dataKas' => $data_pengeluaran],['title' => $title, 'button_kas'=>$button_kas]);
+        return view ('detail_pengajuan', ['dataKas' => $data_pengeluaran],['title' => $title, 'button_kas'=>$button_kas, 'startDate'=>$startDate, 'endDate'=>$endDate]);
     }
 
     public function create()
@@ -53,8 +65,8 @@ class PengeluaranController extends Controller
         $kas->divisi_id = Auth::user()->id;
 
         if (Auth::user()->role_id == 1) {
-            $tunai = $request->tunai;
-            $bank = $request->bank;
+            $tunai = preg_replace("/[^0-9]/","",$request->tunai);
+            $bank = preg_replace("/[^0-9]/","",$request->bank);
             $kas->jumlah = $tunai + $bank;
             $saldo = Auth::user()->saldo;
             if ($kas->jumlah > $saldo) {
@@ -74,7 +86,7 @@ class PengeluaranController extends Controller
                 $pengeluaran->pengajuan->save();
             }
         } else {
-            $kas->jumlah = $request->kredit;
+            $kas->jumlah = preg_replace("/[^0-9]/","",$request->kredit);
             $saldo = Auth::user()->saldo;
             if ($kas->jumlah > $saldo) {
                 Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
@@ -101,10 +113,10 @@ class PengeluaranController extends Controller
     {
         $kas = Pengeluaran::with('pengajuan', 'Divisi')->findOrFail($id);
 
-        $kas_awal = $kas->jumlah;
+        $kas_awal = preg_replace("/[^0-9]/","",$request->jumlah);
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
-        $kas->jumlah = $request->jumlah;
+        $kas->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
 
 
         $saldo_awal = $kas->Divisi->saldo;
@@ -136,12 +148,41 @@ class PengeluaranController extends Controller
         $pengeluaran->pengajuan->status = "4";
         $pengeluaran->tanggal_respon = $request->tanggal;
         
-
         $pengeluaran->pengajuan->save();
         $pengeluaran->save();
-
-
         
         return back();
+    }
+
+    public function filter(Request $request) {
+        $this->startDate = $request->startDate;
+        $this->endDate = $request->endDate;
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('tanggal','>=',$this->startDate)->where('tanggal','<=',$this->endDate)->get();
+        $title = "Laporan Kas Kecil";
+        $kategori = Kategori::with('pengeluaran')->get();
+
+        return view ('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 
+        ['dataKas' => $data_pengeluaran]);
+    }
+
+    public function export(Request $request) {
+        $startDate = $request->session()->get('startDate');
+        $endDate = $request->session()->get('endDate');
+        if ($startDate AND $endDate) {
+            $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status',5)->where('tanggal','>=',$startDate)->where('tanggal','<=',$endDate)->get();
+        } else {
+            $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status', 5)->get();
+        }
+        for ($i = 0; $i<count($data_pengeluaran); $i++) {
+            $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id',$data_pengeluaran[$i]->pemasukan)->get();
+            $data_pengeluaran[$i]->nama_kategori = Kategori::select('nama_kategori')->where('id',$data_pengeluaran[$i]->kategori)->get();
+            $data_pengeluaran[$i]->nama_pembebanan = Pembebanan::select('nama_pembebanan')->where('id',$data_pengeluaran[$i]->pembebanan)->get();
+            $data_pengeluaran[$i]->divisi = Divisi::select('nama_divisi')->where('id',$data_pengeluaran[$i]->divisi_id)->get();
+        }
+        
+        if (!$data_pengeluaran) {
+            return false;
+        }
+        return (new KasKecilExport($data_pengeluaran))->download("Laporan_Kas_Kecil" . ".xlsx");
     }
 }

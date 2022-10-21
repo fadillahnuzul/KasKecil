@@ -197,23 +197,20 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" required>
                                 </div>
-                                @if (Auth::user()->role_id == 1)
+                                <!-- @if (Auth::user()->role_id == 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengajuan Tunai :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Tunai" id="tunai" name="tunai" required>
+                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan Bentuk Tunai" id="tunai" name="tunai" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="bank">Pengajuan Bank :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Saldo Bank" id="bank" name="bank" required>
+                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan Bentuk Saldo Bank" id="bank" name="bank" required>
                                 </div>
-                                @endif
-                                @if (Auth::user()->role_id != 1)
+                                @endif -->
                                 <div class="form-group">
                                     <label for="jumlah">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" required 
-                                    onkeyup="document.getElementById('format2').innerHTML = formatCurrency(this.value);"/>
+                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" required >
                                 </div>
-                                @endif
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             </div>
@@ -284,22 +281,53 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+    <!-- <script type="text/javascript">
+        var jumlah_tunai = document.getElementById('tunai');
+            jumlah_tunai.addEventListener('keyup', function(e) {
+                jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
+            });
+        var jumlah_bank = document.getElementById('bank');
+            jumlah_bank.addEventListener('keyup', function(e) {
+                jumlah_bank.value = currencyIdr(this.value, 'Rp ');
+            });
+
+        function currencyIdr(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+    </script> -->
     <script type="text/javascript">
-        function formatCurrency(jumlah) {
-            jumlah = jumlah.toString().replace(/\$|\,/g,'');
-            if(isNaN(jumlah))
-            jumlah = "0";
-            sign = (jumlah == (jumlah = Math.abs(jumlah)));
-            jumlah = Math.floor(jumlah*100+0,50000000001);
-            cents = jumlah%100;
-            jumlah = Math.floor(jumlah/100).toString();
-            if(cents<10)
-            cents = "0" + cents;
-            for (var i=0; i < Math.floor((jumlah.length-(1+i))/3); i++)
-            jumlah = jumlah.substring(0,jumlah.length-(4*i+3))+'.'+jumlah.substring(jumlah.length-(4*i+3));
-            return (((sign)?'':'-') + 'Rp.' + jumlah + ',' + cents)
-        }
+        var jumlah = document.getElementById('jumlah');
+            jumlah.addEventListener('keyup', function(e) {
+                jumlah.value = currencyIdrUser(this.value, 'Rp ');
+            });
+
+        function currencyIdrUser(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
     </script>
+
 </body>
 
 </html>

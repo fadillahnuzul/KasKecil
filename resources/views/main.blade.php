@@ -287,7 +287,7 @@
                                             <th>Status</th>
                                             <th>Total Belanja</th>
                                             <th>Sisa</th>
-                                            <th>Detail</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -302,6 +302,7 @@
                                             <td>Rp. {{number_format($row->total_belanja)}}</td>
                                             <td>Rp. {{number_format($row->sisa)}}</td>
                                             <td>
+                                            <a onclick="set_modal_id({{$row->id}})" href="" target="_blank" data-toggle="modal" data-target="#PrintModal" class="btn btn-info btn-sm" data-id="{{ $row->id }}">Cetak</a>
                                             @if ($row->Status->id != 1 AND $row->Status->id != 3 AND $row->Status->id != 5)
                                                 <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-warning btn-sm">Buat Kas</a>
@@ -364,7 +365,40 @@
             </div>
         </div>
     </div>
-
+        <!-- Input Modal -->
+        <div class="modal fade" id="PrintModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Inputkan tanggal penyerahan nota</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form action="/download.pdf" method="POST">
+                    @csrf
+                    <input type="hidden" name="modal_id" id="modal_id">
+                        <div class="form-group">
+                            <label for="pengaju">Yang Mengajukan :</label>
+                                <input type="text" class="form-control" placeholder="Pihak yang mengajukan dana" id="pengaju" name="pengaju" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="penerima">Yang Dituju :</label>
+                                <input type="text" class="form-control" placeholder="Pihak yang dituju" id="penerima" name="penerima" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div> 
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>function set_modal_id(id) {
+        document.getElementById("modal_id").value = id;
+    } </script>
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

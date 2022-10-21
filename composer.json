@@ -7,10 +7,14 @@
     "require": {
         "php": "^8.0.2",
         "alfa6661/laravel-autonumber": "^1.2",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "dompdf/dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "maatwebsite/excel": "^3.1",
+        "phpoffice/phpspreadsheet": "^1.25",
         "realrashid/sweet-alert": "^5.1"
     },
     "require-dev": {

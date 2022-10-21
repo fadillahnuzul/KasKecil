@@ -181,17 +181,17 @@
                                 @if (Auth::user()->role_id == 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengeluaran Tunai :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran Bentuk Tunai" id="tunai" name="tunai">
+                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Tunai" id="tunai" name="tunai">
                                 </div>
                                 <div class="form-group">
                                     <label for="bank">Pengeluaran Bank :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran Bentuk Saldo Bank" id="bank" name="bank">
+                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Saldo Bank" id="bank" name="bank">
                                 </div>
                                 @endif
                                 @if (Auth::user()->role_id != 1)
                                 <div class="form-group">
                                     <label for="kredit">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
+                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="kategori">Kategori :</label>
@@ -214,6 +214,53 @@
                                 @endif 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
+                            <script type="text/javascript">
+                                var jumlah_tunai = document.getElementById('tunai');
+                                    jumlah_tunai.addEventListener('keyup', function(e) {
+                                        jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
+                                    });
+
+                                var jumlah_bank = document.getElementById('bank');
+                                    jumlah_bank.addEventListener('keyup', function(e) {
+                                        jumlah_bank.value = currencyIdr(this.value, 'Rp ');
+                                    });
+
+                                function currencyIdr(angka, prefix) {
+                                    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                    split = number_string.split(','),
+                                    sisa = split[0].length % 3,
+                                    rupiah = split[0].substr(0, sisa),
+                                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                                    if (ribuan) {
+                                        separator = sisa ?'.':'';
+                                        rupiah += separator + ribuan.join('.');
+                                    }
+                                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                    return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+                                }
+                            </script>
+                            <script type="text/javascript">
+                            var jumlah = document.getElementById('kredit');
+                                jumlah.addEventListener('keyup', function(e) {
+                                jumlah.value = currencyIdrUser(this.value, 'Rp ');
+                            });
+
+                            function currencyIdrUser(angka, prefix) {
+                                var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                split = number_string.split(','),
+                                sisa = split[0].length % 3,
+                                rupiah = split[0].substr(0, sisa),
+                                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                                if (ribuan) {
+                                    separator = sisa ?'.':'';
+                                    rupiah += separator + ribuan.join('.');
+                                }
+                                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+                            }
+                            </script>
                             </div>
                         </div>
                     </div>

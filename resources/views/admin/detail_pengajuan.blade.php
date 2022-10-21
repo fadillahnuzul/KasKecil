@@ -202,12 +202,13 @@
                                         <td>{{$row->Status->nama_status}}</td>
                                         <td>{{$row->tanggal_respon}}</td>
                                         <td>
+                                        <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                         @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
                                         @endif
                                         @if ($row->status == 5)
                                             <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-danger btn-sm">Batal</a>  
+                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
                                         @endif 
                                         </td>
                                         </tr>

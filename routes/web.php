@@ -68,9 +68,20 @@ Route::get('/edit_admin/{id}', [AdminController::class, 'edit'])->middleware('au
 Route::put('/simpan_done/{id}', [AdminController::class, 'simpan_done'])->middleware('auth');
 Route::put('/update/{id}', [AdminController::class, 'update'])->middleware('auth');
 Route::get('/batal_done/{id}', [AdminController::class, 'batal_done'])->middleware('auth');
+Route::get('/hapus_admin/{pengajuan}/{id}', [AdminController::class, 'hapus'])->middleware('auth');
+
+//Filter tanggal
+Route::post('/filter_pengajuan/{id}', [PengajuanController::class, 'filter']);
+Route::post('/filter_pengeluaran', [PengeluaranController::class, 'filter']);
+
 
 Route::post('/input_sumber', [SumberController::class, 'save']);
 Route::post('/input_pembebanan', [PembebananController::class, 'save']);
+
+//Download
+Route::get('/pengajuan.export', [PengajuanController::class, 'export'])->name('pengajuan.export')->middleware('auth');
+Route::get('/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export')->middleware('auth');
+Route::post('/download.pdf', [PengajuanController::class, 'export_pdf'])->name('download.pdf')->middleware('auth');
 
 
 

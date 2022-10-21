@@ -168,8 +168,6 @@
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
                 </div>
                 <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -260,10 +258,9 @@
                         <div class="card-header py-3">
                         <!-- Dropdown Divisi -->
                         <div class="dropdown" style="float:right;">
-                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Pilih Divisi
                             </button>
-                            
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="/home_admin">All</a>
                             @foreach ($divisi as $divisi)
@@ -272,6 +269,37 @@
                             </div>
                         </div>
                         <!-- End Dropdown Divisi -->
+                        @if ($laporan == TRUE)
+                            <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        @endif
+                        <div class="container">
+                            <div class="row">
+                                @if ($laporan == FALSE)
+                                <form action="/filter_pengajuan/1" method="POST">
+                                @elseif ($laporan == TRUE)
+                                <form action="/filter_pengajuan/2" method="POST">
+                                @endif
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                            
                         @include('sweetalert::alert')
                         </div>
                         
@@ -312,16 +340,17 @@
                                             <td>Rp. {{number_format($row->sisa)}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>
+                                            @if ($row->Status->id != 6)
+                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                             <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
                                             @if ($row->Status->id == 1)
                                                 <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
                                                 Approve</a> 
-                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-danger btn-sm">
+                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
                                                 Decline</a>
-                                            @endif
-                                            @if ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
-                                                
+                                            @elseif ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
                                                 <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
+                                            @endif
                                             @endif
                                             </td>
                                         </tr>
@@ -378,6 +407,8 @@
             </div>
         </div>
     </div>
+
+    
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>

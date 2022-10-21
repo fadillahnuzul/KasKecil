@@ -163,21 +163,11 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" value="{{$pengajuan->deskripsi}}" required>
                                 </div>
-                                @if ($pengajuan->Divisi->role_id == 1)
-                                <div class="form-group">
-                                    <label for="tunai">Pengajuan Tunai :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Tunai" id="tunai" name="tunai" value="{{$pengajuan->tunai}}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="bank">Pengajuan Bank :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan Bentuk Saldo Bank" id="bank" name="bank" value="{{$pengajuan->bank}}" required>
-                                </div>
-                                @endif
-                                @if ($pengajuan->Divisi->role_id != 1)
                                 <div class="form-group">
                                     <label for="jumlah">Nominal :</label>
-                                    <input type="number" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="{{$pengajuan->jumlah}}" required />
+                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="{{$pengajuan->jumlah}}" required />
                                 </div>
+                                @if ($pengajuan->Divisi->role_id != 1)
                                 <div class="form-group">
                                     <label for="mutasi">Sumber Dana :</label>
                                     <select name="sumber" id="sumber" class="form-control">
@@ -186,6 +176,16 @@
                                             <option value="{{$sumber->id}}">{{$sumber->sumber_dana}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                @endif
+                                @if ($pengajuan->Divisi->role_id == 1)
+                                <div class="form-group">
+                                    <label for="tunai">Pengajuan Tunai :</label>
+                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="bank">Pengajuan Bank :</label>
+                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank">
                                 </div>
                                 @endif 
                                 @if ($edit == FALSE) 
@@ -222,7 +222,7 @@
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
+    <a class="scroll-to-0top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
@@ -287,7 +287,52 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+    <script type="text/javascript">
+        var jumlah_tunai = document.getElementById('tunai');
+            jumlah_tunai.addEventListener('keyup', function(e) {
+                jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
+            });
+        var jumlah_bank = document.getElementById('bank');
+            jumlah_bank.addEventListener('keyup', function(e) {
+                jumlah_bank.value = currencyIdr(this.value, 'Rp ');
+            });
 
+        function currencyIdr(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+    </script>
+    <script type="text/javascript">
+        var jumlah = document.getElementById('jumlah');
+            jumlah.addEventListener('keyup', function(e) {
+                jumlah.value = currencyIdrUser(this.value, 'Rp ');
+            });
+
+        function currencyIdrUser(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+    </script>
 </body>
 
 </html>
