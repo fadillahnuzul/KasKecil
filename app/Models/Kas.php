@@ -9,7 +9,7 @@ class Kas extends Model
 {
     use HasFactory;
 
-    protected $table = 'kas';
+    protected $table = 'pettycash_kas';
     public $timestamps = false;
 
     public function Rekening() 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sumber extends Model
 {
     use HasFactory;
-    protected $table = 'sumber';
+    protected $table = 'pettycash_sumber';
 
     public function kas()
     {

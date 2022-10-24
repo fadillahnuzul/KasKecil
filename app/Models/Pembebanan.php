@@ -9,7 +9,7 @@ class Pembebanan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pembebanan';
+    protected $table = 'pettycash_pembebanan';
 
     public function pengeluaran()
     {

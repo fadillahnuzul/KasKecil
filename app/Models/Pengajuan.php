@@ -9,7 +9,7 @@ use Alfa6661\AutoNumber\AutoNumberTrait;
 class Pengajuan extends Model
 {
     use HasFactory;
-    protected $table = 'pengajuan';
+    protected $table = 'pettycash_pengajuan';
     use AutoNumberTrait;
     
     /**

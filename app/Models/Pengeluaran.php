@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pengeluaran extends Model
 {
     use HasFactory;
-    protected $table = 'pengeluaran';
+    protected $table = 'pettycash_pengeluaran';
 
     public function pengajuan() 
     {

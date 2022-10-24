@@ -9,7 +9,7 @@ class Rekening extends Model
 {
     use HasFactory;
 
-    protected $table = 'rekening';
+    protected $table = 'pettycash_rekening';
 
     public function kas()
     {
