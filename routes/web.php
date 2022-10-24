@@ -22,6 +22,7 @@ use App\Http\Controllers\PembebananController;
 |
 */
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', [PengajuanController::class, 'index']);
     Route::get('/home', [PengajuanController::class, 'index']);
     Route::get('/laporan', [PengajuanController::class, 'laporan']);
     Route::post('/simpan_pengajuan', [PengajuanController::class, 'save']);
@@ -37,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
     Route::get('/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
 });
-Route::get('/', [KasController::class, 'index'])->middleware('auth');
+// Route::get('/', [KasController::class, 'index'])->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authentic'])->middleware('guest');

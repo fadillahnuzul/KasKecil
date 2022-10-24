@@ -16,7 +16,10 @@ return new class extends Migration
         Schema::create('divisi', function (Blueprint $table) {
             $table->id();
             $table->string('nama_divisi');
+            $table->string('password')->after('nama_divisi');
+            $table->unsignedBigInteger('role_id')->after('password');
             $table->integer('saldo')->nullable();
+            $table->timestamps();
         });
     }
 

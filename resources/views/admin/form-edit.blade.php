@@ -181,11 +181,13 @@
                                 @if ($pengajuan->Divisi->role_id == 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengajuan Tunai :</label>
-                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" >
+                                    <small style="color:red;"> *Kosongi jika tidak ada</small>
+                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" value="{{$pengajuan->tunai}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="bank">Pengajuan Bank :</label>
-                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank">
+                                    <small style="color:red;"> *Kosongi jika tidak ada</small>
+                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank" value="{{$pengajuan->bank}}">
                                 </div>
                                 @endif 
                                 @if ($edit == FALSE) 

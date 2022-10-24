@@ -21,6 +21,12 @@ return new class extends Migration
             $table->integer('jumlah')->nullable();
             $table->string('sumber')->nullable();
             $table->string('pengeluaran')->nullable();
+            $table->integer('riwayat_saldo')->nullable();
+            $table->string('divisi_id');
+            $table->string('kode')->nullable();
+            $table->string('divisi')->nullable();
+            $table->integer('tunai')->nullable();
+            $table->integer('bank')->nullable();
             $table->timestamps();
         });
     }

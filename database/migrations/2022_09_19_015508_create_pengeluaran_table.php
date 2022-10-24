@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('deskripsi', 100)->required();
             $table->integer('jumlah')->nullable();
             $table->string('pemasukan')->nullable();
+            $table->string('divisi_id');
+            $table->string('status');
+            $table->date('tanggal_respon')->nullable();
+            $table->string('kategori')->nullable();
+            $table->string('pembebanan')->nullable();
             $table->timestamps();
         });
     }
