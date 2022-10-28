@@ -10,33 +10,33 @@ class Pengeluaran extends Model
     use HasFactory;
     protected $table = 'pettycash_pengeluaran';
 
-    public function pengajuan() 
+    public function pengajuan()
     {
         return $this->belongsTo(Pengajuan::class, 'pemasukan', 'id');
     }
 
-    public function Divisi() 
+    public function Divisi()
     {
         return $this->belongsTo(Divisi::class, 'divisi_id', 'id');
     }
 
-    public function Status() 
+    public function Status()
     {
         return $this->belongsTo(Status::class, 'status', 'id');
     }
 
-    public function Kategori() 
+    public function Kategori()
     {
         return $this->belongsTo(Kategori::class, 'kategori', 'id');
     }
 
-    public function Pembebanan() 
+    public function Pembebanan()
     {
         return $this->belongsTo(Pembebanan::class, 'pembebanan', 'id');
     }
 
-    public function User() 
+    public function User()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'id', 'user_id');
     }
 }

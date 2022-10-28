@@ -19,7 +19,8 @@ class PengeluaranController extends Controller
     public $startDate;
     public $endDate;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->endDate = Carbon::now()->endOfMonth('Y-m-d');
     }
@@ -28,30 +29,32 @@ class PengeluaranController extends Controller
     {
         $button_kas = TRUE;
         $title = "Detail Pengajuan";
-        $kas = Pengeluaran::with('Pembebanan', 'Status', 'Kategori')->where('pemasukan','=',$id)->get();
+        $kas = Pengeluaran::with('Pembebanan', 'Status', 'Kategori')->where('pemasukan', '=', $id)->get();
         session(['key' => $id]);
         $total = $kas->sum('jumlah');
-        
-        return view ('detail_pengajuan', ['dataKas' => $kas],['title' => $title, 'button_kas'=>$button_kas]);
+
+        return view('detail_pengajuan', ['dataKas' => $kas], ['title' => $title, 'button_kas' => $button_kas]);
     }
 
     public function laporan()
     {
-        $startDate = $this->startDate; $endDate = $this->endDate; 
+        $startDate = $this->startDate;
+        $endDate = $this->endDate;
         $button_kas = FALSE;
-        $divisi = Auth::user()->id;
         $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 5)->get();
         $title = "Laporan Kas Kecil";
-
-        return view ('detail_pengajuan', ['dataKas' => $data_pengeluaran],['title' => $title, 'button_kas'=>$button_kas, 'startDate'=>$startDate, 'endDate'=>$endDate]);
+        // dd(view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate]));
+        $saldo = Saldo::find(Auth::id());
+        
+        return view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate, 'saldo' => $saldo]);
     }
 
     public function create()
     {
         $kategori = Kategori::get();
         $pembebanan = Pembebanan::get();
-        
-        return view('form_kas', ['kategori'=> $kategori, 'pembebanan' => $pembebanan]);
+
+        return view('form_kas', ['kategori' => $kategori, 'pembebanan' => $pembebanan]);
     }
 
     public function save(Request $request)
@@ -67,8 +70,8 @@ class PengeluaranController extends Controller
         $kas->divisi_id = Auth::user()->level;
         //Kas admin
         if (Auth::user()->access == 'admin') {
-            $tunai = preg_replace("/[^0-9]/","",$request->tunai);
-            $bank = preg_replace("/[^0-9]/","",$request->bank);
+            $tunai = preg_replace("/[^0-9]/", "", $request->tunai);
+            $bank = preg_replace("/[^0-9]/", "", $request->bank);
             $kas->jumlah = $tunai + $bank;
             $saldo = Saldo::findOrFail(Auth::user()->id);
             if ($kas->jumlah > $saldo->saldo) {
@@ -89,9 +92,9 @@ class PengeluaranController extends Controller
                 $pengeluaran->pengajuan->save();
                 $saldo->save();
             }
-        //Kas non admin
+            //Kas non admin
         } else {
-            $kas->jumlah = preg_replace("/[^0-9]/","",$request->kredit);
+            $kas->jumlah = preg_replace("/[^0-9]/", "", $request->kredit);
             $saldo = Saldo::findOrFail(Auth::user()->id);
             if ($kas->jumlah > $saldo->saldo) {
                 Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
@@ -102,24 +105,23 @@ class PengeluaranController extends Controller
                 $saldo->save();
                 $kas->save();
             }
-
         }
-        return redirect ('home');
+        return redirect('home');
     }
 
     public function edit(Request $request, $id)
     {
-        $kas = Pengeluaran::with('pengajuan','Kategori','Pembebanan')->findOrFail($id);
-        $kategori = Kategori::where('id','!=',$kas->kategori)->get();
-        $pembebanan = Pembebanan::where('id','!=',$kas->pembebanan)->get();
+        $kas = Pengeluaran::with('pengajuan', 'Kategori', 'Pembebanan')->findOrFail($id);
+        $kategori = Kategori::where('id', '!=', $kas->kategori)->get();
+        $pembebanan = Pembebanan::where('id', '!=', $kas->pembebanan)->get();
 
-        return view('form-edit', ['kas' => $kas, 'kategori'=> $kategori, 'pembebanan' => $pembebanan]);
+        return view('form-edit', ['kas' => $kas, 'kategori' => $kategori, 'pembebanan' => $pembebanan]);
     }
 
     public function update(Request $request, $id)
     {
         $kas = Pengeluaran::with('pengajuan', 'Divisi')->findOrFail($id);
-        $kas_input = preg_replace("/[^0-9]/","",$request->jumlah);
+        $kas_input = preg_replace("/[^0-9]/", "", $request->jumlah);
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
         $kas->kategori = $request->kategori;
@@ -128,11 +130,11 @@ class PengeluaranController extends Controller
         //mengembalikan saldo
         $saldo->saldo = $saldo->saldo - $kas_input + $kas->jumlah;
         //simpan data
-        $kas->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
+        $kas->jumlah = preg_replace("/[^0-9]/", "", $request->jumlah);
         $saldo->save();
         $kas->save();
 
-        return redirect ('home');
+        return redirect('home');
     }
 
     public function delete($id)
@@ -142,7 +144,7 @@ class PengeluaranController extends Controller
         $saldo_awal = $saldo->saldo;
         $saldo_akhir = $saldo_awal + $delete->jumlah;
         $saldo->saldo = $saldo_akhir;
-        
+
         $saldo->save();
         $delete->status = 6;
         $delete->save();
@@ -155,39 +157,44 @@ class PengeluaranController extends Controller
         $pengeluaran->status = "4";
         $pengeluaran->pengajuan->status = "4";
         $pengeluaran->tanggal_respon = $request->tanggal;
-        
+
         $pengeluaran->pengajuan->save();
         $pengeluaran->save();
-        
+
         return back();
     }
 
-    public function filter(Request $request) {
+    public function filter(Request $request)
+    {
         $this->startDate = $request->startDate;
         $this->endDate = $request->endDate;
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('tanggal','>=',$this->startDate)->where('tanggal','<=',$this->endDate)->get();
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
         $title = "Laporan Kas Kecil";
         $kategori = Kategori::with('pengeluaran')->get();
 
-        return view ('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 
-        ['dataKas' => $data_pengeluaran]);
+        return view(
+            '/admin/laporan_kas',
+            ['kategori' => $kategori, 'title' => $title, 'startDate' => $this->startDate, 'endDate' => $this->endDate],
+            ['dataKas' => $data_pengeluaran]
+        );
     }
 
-    public function export(Request $request) {
+    public function export(Request $request)
+    {
         $startDate = $request->session()->get('startDate');
         $endDate = $request->session()->get('endDate');
-        if ($startDate AND $endDate) {
-            $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status',5)->where('tanggal','>=',$startDate)->where('tanggal','<=',$endDate)->get();
+        if ($startDate and $endDate) {
+            $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status', 5)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
         } else {
             $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status', 5)->get();
         }
-        for ($i = 0; $i<count($data_pengeluaran); $i++) {
-            $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id',$data_pengeluaran[$i]->pemasukan)->get();
-            $data_pengeluaran[$i]->nama_kategori = Kategori::select('nama_kategori')->where('id',$data_pengeluaran[$i]->kategori)->get();
-            $data_pengeluaran[$i]->nama_pembebanan = Pembebanan::select('nama_pembebanan')->where('id',$data_pengeluaran[$i]->pembebanan)->get();
-            $data_pengeluaran[$i]->divisi = Divisi::select('nama_divisi')->where('id',$data_pengeluaran[$i]->divisi_id)->get();
+        for ($i = 0; $i < count($data_pengeluaran); $i++) {
+            $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id', $data_pengeluaran[$i]->pemasukan)->get();
+            $data_pengeluaran[$i]->nama_kategori = Kategori::select('nama_kategori')->where('id', $data_pengeluaran[$i]->kategori)->get();
+            $data_pengeluaran[$i]->nama_pembebanan = Pembebanan::select('nama_pembebanan')->where('id', $data_pengeluaran[$i]->pembebanan)->get();
+            $data_pengeluaran[$i]->divisi = Divisi::select('nama_divisi')->where('id', $data_pengeluaran[$i]->divisi_id)->get();
         }
-        
+
         if (!$data_pengeluaran) {
             return false;
         }
