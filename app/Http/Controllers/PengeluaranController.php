@@ -9,6 +9,7 @@ use App\Models\Pengeluaran;
 use App\Models\Kategori;
 use App\Models\Pembebanan;
 use App\Models\Divisi;
+use App\Models\Saldo;
 use App\Exports\KasKecilExport;
 use Alert;
 use Carbon\Carbon;
@@ -39,7 +40,7 @@ class PengeluaranController extends Controller
         $startDate = $this->startDate; $endDate = $this->endDate; 
         $button_kas = FALSE;
         $divisi = Auth::user()->id;
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('divisi_id', $divisi)->where('status', 5)->get();
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 5)->get();
         $title = "Laporan Kas Kecil";
 
         return view ('detail_pengajuan', ['dataKas' => $data_pengeluaran],['title' => $title, 'button_kas'=>$button_kas, 'startDate'=>$startDate, 'endDate'=>$endDate]);
@@ -62,39 +63,43 @@ class PengeluaranController extends Controller
         $kas->pembebanan = $request->pembebanan;
         $kas->status = "4";
         $kas->pemasukan = $request->session()->get('key');
-        $kas->divisi_id = Auth::user()->id;
-
-        if (Auth::user()->role_id == 1) {
+        $kas->user_id = Auth::user()->id;
+        $kas->divisi_id = Auth::user()->level;
+        //Kas admin
+        if (Auth::user()->access == 'admin') {
             $tunai = preg_replace("/[^0-9]/","",$request->tunai);
             $bank = preg_replace("/[^0-9]/","",$request->bank);
             $kas->jumlah = $tunai + $bank;
-            $saldo = Auth::user()->saldo;
-            if ($kas->jumlah > $saldo) {
+            $saldo = Saldo::findOrFail(Auth::user()->id);
+            if ($kas->jumlah > $saldo->saldo) {
                 Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
                 return back();
             } else {
-                $saldo_akhir = $saldo - $kas->jumlah;
-                Auth::user()->saldo = $saldo_akhir;
-                Auth::user()->save();
+                $saldo_akhir = $saldo->saldo - $kas->jumlah;
+                $saldo->saldo = $saldo_akhir;
                 $kas->save();
 
                 #mengurangi saldo tunai dan bank
                 $lastInsertedId = $kas->id;
                 $pengeluaran = Pengeluaran::with('pengajuan')->find($lastInsertedId);
+                $saldo->tunai = $saldo->tunai - $tunai;
+                $saldo->bank = $saldo->bank - $bank;
                 $pengeluaran->pengajuan->tunai = $pengeluaran->pengajuan->tunai - $tunai;
                 $pengeluaran->pengajuan->bank = $pengeluaran->pengajuan->bank - $bank;
                 $pengeluaran->pengajuan->save();
+                $saldo->save();
             }
+        //Kas non admin
         } else {
             $kas->jumlah = preg_replace("/[^0-9]/","",$request->kredit);
-            $saldo = Auth::user()->saldo;
-            if ($kas->jumlah > $saldo) {
+            $saldo = Saldo::findOrFail(Auth::user()->id);
+            if ($kas->jumlah > $saldo->saldo) {
                 Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
                 return back();
             } else {
-                $saldo_akhir = $saldo - $kas->jumlah;
-                Auth::user()->saldo = $saldo_akhir;
-                Auth::user()->save();
+                $saldo_akhir = $saldo->saldo - $kas->jumlah;
+                $saldo->saldo = $saldo_akhir;
+                $saldo->save();
                 $kas->save();
             }
 
@@ -104,26 +109,27 @@ class PengeluaranController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $kas = Pengeluaran::with('pengajuan')->findOrFail($id);
+        $kas = Pengeluaran::with('pengajuan','Kategori','Pembebanan')->findOrFail($id);
+        $kategori = Kategori::where('id','!=',$kas->kategori)->get();
+        $pembebanan = Pembebanan::where('id','!=',$kas->pembebanan)->get();
 
-        return view('form-edit', ['kas' => $kas]);
+        return view('form-edit', ['kas' => $kas, 'kategori'=> $kategori, 'pembebanan' => $pembebanan]);
     }
 
     public function update(Request $request, $id)
     {
         $kas = Pengeluaran::with('pengajuan', 'Divisi')->findOrFail($id);
-
-        $kas_awal = preg_replace("/[^0-9]/","",$request->jumlah);
+        $kas_input = preg_replace("/[^0-9]/","",$request->jumlah);
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
+        $kas->kategori = $request->kategori;
+        $kas->pembebanan = $request->pembebanan;
+        $saldo = Saldo::findOrFail(Auth::user()->id);
+        //mengembalikan saldo
+        $saldo->saldo = $saldo->saldo - $kas_input + $kas->jumlah;
+        //simpan data
         $kas->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
-
-
-        $saldo_awal = $kas->Divisi->saldo;
-        $saldo_akhir = $saldo_awal + $kas_awal - $kas->jumlah;
-        $kas->Divisi->saldo = $saldo_akhir;
-
-        $kas->Divisi->save();
+        $saldo->save();
         $kas->save();
 
         return redirect ('home');
@@ -132,12 +138,14 @@ class PengeluaranController extends Controller
     public function delete($id)
     {
         $delete = Pengeluaran::with('Divisi')->findOrFail($id);
-        $saldo_awal = $delete->Divisi->saldo;
+        $saldo = Saldo::findOrFail(Auth::user()->id);
+        $saldo_awal = $saldo->saldo;
         $saldo_akhir = $saldo_awal + $delete->jumlah;
-        $delete->Divisi->saldo = $saldo_akhir;
+        $saldo->saldo = $saldo_akhir;
         
-        $delete->Divisi->save();
-        $delete->delete();
+        $saldo->save();
+        $delete->status = 6;
+        $delete->save();
         return back();
     }
 

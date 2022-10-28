@@ -48,6 +48,14 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(Status::class, 'status', 'id');
     }
-
-
+    
+    public function User() 
+    {
+        return $this->belongsTo(User::class);
+    }
+    
+    public function Saldo() 
+    {
+        return $this->belongsTo(Saldo::class, 'user_id', 'id');
+    }
 }

@@ -10,7 +10,7 @@ class Divisi extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'pettycash_divisi';
+    protected $table = 'user_div';
 
     /**
      * The attributes that are mass assignable.
@@ -18,10 +18,10 @@ class Divisi extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'nama_divisi',
-        'password',
-        'saldo',
-        'update_at',
+        'name',
+        'initial',
+        'status',
+        'created_at',
     ];
 
     /**

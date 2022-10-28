@@ -131,7 +131,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->nama_divisi}}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
@@ -178,6 +178,24 @@
                                 <div class="form-group">
                                     <label for="jumlah">Kas Keluar :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="{{$kas->jumlah}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="kategori">Kategori :</label>
+                                    <select name="kategori" id="kategori" class="form-control">
+                                        <option value="{{$kas->kategori}}">{{$kas->Kategori->nama_kategori}}</option>
+                                        @foreach ($kategori as $kategori)
+                                            <option value="{{$kategori->id}}">{{$kategori->nama_kategori}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pembebanan">Pembebanan :</label>
+                                    <select name="pembebanan" id="pembebanan" class="form-control">
+                                        <option value="{{$kas->pembebanan}}">{{$kas->Pembebanan->nama_pembebanan}}</option>
+                                        @foreach ($pembebanan as $pembebanan)
+                                            <option value="{{$pembebanan->id}}">{{$pembebanan->nama_pembebanan}}</option>
+                                        @endforeach
+                                    </select>
                                 </div> 
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>

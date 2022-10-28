@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +26,9 @@ class AppServiceProvider extends ServiceProvider
     {
         config(['app.locale' => 'id']);
         \Carbon\Carbon::setLocale('id');
+
+        Auth::provider('self-eloquent', function ($app, $config) {
+            return New \App\Libs\SelfEloquentUserProvider($app['hash'], $config['model']);
+        });
     }
 }

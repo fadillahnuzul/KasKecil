@@ -52,7 +52,7 @@
                                     <form method="POST" action="/login">
                                         @csrf
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Divisi" id="divisi" name="divisi" required>
+                                            <input type="text" class="form-control" placeholder="Username" id="username" name="username" required>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control" placeholder="Password" id="password" name="password" required>

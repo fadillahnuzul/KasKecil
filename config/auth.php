@@ -14,7 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'divisi',
+        // 'guard' => 'divisi',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -41,10 +42,10 @@ return [
             'provider' => 'users',
         ],
 
-        'divisi' => [
-            'driver' => 'session',
-            'provider' => 'divisis'
-        ],
+        // 'divisi' => [
+        //     'driver' => 'session',
+        //     'provider' => 'divisis'
+        // ],
     ],
 
     /*
@@ -66,14 +67,15 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            // 'driver' => 'eloquent',
+            'driver' => 'self-eloquent',
             'model' => App\Models\User::class,
         ],
 
-        'divisis' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Divisi::class,
-        ],
+        // 'divisis' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Divisi::class,
+        // ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

@@ -11,6 +11,7 @@ use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
 use App\Models\Sumber;
 use App\Models\Kategori;
+use App\Models\Saldo;
 use Illuminate\Support\Facades\Auth;
 use Alert;
 use Carbon\Carbon;
@@ -27,8 +28,9 @@ class AdminController extends Controller
     
     public function index(){
         $laporan = FALSE;
-        $data_kas = Pengajuan::with('Sumber','Divisi', 'Status')->where('status','!=',5)->get();
-        $divisi = Divisi::where('role_id', '!=', '1')->get();
+        $data_kas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->get();
+        $saldo = Saldo::findOrFail(Auth::user()->id);
+        $divisi = Divisi::get();
         $title = "Admin Kas Kecil";
        
         // Perhitungan sisa dan total belanja
@@ -45,17 +47,18 @@ class AdminController extends Controller
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('admin/main', ['dataKas' => $data_kas, 'admin'=>$admin], ['divisi' => $divisi, 'title' => $title, 'laporan' => $laporan, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate]);
+        return view('admin/main', ['dataKas' => $data_kas, 'admin'=>$admin], ['Saldo'=>$saldo,'divisi' => $divisi, 'title' => $title, 'laporan' => $laporan, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate]);
     }
 
     public function laporan(){
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $laporan = TRUE;
-        $dataKas = Pengajuan::with('Sumber','Divisi', 'Status')->where('status',5)->get();
-        $divisi = Divisi::where('role_id', '!=', '1')->get();
-        $data_pengajuan = Pengajuan::where('divisi_id','!=', 1)->where('status', 5)->get();
-        $data_pengeluaran = Pengeluaran::where('divisi_id','!=', 1)->where('status',5)->get();
+        $dataKas = Pengajuan::with('Sumber','User', 'Status')->where('status',5)->get();
+        $divisi = Divisi::get();
+        $data_pengajuan = Pengajuan::get();
+        // dd($data_pengajuan);
+        $data_pengeluaran = Pengeluaran::get();
         // Perhitungan sisa dan total belanja pada card
         $total_pengajuan = 0;
         foreach ($data_pengajuan as $masuk){
@@ -137,7 +140,7 @@ class AdminController extends Controller
         $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
         $pengajuan->sumber = $request->sumber;     
 
-        if ($pengajuan->Divisi->role_id == 1) {
+        if ($pengajuan->User->access == 'admin') {
             $tunai_awal = $pengajuan->tunai;
             $bank_awal = $pengajuan->bank;
             $pengajuan->tunai = preg_replace("/[^0-9]/","",$request->tunai);
@@ -184,52 +187,60 @@ class AdminController extends Controller
 
     public function setujui(Request $request, $id)
     {
-        $pengajuan = Pengajuan::with('Divisi')->findOrFail($id);
-        $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
-        $admin = $pengajuan_admin->last();
-
+        $pengajuan = Pengajuan::with('User')->findOrFail($id);
+        $saldo_user = Saldo::with('User')->findOrFail($pengajuan->user_id);
+        //mengambil saldo pengajuan admin yang terbaru
+        $saldo_admin = Saldo::with('User')->findOrFail(Auth::user()->id);
+        // $pengajuan_admin = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status', 2)->orWhere('status', '4')->get();
+        // $admin = $pengajuan_admin->last();
+        //menyimpan data
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->deskripsi = $request->deskripsi;
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->sumber = $request->sumber;
         $pengajuan->status = "2";        
 
-        if ($pengajuan->Divisi->role_id == 1) {
+        if ($pengajuan->User->access == 'admin') {
             $pengajuan->tunai = preg_replace("/[^0-9]/","",$request->tunai);
             $pengajuan->bank = preg_replace("/[^0-9]/","",$request->bank);
-            $pengajuan->Divisi->saldo = $pengajuan->tunai + $pengajuan->bank;
+            $pengajuan->jumlah = $pengajuan->tunai + $pengajuan->bank;
+            $saldo_user->tunai = $pengajuan->tunai;
+            $saldo_user->bank = $pengajuan->bank;
+            $saldo_user->saldo = $pengajuan->tunai + $pengajuan->bank;
+
+            $saldo_user->save();
         } else {
             $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
-            $saldo = Auth::user()->saldo;
-            if ($pengajuan->jumlah > $saldo){
+            if ($pengajuan->jumlah > $saldo_admin){
                 Alert::error('Approve gagal', 'Maaf, saldo admin tidak cukup');
                 return back();
             } else {
-                $saldo_awal = $pengajuan->Divisi->saldo;
+                $saldo_awal = $saldo_user->saldo;
                 $saldo_akhir = $saldo_awal + preg_replace("/[^0-9]/","",$request->jumlah);
-                $pengajuan->Divisi->saldo = $saldo_akhir;
-                Auth::user()->saldo = Auth::user()->saldo - $pengajuan->jumlah;
+                $saldo_user->saldo = $saldo_akhir;
+                $saldo_admin->saldo = $saldo_admin->saldo - $pengajuan->jumlah;
                 if ($pengajuan->sumber == 1) {
-                    if ($pengajuan->jumlah > $admin->tunai) {
+                    if ($pengajuan->jumlah > $saldo_admin->tunai) {
                         Alert::error('Approve gagal', 'Maaf, saldo tunai tidak cukup');
                         return back();
                     } else {
-                        $admin->tunai = $admin->tunai - $pengajuan->jumlah;
+                        $saldo_admin->tunai = $saldo_admin->tunai - $pengajuan->jumlah;
                     }
                 } elseif ($pengajuan->sumber == 2) {
-                    if ($pengajuan->jumlah > $admin->bank) {
+                    if ($pengajuan->jumlah > $saldo_admin->bank) {
                         Alert::error('Approve gagal', 'Maaf, saldo bank tidak cukup');
                         return back();
                     } else {
-                        $admin->bank = $admin->bank - $pengajuan->jumlah;
+                        $saldo_admin->bank = $saldo_admin->bank - $pengajuan->jumlah;
                     }
                 }
-                $admin->save();
-                Auth::user()->save();
+                // $admin->save();
+                // Auth::user()->save();
+                $saldo_user->save();
+                $saldo_admin->save();
             }
         }
-        
-        $pengajuan->Divisi->save();
+        // $pengajuan->Divisi->save();
         $pengajuan->save();
 
         return redirect('home_admin');
@@ -305,11 +316,24 @@ class AdminController extends Controller
 
     public function kas_divisi($id)
     {
-        $data_kas = Pengajuan::with('Sumber','Divisi', 'Status')->where('divisi_id', $id)->get();
-        $divisi = Divisi::where('role_id', '!=', '1')->get();
+        $data_kas = Pengajuan::with('Sumber','User', 'Status')->where('divisi_id', $id)->get();
+        $divisi = Divisi::get();
         session(['key' => $id]);
-
-        return view('admin/main', ['dataKas' => $data_kas], ['divisi' => $divisi]);
+        $laporan = FALSE;
+        $title = "Admin Kas Kecil";
+        $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
+        $admin = $pengajuan_admin->last();
+        // Perhitungan sisa dan total belanja
+        foreach ($data_kas as $masuk) {
+            $total = 0;
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
+            foreach ($data_pengeluaran as $keluar){
+                $total = $total + $keluar->jumlah;
+            }
+            $masuk->total_belanja = $total;
+            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
+        }
+        return view('admin/main', ['dataKas' => $data_kas, 'admin'=>$admin], ['divisi' => $divisi, 'title'=>$title, 'laporan'=>$laporan,'startDate'=>$this->startDate, 'endDate'=>$this->endDate]);
     }
 
     public function detail_divisi($id)

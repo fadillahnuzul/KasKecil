@@ -46,7 +46,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            @if (Auth::user()->role_id==1)
+            @if (Auth::user()->access=='admin')
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -73,7 +73,7 @@
                     <span>Laporan Kas Keluar</span></a>
             </li>
              @endif
-             @if (Auth::user()->role_id!=1)
+             @if (Auth::user()->access!='admin')
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -168,7 +168,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->nama_divisi}}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
@@ -204,7 +204,7 @@
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format(Auth::user()->saldo)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo)}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -214,7 +214,7 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        @if (Auth::user()->role_id==1)
+                        @if (Auth::user()->access=='admin')
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
@@ -224,7 +224,7 @@
                                             @if ($admin != NULL)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
                                             @else
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
@@ -248,7 +248,7 @@
                                             @if ($admin != NULL)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->bank)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
                                             @else
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>

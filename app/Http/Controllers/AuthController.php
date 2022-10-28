@@ -14,8 +14,8 @@ class AuthController extends Controller
 
     public function authentic(Request $request)
     {
-        if (Auth::guard('divisi')->attempt(['nama_divisi' => $request->divisi, 'password' => $request->password])) {
-            if (Auth::user()->role_id == 1) {
+        if (Auth::guard('web')->attempt(['username' => $request->username, 'password' => $request->password])) {
+            if (Auth::user()->access == 'admin') {
                 return redirect('/home_admin');
             } else {
                 return redirect('/home');
@@ -29,7 +29,7 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
-        Auth::guard('divisi')->logout();
+        Auth::guard('web')->logout();
         
         $request->session()->invalidate();
  

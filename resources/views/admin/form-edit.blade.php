@@ -110,7 +110,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->nama_divisi}}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
@@ -167,7 +167,7 @@
                                     <label for="jumlah">Nominal :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="{{$pengajuan->jumlah}}" required />
                                 </div>
-                                @if ($pengajuan->Divisi->role_id != 1)
+                                @if ($pengajuan->User->access != 'admin')
                                 <div class="form-group">
                                     <label for="mutasi">Sumber Dana :</label>
                                     <select name="sumber" id="sumber" class="form-control">
@@ -178,7 +178,7 @@
                                     </select>
                                 </div>
                                 @endif
-                                @if ($pengajuan->Divisi->role_id == 1)
+                                @if ($pengajuan->User->access == 'admin')
                                 <div class="form-group">
                                     <label for="tunai">Pengajuan Tunai :</label>
                                     <small style="color:red;"> *Kosongi jika tidak ada</small>

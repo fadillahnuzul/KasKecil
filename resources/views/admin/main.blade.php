@@ -144,7 +144,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->nama_divisi}}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
@@ -178,7 +178,7 @@
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format(Auth::user()->saldo)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo)}}</div>
                                             @endif
                                             @if ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
@@ -201,14 +201,11 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($laporan == FALSE AND $admin != NULL)
+                                            @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai)}}</div>
-                                            @elseif ($laporan == FALSE)
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->tunai)}}</div>
+                                            
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Total Dipakai</div>
@@ -229,14 +226,10 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($laporan == FALSE AND $admin != NULL)
+                                            @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->bank)}}</div>
-                                            @elseif ($laporan == FALSE)
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank)}}</div>
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Sisa</div>
@@ -264,7 +257,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="/home_admin">All</a>
                             @foreach ($divisi as $divisi)
-                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->nama_divisi}}</a>
+                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->name}}</a>
                             @endforeach
                             </div>
                         </div>
@@ -326,7 +319,7 @@
                                         <tr>
                                             <td>{{$row->kode}}</td>
                                             <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->Divisi->nama_divisi}}</td>
+                                            <td>{{$row->Divisi->name}}</td>
                                             <td>{{$row->deskripsi}}</td>
                                             <td>Rp. {{number_format($row->jumlah)}}</td>                           
                                             <td>@if ($row->sumber == NULL) 

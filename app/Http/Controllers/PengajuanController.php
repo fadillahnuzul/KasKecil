@@ -8,6 +8,7 @@ use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
 use App\Models\Divisi;
 use App\Models\Sumber;
+use App\Models\Saldo;
 use App\Exports\PengajuanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Alert;
@@ -26,9 +27,10 @@ class PengajuanController extends Controller
     }
 
     public function index(){
-        $divisi = Auth::user()->id;
         $title = "Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->where('divisi_id', $divisi)->where('status','!=','5')->get();
+        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status','!=','5')->get();
+        // dd($data_pengajuan);
+        //Menghitung total belanja, sisa
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
@@ -39,17 +41,17 @@ class PengajuanController extends Controller
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
 
+        $saldo = Saldo::findOrFail(Auth::user()->id);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
         // dd($admin);
 
-        return view ('main', ['dataKas' => $data_pengajuan, 'admin' => $admin],['title'=>$title]);
+        return view ('main', ['dataKas' => $data_pengajuan, 'admin' => $admin],['title'=>$title, 'Saldo'=>$saldo]);
     }
 
     public function laporan(){
-        $divisi = Auth::user()->id;
         $title = "Laporan Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->where('divisi_id', $divisi)->where('status', 5)->get();
+        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status', 5)->get();
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
@@ -59,11 +61,11 @@ class PengajuanController extends Controller
             $masuk->total_belanja = $total;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
-
-        if ($divisi == 1) {
-            return view ('admin/main', ['dataKas' => $data_pengajuan],['title'=>$title]);
+        $saldo = Saldo::findOrFail(Auth::user()->id);
+        if (Auth::user()->access == 'admin') {
+            return view ('admin/main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
         } else {
-            return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title]);
+            return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
         }
         
     }
@@ -87,12 +89,13 @@ class PengajuanController extends Controller
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->sumber = $request->sumber;
         $pengajuan->status = "1";
-        $pengajuan->divisi_id = Auth::user()->id;
+        $pengajuan->user_id = Auth::user()->id;
+        $pengajuan->divisi_id = Auth::user()->level;
         $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
-
+        //mengambil nama divisi untuk generate kode pengajuan
         $divisi = Divisi::find($pengajuan->divisi_id);
-        $pengajuan->divisi = $divisi->nama_divisi;
-
+        $pengajuan->divisi = $divisi->name;
+        //simpan
         $pengajuan->save();
 
         return redirect('home');

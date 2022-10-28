@@ -34,4 +34,9 @@ class Pengeluaran extends Model
     {
         return $this->belongsTo(Pembebanan::class, 'pembebanan', 'id');
     }
+
+    public function User() 
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
