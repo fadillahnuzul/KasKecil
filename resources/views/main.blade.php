@@ -204,7 +204,7 @@
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -221,15 +221,9 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($admin != NULL)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
-                                            @else
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
-                                            @endif
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->tunai ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -245,15 +239,9 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($admin != NULL)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
-                                            @else
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
-                                            @endif
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -302,13 +290,14 @@
                                             <td>Rp. {{number_format($row->total_belanja)}}</td>
                                             <td>Rp. {{number_format($row->sisa)}}</td>
                                             <td>
+                                            @if ($row->Status->id != 6)
                                             <a onclick="set_modal_id({{$row->id}})" href="" target="_blank" data-toggle="modal" data-target="#PrintModal" class="btn btn-info btn-sm" data-id="{{ $row->id }}">Cetak</a>
                                             @if ($row->Status->id != 1 AND $row->Status->id != 3 AND $row->Status->id != 5)
                                                 <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-warning btn-sm">Buat Kas</a>
-                                            @endif
-                                            @if ($row->Status->id == 5)
+                                            @elseif ($row->Status->id == 5)
                                                 <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
+                                            @endif
                                             @endif
                                             </td>
                                         </tr>

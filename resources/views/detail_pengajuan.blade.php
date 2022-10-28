@@ -210,15 +210,9 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($admin != NULL)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai)}}</div>
-                                            @else
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
-                                            @endif
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -234,15 +228,9 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($admin != NULL)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->bank)}}</div>
-                                            @else
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 0</div>
-                                            @endif
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -299,7 +287,7 @@
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>{{$row->tanggal_respon}}</td>
                                             <td>
-                                                @if ($row->status != 5)
+                                                @if ($row->status != 5 AND $row->status != 6)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
                                                     Edit</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">

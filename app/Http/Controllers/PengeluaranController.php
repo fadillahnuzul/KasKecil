@@ -32,8 +32,9 @@ class PengeluaranController extends Controller
         $kas = Pengeluaran::with('Pembebanan', 'Status', 'Kategori')->where('pemasukan', '=', $id)->get();
         session(['key' => $id]);
         $total = $kas->sum('jumlah');
+        $saldo = Saldo::find(Auth::id());
 
-        return view('detail_pengajuan', ['dataKas' => $kas], ['title' => $title, 'button_kas' => $button_kas]);
+        return view('detail_pengajuan', ['dataKas' => $kas], ['title' => $title, 'button_kas' => $button_kas, 'saldo' => $saldo]);
     }
 
     public function laporan()

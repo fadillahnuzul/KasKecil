@@ -178,12 +178,12 @@
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo ,2, ",", ".")}}</div>
                                             @endif
                                             @if ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Total Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
                                         <div class="col-auto">
@@ -204,12 +204,12 @@
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->tunai)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->tunai ,2, ",", ".")}}</div>
                                             
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Total Dipakai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
                                         <div class="col-auto">
@@ -229,11 +229,11 @@
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank ,2, ",", ".")}}</div>
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Sisa</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
                                         <div class="col-auto">

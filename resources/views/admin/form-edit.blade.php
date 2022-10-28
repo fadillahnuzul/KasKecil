@@ -171,7 +171,7 @@
                                 <div class="form-group">
                                     <label for="mutasi">Sumber Dana :</label>
                                     <select name="sumber" id="sumber" class="form-control">
-                                        <option value="">--</option>
+                                        <option value="{{$pengajuan->sumber}}">--</option>
                                         @foreach ($sumber as $sumber)
                                             <option value="{{$sumber->id}}">{{$sumber->sumber_dana}}</option>
                                         @endforeach
