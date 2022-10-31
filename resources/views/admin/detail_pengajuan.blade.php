@@ -185,6 +185,7 @@
                                         <tr>
                                             <th>Tanggal Transaksi</th>
                                             <th>Keterangan</th>
+                                            <th>User</th>
                                             <th>Saldo Masuk</th>
                                             <th>Kas Keluar</th>
                                             <th>Status</th>
@@ -197,6 +198,7 @@
                                         <tr>
                                         <td>{{$row->tanggal}}</td>
                                         <td>{{$row->deskripsi}}</td>
+                                        <td>{{$row->User->username}}</td>
                                         <td>Rp. {{number_format($row->pengajuan->jumlah)}}</td>
                                         <td>Rp. {{number_format($row->jumlah)}}</td>
                                         <td>{{$row->Status->nama_status}}</td>

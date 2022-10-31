@@ -37,6 +37,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithMapping
         return [
             $pengajuan['kode'],
             \Carbon\Carbon::parse($pengajuan['tanggal'])->format('d/m/Y'),
+            $pengajuan['user'],
             $pengajuan['divisi'],
             $pengajuan['deskripsi'],
             number_format($pengajuan['jumlah'], 2, ",", "."),
@@ -49,6 +50,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithMapping
         return [
         'Kode',
         'Tanggal Pengajuan',
+        'User',
         'Divisi',
         'Keterangan',
         'Jumlah Pengajuan', 

@@ -303,6 +303,7 @@
                                         <tr>
                                             <th>Kode</th>
                                             <th>Tanggal</th>
+                                            <th>User</th>
                                             <th>Divisi</th>
                                             <th>Keterangan</th>
                                             <th>Pengajuan</th>
@@ -319,6 +320,7 @@
                                         <tr>
                                             <td>{{$row->kode}}</td>
                                             <td>{{$row->tanggal}}</td>
+                                            <td>{{$row->User->username}}</td>
                                             <td>{{$row->Divisi->name}}</td>
                                             <td>{{$row->deskripsi}}</td>
                                             <td>Rp. {{number_format($row->jumlah)}}</td>                           

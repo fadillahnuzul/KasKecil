@@ -50,7 +50,7 @@ class PengajuanController extends Controller
     }
 
     public function laporan(){
-        $title = "Laporan Kas Kecil";
+        $title = "Laporan Pengajuan Kas Kecil";
         $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status', 5)->get();
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
@@ -114,9 +114,9 @@ class PengajuanController extends Controller
         session(['startDate' => $this->startDate, 'endDate' => $this->endDate]);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
-        $data_pengajuan = Pengajuan::where('divisi_id','!=', 1)->where('status','!=', 1)->where('status','!=', 3)->get();
-        $data_pengeluaran = Pengeluaran::where('divisi_id','!=', 1)->where('status','!=', 1)->where('status','!=', 3)->get();
-        $divisi = Divisi::where('role_id', '!=', '1')->get();
+        $data_pengajuan = Pengajuan::where('status','!=', 1)->where('status','!=', 3)->get();
+        $data_pengeluaran = Pengeluaran::where('status','!=', 1)->where('status','!=', 3)->get();
+        $divisi = Divisi::get();
         // Perhitungan sisa dan total belanja
         $total_masuk = 0;
         foreach ($data_pengajuan as $masuk){
@@ -148,12 +148,13 @@ class PengajuanController extends Controller
         $startDate = $request->session()->get('startDate');
         $endDate = $request->session()->get('endDate');
         if ($startDate AND $endDate) {
-            $data_pengajuan = Pengajuan::with('Divisi','Sumber')->where('status',5)->where('tanggal','>=',$startDate)->where('tanggal','<=',$endDate)->get();
+            $data_pengajuan = Pengajuan::with('User','Divisi','Sumber')->where('status',5)->where('tanggal','>=',$startDate)->where('tanggal','<=',$endDate)->get();
         } else {
-            $data_pengajuan = Pengajuan::with('Divisi','Sumber')->where('status', 5)->get();
+            $data_pengajuan = Pengajuan::with('User','Divisi','Sumber')->where('status', 5)->get();
         }
         for ($i = 0; $i<count($data_pengajuan); $i++) {
             $data_pengajuan[$i]->nama_sumber = Sumber::select('sumber_dana')->where('id',$data_pengajuan[$i]->sumber)->get();
+            $data_pengajuan[$i]->user = $data_pengajuan[$i]->User->username;
         }
         if (!$data_pengajuan) {
             return false;

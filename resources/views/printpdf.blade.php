@@ -28,7 +28,7 @@
                     <tr>
                         <td>Divisi</td>
                         <td></td>
-                        <td> : {{$data->Divisi->nama_divisi}}</td>
+                        <td> : {{$data->Divisi->name}}</td>
                     </tr>
                     <tr>
                         <td>Tanggal Pengajuan</td>
@@ -38,7 +38,7 @@
                     <tr>
                         <td>Nominal Pengajuan</td>
                         <td></td>
-                        <td> : Rp {{number_format($data->jumlah)}}</td>
+                        <td> : Rp {{number_format($data->jumlah, 2, ",", ".")}}</td>
                     </tr>
                     <tr>
                         <td>Keterangan Pengajuan</td>

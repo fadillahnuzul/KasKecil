@@ -178,7 +178,7 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
                                 </div>
-                                @if (Auth::user()->role_id == 1)
+                                @if (Auth::user()->access=='admin')
                                 <div class="form-group">
                                     <label for="tunai">Pengeluaran Tunai :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Tunai" id="tunai" name="tunai">
@@ -187,8 +187,7 @@
                                     <label for="bank">Pengeluaran Bank :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Saldo Bank" id="bank" name="bank">
                                 </div>
-                                @endif
-                                @if (Auth::user()->role_id != 1)
+                                @else
                                 <div class="form-group">
                                     <label for="kredit">Nominal :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>

@@ -164,6 +164,7 @@ class AdminController extends Controller
                 // PENGAJUAN SUMBER TUNAI
                 if ($pengajuan->sumber == 1) {
                     $saldo_admin->tunai = $saldo_admin->tunai + $pengajuan->jumlah;
+                    $saldo_admin->saldo = $saldo_admin->saldo + $pengajuan->jumlah;
                     $jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
                     if ($jumlah > $saldo_admin->tunai) {
                         Alert::error('Approve gagal', 'Maaf, saldo tunai tidak cukup');
@@ -172,10 +173,12 @@ class AdminController extends Controller
                         $tunai_awal = $pengajuan->jumlah;
                         $pengajuan->jumlah = $jumlah;
                         $saldo_admin->tunai = $saldo_admin->tunai - $pengajuan->jumlah;
+                        $saldo_admin->saldo = $saldo_admin->saldo - $pengajuan->jumlah;
                         $saldo->saldo = $saldo->saldo - $tunai_awal + $pengajuan->jumlah;
                     }
                 } elseif ($pengajuan->sumber == 2) {
                     $saldo_admin->bank = $saldo_admin->bank + $pengajuan->jumlah;
+                    $saldo_admin->saldo = $saldo_admin->saldo + $pengajuan->jumlah;
                     $jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
                     if ($jumlah > $saldo_admin->bank) {
                         Alert::error('Approve gagal', 'Maaf, saldo bank tidak cukup');
@@ -184,7 +187,9 @@ class AdminController extends Controller
                         $bank_awal = $pengajuan->jumlah;
                         $pengajuan->jumlah = $jumlah;
                         $saldo_admin->bank = $saldo_admin->bank - $pengajuan->jumlah;
-                        $saldo->saldo = $saldo->saldo - $tunai_awal + $pengajuan->jumlah;
+                        $saldo_admin->saldo = $saldo_admin->saldo - $pengajuan->jumlah;
+                        $saldo->saldo = $saldo->saldo - $bank_awal + $pengajuan->jumlah;
+                        // dd($saldo_admin->bank);
                     }
                 }
                 $saldo_admin->save();
@@ -221,6 +226,7 @@ class AdminController extends Controller
             $saldo_user->saldo = $pengajuan->tunai + $pengajuan->bank;
 
             $saldo_user->save();
+        //PENGAJUAN USER
         } else {
             $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
             if ($pengajuan->jumlah > $saldo_admin){
@@ -231,6 +237,7 @@ class AdminController extends Controller
                 $saldo_akhir = $saldo_awal + preg_replace("/[^0-9]/","",$request->jumlah);
                 $saldo_user->saldo = $saldo_akhir;
                 $saldo_admin->saldo = $saldo_admin->saldo - $pengajuan->jumlah;
+                //PENGAJUAN TUNAI
                 if ($pengajuan->sumber == 1) {
                     if ($pengajuan->jumlah > $saldo_admin->tunai) {
                         Alert::error('Approve gagal', 'Maaf, saldo tunai tidak cukup');
@@ -238,6 +245,7 @@ class AdminController extends Controller
                     } else {
                         $saldo_admin->tunai = $saldo_admin->tunai - $pengajuan->jumlah;
                     }
+                //PENGAJUAN BANK
                 } elseif ($pengajuan->sumber == 2) {
                     if ($pengajuan->jumlah > $saldo_admin->bank) {
                         Alert::error('Approve gagal', 'Maaf, saldo bank tidak cukup');
@@ -248,8 +256,8 @@ class AdminController extends Controller
                 }
                 // $admin->save();
                 // Auth::user()->save();
-                $saldo_user->save();
                 $saldo_admin->save();
+                $saldo_user->save();
             }
         }
         // $pengajuan->Divisi->save();
@@ -300,20 +308,24 @@ class AdminController extends Controller
             $delete = Pengajuan::with('Divisi','User')->findOrFail($id);
             $saldo = Saldo::findOrFail($delete->user_id);
             $saldo_admin = Saldo::findOrFail(Auth::user()->id);
+            //HAPUS ADMIN
             if ($delete->User->access == 'admin') {
                 $saldo->saldo = $saldo->saldo - $delete->jumlah;
             } else {
-            $saldo->saldo = $saldo->saldo - $delete->jumlah;
-            $saldo_admin->saldo = $saldo_admin->saldo + $delete->jumlah;
-            // $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
-            // $admin = $pengajuan_admin->last();
-            if ($delete->sumber == 1) {
-                $saldo_admin->tunai = $saldo_admin->tunai + $delete->jumlah;
-            } elseif ($delete->sumber == 2) {
-                $saldo_admin->bank = $saldo_admin->bank + $delete->jumlah;
-            }
-            // $saldo->save();
-            $saldo_admin->save();
+                //JIKA STATUSNYA BELUM DIAPPROVE ATAU DECLINE
+                if ($delete->status != 1 AND $delete->status != 3) {
+                    $saldo->saldo = $saldo->saldo - $delete->jumlah;
+                    $saldo_admin->saldo = $saldo_admin->saldo + $delete->jumlah;
+                    // $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
+                    // $admin = $pengajuan_admin->last();
+                    if ($delete->sumber == 1) {
+                        $saldo_admin->tunai = $saldo_admin->tunai + $delete->jumlah;
+                    } elseif ($delete->sumber == 2) {
+                        $saldo_admin->bank = $saldo_admin->bank + $delete->jumlah;
+                    }
+                    // $saldo->save();
+                    $saldo_admin->save();
+                }
             }
         //HAPUS PENGELUARAN
         } else if ($pengajuan == 2) {
@@ -334,8 +346,9 @@ class AdminController extends Controller
         session(['key' => $id]);
         $laporan = FALSE;
         $title = "Admin Kas Kecil";
-        $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
-        $admin = $pengajuan_admin->last();
+        // $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
+        // $admin = $pengajuan_admin->last();
+        $saldo = Saldo::findOrFail(Auth::user()->id);
         // Perhitungan sisa dan total belanja
         foreach ($data_kas as $masuk) {
             $total = 0;
@@ -346,7 +359,7 @@ class AdminController extends Controller
             $masuk->total_belanja = $total;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
-        return view('admin/main', ['dataKas' => $data_kas, 'admin'=>$admin], ['divisi' => $divisi, 'title'=>$title, 'laporan'=>$laporan,'startDate'=>$this->startDate, 'endDate'=>$this->endDate]);
+        return view('admin/main', ['dataKas' => $data_kas], ['divisi' => $divisi, 'title'=>$title, 'laporan'=>$laporan,'startDate'=>$this->startDate, 'endDate'=>$this->endDate, 'Saldo'=>$saldo]);
     }
 
     public function detail_divisi($id)

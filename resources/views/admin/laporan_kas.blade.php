@@ -221,6 +221,7 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
+                                            <th>User</th>
                                             <th>Kode Pengajuan</th>
                                             <th>Kas Keluar</th>
                                             <th>Kategori</th>
@@ -234,6 +235,7 @@
                                         <tr>
                                         <td>{{$row->tanggal}}</td>
                                         <td>{{$row->deskripsi}}</td>
+                                        <td>{{$row->User->username}}</td>
                                         <td>{{$row->pengajuan->kode}}</td>
                                         <td>Rp. {{number_format($row->jumlah)}}</td>
                                         <td>{{$row->Kategori->nama_kategori}}</td>

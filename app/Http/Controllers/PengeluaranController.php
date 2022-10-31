@@ -43,7 +43,7 @@ class PengeluaranController extends Controller
         $endDate = $this->endDate;
         $button_kas = FALSE;
         $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 5)->get();
-        $title = "Laporan Kas Kecil";
+        $title = "Laporan Pengeluaran Kas Kecil";
         // dd(view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate]));
         $saldo = Saldo::find(Auth::id());
         
@@ -170,7 +170,7 @@ class PengeluaranController extends Controller
         $this->startDate = $request->startDate;
         $this->endDate = $request->endDate;
         $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
-        $title = "Laporan Kas Kecil";
+        $title = "Laporan Pengeluaran Kas Kecil";
         $kategori = Kategori::with('pengeluaran')->get();
 
         return view(
@@ -185,15 +185,16 @@ class PengeluaranController extends Controller
         $startDate = $request->session()->get('startDate');
         $endDate = $request->session()->get('endDate');
         if ($startDate and $endDate) {
-            $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status', 5)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
+            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 5)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
         } else {
-            $data_pengeluaran = Pengeluaran::with('Pembebanan', 'pengajuan', 'Kategori')->where('status', 5)->get();
+            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 5)->get();
         }
         for ($i = 0; $i < count($data_pengeluaran); $i++) {
             $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id', $data_pengeluaran[$i]->pemasukan)->get();
             $data_pengeluaran[$i]->nama_kategori = Kategori::select('nama_kategori')->where('id', $data_pengeluaran[$i]->kategori)->get();
             $data_pengeluaran[$i]->nama_pembebanan = Pembebanan::select('nama_pembebanan')->where('id', $data_pengeluaran[$i]->pembebanan)->get();
-            $data_pengeluaran[$i]->divisi = Divisi::select('nama_divisi')->where('id', $data_pengeluaran[$i]->divisi_id)->get();
+            $data_pengeluaran[$i]->divisi = Divisi::select('name')->where('id', $data_pengeluaran[$i]->User->level)->get();
+            $data_pengeluaran[$i]->user = $data_pengeluaran[$i]->User->username;
         }
 
         if (!$data_pengeluaran) {

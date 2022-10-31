@@ -47,7 +47,7 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
-             @if (Auth::user()->role_id==1)
+             @if (Auth::user()->access=='admin')
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -73,8 +73,8 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
-             @endif
-             @if (Auth::user()->role_id!=1)
+             
+             @else
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>

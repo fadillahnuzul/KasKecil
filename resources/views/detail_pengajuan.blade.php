@@ -43,7 +43,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            @if (Auth::user()->role_id==1)
+            @if (Auth::user()->access=='admin')
             <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -69,8 +69,7 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
-            @endif
-            @if (Auth::user()->role_id!=1)
+            @else
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -182,7 +181,7 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
+                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
                     </div>
                     <!-- Card Saldo -->
                     <div class="row">
@@ -203,7 +202,7 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        @if (Auth::user()->role_id==1)
+                        @if (Auth::user()->access=='admin')
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
@@ -212,7 +211,7 @@
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->tunai ,2, ",", ".")}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo->tunai ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -230,7 +229,7 @@
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($admin->bank)}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo->bank)}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -251,6 +250,9 @@
                                 <span class="text">Catat Kas</span>
                             </a>
                             @endif
+                            @if ($button_kas==TRUE)
+                            
+                            @endif
                         </div>
 
                         <div class="card-body">
@@ -260,7 +262,10 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
+                                            @if ($button_kas==FALSE)
+                                            <th>Kode Pengajuan</th>
                                             <th>Saldo Masuk</th>
+                                            @endif
                                             <th>Kas Keluar</th>
                                             <th>Kategori</th>
                                             <th>Pembebanan</th>
@@ -274,6 +279,9 @@
                                         <tr>
                                             <td>{{$row->tanggal}}</td>
                                             <td>{{$row->deskripsi}}</td>
+                                            @if ($button_kas==FALSE)
+                                            <td>{{$row->pengajuan->kode}}</td>
+                                            @endif
                                             <td>Rp. {{number_format($row->pengajuan->jumlah)}}</td>
                                             <td>Rp. {{number_format($row->jumlah)}}</td>
                                             <td>@if ($row->kategori)
