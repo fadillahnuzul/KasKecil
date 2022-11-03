@@ -281,8 +281,8 @@
                                             <td>{{$row->deskripsi}}</td>
                                             @if ($button_kas==FALSE)
                                             <td>{{$row->pengajuan->kode}}</td>
-                                            @endif
                                             <td>Rp. {{number_format($row->pengajuan->jumlah)}}</td>
+                                            @endif
                                             <td>Rp. {{number_format($row->jumlah)}}</td>
                                             <td>@if ($row->kategori)
                                                 {{$row->Kategori->nama_kategori}}

@@ -36,7 +36,7 @@ class AdminController extends Controller
         // Perhitungan sisa dan total belanja
         foreach ($data_kas as $masuk) {
             $total = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
@@ -73,7 +73,7 @@ class AdminController extends Controller
         // Perhitungan sisa dan total belanja pada card
         foreach ($dataKas as $masuk) {
             $total = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
@@ -352,7 +352,7 @@ class AdminController extends Controller
         // Perhitungan sisa dan total belanja
         foreach ($data_kas as $masuk) {
             $total = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->get();
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
@@ -365,7 +365,7 @@ class AdminController extends Controller
     public function detail_divisi($id)
     {
         $pengajuan = Pengajuan::find($id);
-        $kas = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->get();
+        $kas = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->where('status','!=',6)->get();
         session(['key' => $id]);
         
         return view ('admin/detail_pengajuan', ['dataKas' => $kas], ['pengajuan' => $pengajuan]);

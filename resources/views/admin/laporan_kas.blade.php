@@ -225,6 +225,7 @@
                                             <th>Kode Pengajuan</th>
                                             <th>Kas Keluar</th>
                                             <th>Kategori</th>
+                                            <th>Pembebanan</th>
                                             <th>Status</th>
                                             <th>Tanggal Respon</th>
                                             <th>Aksi</th>
@@ -238,7 +239,14 @@
                                         <td>{{$row->User->username}}</td>
                                         <td>{{$row->pengajuan->kode}}</td>
                                         <td>Rp. {{number_format($row->jumlah)}}</td>
-                                        <td>{{$row->Kategori->nama_kategori}}</td>
+                                        <td>@if ($row->kategori)
+                                                {{$row->Kategori->nama_kategori}}
+                                                @endif
+                                            </td>
+                                            <td>@if ($row->pembebanan)
+                                                {{$row->Pembebanan->nama_pembebanan}}
+                                                @endif
+                                            </td>
                                         <td>{{$row->Status->nama_status}}</td>
                                         <td>{{$row->tanggal_respon}}</td>
                                         <td>
