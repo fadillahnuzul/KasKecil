@@ -24,7 +24,7 @@
     
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -197,6 +197,22 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" required>
                                 </div>
+                                <!-- <div class="form-group">
+                                    <label for="company">Company :</label>
+                                    <select name="company" id="company" class="form-control" required>
+                                        @foreach ($Company as $Company)
+                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+	                                <label for="title">Project :</label>
+	                                <select name="project" id="project" class="form-control">
+                                        @foreach ($Project as $Project)
+                                            <option value="{{$Project->project_id}}">{{$Project->name}}</option>
+                                        @endforeach
+                                    </select>
+	                            </div> -->
                                 <!-- @if (Auth::user()->role_id == 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengajuan Tunai :</label>
@@ -328,6 +344,29 @@
             }
     </script>
 
+    <!-- Dependent dropdown project
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('select[name="company"]').on('change', function() {
+            var stateID = $(this).val();
+            if(stateID) {
+                $.ajax({
+                    url: '/project/'+stateID,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data) {                      
+                        $('select[name="project"]').empty();
+                        $.each(data, function(key, value) {
+                        $('select[name="project"]').append('<option value="'+ key +'">'+ value +'</option>');
+                        });
+                    }
+                });
+            }else{
+                $('select[name="project"]').empty();
+            }
+        });
+    });
+</script> -->
 </body>
 
 </html>

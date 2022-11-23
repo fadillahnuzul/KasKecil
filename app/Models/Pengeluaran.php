@@ -32,11 +32,16 @@ class Pengeluaran extends Model
 
     public function Pembebanan()
     {
-        return $this->belongsTo(Pembebanan::class, 'pembebanan', 'id');
+        return $this->belongsTo(Company::class, 'pembebanan', 'project_company_id');
     }
 
     public function User()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function COA() 
+    {
+        return $this->belongsTo(COA::class, 'coa', 'coa_id');
     }
 }

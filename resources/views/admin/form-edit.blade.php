@@ -58,7 +58,7 @@
                     <span>Buat Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/#">
+                <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Pengajuan Admin</span></a>
             </li>
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="jumlah">Nominal :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="{{$pengajuan->jumlah}}" required />
+                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="Rp. {{substr($pengajuan->jumlah,0,-3)}}" required />
                                 </div>
                                 @if ($pengajuan->User->access != 'admin')
                                 <div class="form-group">
@@ -178,16 +178,16 @@
                                     </select>
                                 </div>
                                 @endif
-                                @if ($pengajuan->User->access == 'admin')
+                                @if ($pengajuan->User->kk_access == 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengajuan Tunai :</label>
                                     <small style="color:red;"> *Kosongi jika tidak ada</small>
-                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" value="{{$pengajuan->tunai}}">
+                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" value="Rp. {{substr($pengajuan->tunai,0,-3)}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="bank">Pengajuan Bank :</label>
                                     <small style="color:red;"> *Kosongi jika tidak ada</small>
-                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank" value="{{$pengajuan->bank}}">
+                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank" value="Rp. {{substr($pengajuan->bank,0,-3)}}">
                                 </div>
                                 @endif 
                                 @if ($edit == FALSE) 
@@ -289,31 +289,6 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-    <script type="text/javascript">
-        var jumlah_tunai = document.getElementById('tunai');
-            jumlah_tunai.addEventListener('keyup', function(e) {
-                jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
-            });
-        var jumlah_bank = document.getElementById('bank');
-            jumlah_bank.addEventListener('keyup', function(e) {
-                jumlah_bank.value = currencyIdr(this.value, 'Rp ');
-            });
-
-        function currencyIdr(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ?'.':'';
-                rupiah += separator + ribuan.join('.');
-            }
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-            }
-    </script>
     <script type="text/javascript">
         var jumlah = document.getElementById('jumlah');
             jumlah.addEventListener('keyup', function(e) {

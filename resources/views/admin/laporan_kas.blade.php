@@ -57,7 +57,7 @@
                     <span>Buat Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/#">
+                <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Pengajuan Admin</span></a>
             </li>
@@ -224,7 +224,7 @@
                                             <th>User</th>
                                             <th>Kode Pengajuan</th>
                                             <th>Kas Keluar</th>
-                                            <th>Kategori</th>
+                                            <th>COA</th>
                                             <th>Pembebanan</th>
                                             <th>Status</th>
                                             <th>Tanggal Respon</th>
@@ -238,13 +238,13 @@
                                         <td>{{$row->deskripsi}}</td>
                                         <td>{{$row->User->username}}</td>
                                         <td>{{$row->pengajuan->kode}}</td>
-                                        <td>Rp. {{number_format($row->jumlah)}}</td>
-                                        <td>@if ($row->kategori)
-                                                {{$row->Kategori->nama_kategori}}
-                                                @endif
+                                        <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                        <td>@if ($row->coa)
+                                                {{$row->COA->code}}
+                                            @endif
                                             </td>
                                             <td>@if ($row->pembebanan)
-                                                {{$row->Pembebanan->nama_pembebanan}}
+                                                {{$row->Pembebanan->name}}
                                                 @endif
                                             </td>
                                         <td>{{$row->Status->nama_status}}</td>

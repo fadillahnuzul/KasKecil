@@ -34,27 +34,27 @@ class KasKecilExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             \Carbon\Carbon::parse($pengeluaran['tanggal'])->format('d/m/Y'),
+            substr($pengeluaran['coa'],10,-3),
             $pengeluaran['user'],
             substr($pengeluaran['divisi'],10,-3),
             $pengeluaran['deskripsi'],
             number_format($pengeluaran['jumlah'], 2, ",", "."),
             str_ireplace('\/','/',substr($pengeluaran['pengajuan'],10,-3)),
             \Carbon\Carbon::parse($pengeluaran['tanggal_respon'])->format('d/m/Y'),
-            substr($pengeluaran['nama_kategori'],19,-3),
-            substr($pengeluaran['nama_pembebanan'],21,-3),
+            substr($pengeluaran['nama_pembebanan'],10,-3),
         ];
     }
 
     public function headings(): array{
         return [
         'Tanggal',
+        'COA',
         'User',
         'Divisi',
         'Keterangan',
         'Nominal', 
         'Kode Pengajuan',
         'Tanggal Responsi',
-        'Kategori',
         'Pembebanan',
         ];
     }

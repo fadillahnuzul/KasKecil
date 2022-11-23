@@ -10,6 +10,9 @@ use App\Models\Kategori;
 use App\Models\Pembebanan;
 use App\Models\Divisi;
 use App\Models\Saldo;
+use App\Models\COA;
+use App\Models\Company;
+use App\Models\Project;
 use App\Exports\KasKecilExport;
 use Alert;
 use Carbon\Carbon;
@@ -29,7 +32,7 @@ class PengeluaranController extends Controller
     {
         $button_kas = TRUE;
         $title = "Detail Pengajuan";
-        $kas = Pengeluaran::with('Pembebanan', 'Status', 'Kategori')->where('pemasukan', '=', $id)->get();
+        $kas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->where('pemasukan', '=', $id)->get();
         session(['key' => $id]);
         $total = $kas->sum('jumlah');
         $saldo = Saldo::find(Auth::id());
@@ -42,7 +45,7 @@ class PengeluaranController extends Controller
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $button_kas = FALSE;
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 5)->get();
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 7)->get();
         $title = "Laporan Pengeluaran Kas Kecil";
         // dd(view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate]));
         $saldo = Saldo::find(Auth::id());
@@ -53,9 +56,10 @@ class PengeluaranController extends Controller
     public function create()
     {
         $kategori = Kategori::get();
-        $pembebanan = Pembebanan::get();
+        $Company = Company::get();
+        $Coa = COA::where('status','!=',0)->get();
 
-        return view('form_kas', ['kategori' => $kategori, 'pembebanan' => $pembebanan]);
+        return view('form_kas', ['kategori' => $kategori, 'Company' => $Company, 'Coa' => $Coa]);
     }
 
     public function save(Request $request)
@@ -64,13 +68,15 @@ class PengeluaranController extends Controller
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
         $kas->kategori = $request->kategori;
-        $kas->pembebanan = $request->pembebanan;
+        $kas->coa = $request->coa;
+        $kas->pembebanan = $request->company;
+        $kas->tujuan = $request->tujuan;
         $kas->status = "4";
         $kas->pemasukan = $request->session()->get('key');
         $kas->user_id = Auth::user()->id;
         $kas->divisi_id = Auth::user()->level;
         //Kas admin
-        if (Auth::user()->access == 'admin') {
+        if (Auth::user()->kk_access == '1') {
             $tunai = preg_replace("/[^0-9]/", "", $request->tunai);
             $bank = preg_replace("/[^0-9]/", "", $request->bank);
             $kas->jumlah = $tunai + $bank;
@@ -113,10 +119,10 @@ class PengeluaranController extends Controller
     public function edit(Request $request, $id)
     {
         $kas = Pengeluaran::with('pengajuan', 'Kategori', 'Pembebanan')->findOrFail($id);
-        $kategori = Kategori::where('id', '!=', $kas->kategori)->get();
-        $pembebanan = Pembebanan::where('id', '!=', $kas->pembebanan)->get();
+        $Company = Company::get();
+        $Coa = COA::where('status','!=',0)->get();
 
-        return view('form-edit', ['kas' => $kas, 'kategori' => $kategori, 'pembebanan' => $pembebanan]);
+        return view('form-edit', compact('kas','Company','Coa'));
     }
 
     public function update(Request $request, $id)
@@ -126,7 +132,9 @@ class PengeluaranController extends Controller
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
         $kas->kategori = $request->kategori;
-        $kas->pembebanan = $request->pembebanan;
+        $kas->coa = $request->coa;
+        $kas->pembebanan = $request->company;
+        $kas->tujuan = $request->tujuan;
         $saldo = Saldo::findOrFail(Auth::user()->id);
         //mengembalikan saldo
         $saldo->saldo = $saldo->saldo - $kas_input + $kas->jumlah;
@@ -185,14 +193,14 @@ class PengeluaranController extends Controller
         $startDate = $request->session()->get('startDate');
         $endDate = $request->session()->get('endDate');
         if ($startDate and $endDate) {
-            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 5)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
+            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
         } else {
-            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 5)->get();
+            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->get();
         }
         for ($i = 0; $i < count($data_pengeluaran); $i++) {
             $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id', $data_pengeluaran[$i]->pemasukan)->get();
-            $data_pengeluaran[$i]->nama_kategori = Kategori::select('nama_kategori')->where('id', $data_pengeluaran[$i]->kategori)->get();
-            $data_pengeluaran[$i]->nama_pembebanan = Pembebanan::select('nama_pembebanan')->where('id', $data_pengeluaran[$i]->pembebanan)->get();
+            $data_pengeluaran[$i]->coa = COA::select('code')->where('coa_id', $data_pengeluaran[$i]->coa)->get();
+            $data_pengeluaran[$i]->nama_pembebanan = Company::select('name')->where('project_company_id', $data_pengeluaran[$i]->pembebanan)->get();
             $data_pengeluaran[$i]->divisi = Divisi::select('name')->where('id', $data_pengeluaran[$i]->User->level)->get();
             $data_pengeluaran[$i]->user = $data_pengeluaran[$i]->User->username;
         }

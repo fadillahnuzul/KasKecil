@@ -178,7 +178,7 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
                                 </div>
-                                @if (Auth::user()->access=='admin')
+                                @if (Auth::user()->kk_access== 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengeluaran Tunai :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Tunai" id="tunai" name="tunai">
@@ -193,22 +193,26 @@
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="kategori">Kategori :</label>
-                                    <select name="kategori" id="kategori" class="form-control">
+                                    <label for="coa">COA :</label>
+                                    <select name="coa" id="coa" class="form-control" required>
                                         <option value="">--</option>
-                                        @foreach ($kategori as $kategori)
-                                            <option value="{{$kategori->id}}">{{$kategori->nama_kategori}}</option>
+                                        @foreach ($Coa as $Coa)
+                                            <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pembebanan">Pembebanan :</label>
-                                    <select name="pembebanan" id="pembebanan" class="form-control">
+                                    <label for="company">Company :</label>
+                                    <select name="company" id="company" class="form-control">
                                         <option value="">--</option>
-                                        @foreach ($pembebanan as $pembebanan)
-                                            <option value="{{$pembebanan->id}}">{{$pembebanan->nama_pembebanan}}</option>
+                                        @foreach ($Company as $Company)
+                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="tujuan" name="tujuan" required>
                                 </div>
                                 @endif 
                                 <button type="submit" class="btn btn-primary">Submit</button>

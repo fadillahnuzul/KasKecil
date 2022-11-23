@@ -177,26 +177,30 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="jumlah">Kas Keluar :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="{{$kas->jumlah}}">
+                                    <input type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="Rp. {{substr($kas->jumlah,0,-3)}}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="kategori">Kategori :</label>
-                                    <select name="kategori" id="kategori" class="form-control">
-                                        <option value="{{$kas->kategori}}">{{$kas->Kategori->nama_kategori}}</option>
-                                        @foreach ($kategori as $kategori)
-                                            <option value="{{$kategori->id}}">{{$kategori->nama_kategori}}</option>
+                                    <label for="coa">COA :</label>
+                                    <select name="coa" id="coa" class="form-control" required>
+                                        <option value="{{$kas->coa}}">{{$kas->COA->name}}</option>
+                                        @foreach ($Coa as $Coa)
+                                            <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pembebanan">Pembebanan :</label>
-                                    <select name="pembebanan" id="pembebanan" class="form-control">
-                                        <option value="{{$kas->pembebanan}}">{{$kas->Pembebanan->nama_pembebanan}}</option>
-                                        @foreach ($pembebanan as $pembebanan)
-                                            <option value="{{$pembebanan->id}}">{{$pembebanan->nama_pembebanan}}</option>
+                                    <label for="company">Company :</label>
+                                    <select name="company" id="company" class="form-control">
+                                        <option value="{{$kas->pembebanan}}">{{$kas->Pembebanan->name}}</option>
+                                        @foreach ($Company as $Company)
+                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
                                         @endforeach
                                     </select>
-                                </div> 
+                                </div>
+                                <div class="form-group">
+                                    <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="tujuan" name="tujuan" value="{{$kas->tujuan}}" required>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                             <script type="text/javascript">

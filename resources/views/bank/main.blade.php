@@ -10,10 +10,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Detail Pengeluaran</title>
-     <!-- Checkbox -->
+    <title>{{$title}}</title>
+    <!-- Checkbox -->
     <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+    
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -25,7 +26,7 @@
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
     <!-- Ajax -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -50,31 +51,30 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="/home_admin">
+                <a class="nav-link" href="/home_bank">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Buat Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/#">
+                <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Pengajuan Admin</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
-                <a class="nav-link" href="/admin_laporan">
+                <a class="nav-link" href="/bank_laporan">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Laporan Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                <a class="nav-link" href="/bank_laporan_kas_keluar">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
-
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -95,6 +95,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <div class="d-sm-flex align-items-center justify-content-between">
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
+                </div>
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -169,21 +172,19 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Detail Pengeluaran</h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
-                    </div>
-                    <div class="row">
+                <!-- Page Heading -->
+
+                <!-- Saldo, Tunai, Bank -->
+                <!-- Card Saldo -->
+                <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Saldo Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($pengajuan->jumlah ,2, ",", ".")}}</div>
+                                                Total Pengajuan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -193,22 +194,6 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-danger shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Pengeluaran</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalPengeluaran ,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                 
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -217,8 +202,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Diklaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalDiklaim ,2, ",", ".")}}</div>
+                                                Total Dipakai</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -227,26 +212,95 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <!-- End Card Tunai -->
+                        <!-- Card Bank -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
+                                                Sisa</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa ,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Bank -->
+                        </div>
+
+                <!-- terpakai, sisa dashboard -->
+                    
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h5 style="float:right;">Kode Pengajuan : {{$pengajuan->kode}}</h5>
+                        <!-- Dropdown Divisi -->
+                        <div class="dropdown" style="float:right;">
+                            <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Pilih Divisi
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/home_admin">All</a>
+                            @foreach ($divisi as $divisi)
+                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->name}}</a>
+                            @endforeach
+                            </div>
                         </div>
+                        <!-- End Dropdown Divisi -->
+                        @if ($laporan == TRUE)
+                            <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        @endif
+                        <div class="container">
+                            <div class="row">
+                                @if ($laporan == FALSE)
+                                <form action="/filter_pengajuan/1" method="POST">
+                                @elseif ($laporan == TRUE)
+                                <form action="/filter_pengajuan/2" method="POST">
+                                @endif
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                            
+                        @include('sweetalert::alert')
+                        </div>
+                        
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table id="dataTable2" class="table table-bordered" width="100%" cellspacing="0">
+                                <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <!-- <th></th> -->
+                                            <th>Kode</th>
                                             <th>Tanggal</th>
-                                            <th>Keterangan</th>
                                             <th>User</th>
-                                            <th>Kas Keluar</th>
-                                            <th>COA</th>
-                                            <th>Pembebanan</th>
+                                            <th>Divisi</th>
+                                            <th>Keterangan</th>
+                                            <th>Pengajuan</th>
+                                            <th>Sumber Dana</th>
+                                            <th>Total Belanja</th>
+                                            <th>Sisa</th>
                                             <th>Status</th>
-                                            <th>Tanggal Respon</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -254,38 +308,43 @@
                                     <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                        <!-- <td>{{$row->id}}</td> -->
-                                        <td>{{$row->tanggal}}</td>
-                                        <td>{{$row->deskripsi}}</td>
-                                        <td>{{$row->User->username}}</td>
-                                        <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                        <td>@if ($row->coa)
-                                                {{$row->COA->code}}
-                                            @endif
-                                            </td>
-                                            <td>@if ($row->pembebanan)
-                                                {{$row->Pembebanan->name}}
+                                            <!-- <td>{{$row->id}}</td> -->
+                                            <td>{{$row->kode}}</td>
+                                            <td>{{$row->tanggal}}</td>
+                                            <td>{{$row->User->username}}</td>
+                                            <td>{{$row->Divisi->name}}</td>
+                                            <td>{{$row->deskripsi}}</td>
+                                            <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>                           
+                                            <td>@if ($row->sumber == NULL) 
+                                                -
+                                                @endif
+                                                @if ($row->sumber != NULL)
+                                                    {{$row->Sumber->sumber_dana}}
                                                 @endif
                                             </td>
-                                        <td>{{$row->Status->nama_status}}</td>
-                                        <td>{{$row->tanggal_respon}}</td>
-                                        <td>
-                                        @if ($row->status == 4)
-                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Klaim</a> 
-                                        @endif
-                                        @if ($row->status == 5)
-                                            <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
-                                        @endif 
-                                        <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
-                                        </td>
+                                            <td>Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
+                                            <td>Rp. {{number_format($row->sisa,2,",", ".")}}</td>
+                                            <td>{{$row->Status->nama_status}}</td>
+                                            <td>
+                                            @if ($row->Status->id != 6)
+                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_bank/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
+                                            <a href="/edit_bank/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
+                                            @if ($row->Status->id == 1)
+                                                <a href="/acc_bank/{{$row->id}}" class="btn btn-success btn-sm">
+                                                Approve</a> 
+                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak_bank/{{$row->id}}" class="btn btn-warning btn-sm">
+                                                Decline</a>
+                                            @elseif ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
+                                                <a href="/detail_bank/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
+                                            @endif
+                                            @endif
+                                            </td>
                                         </tr>
-                                        @endforeach 
                                         <?php $no++ ;?>
+                                        @endforeach 
                                     </tbody>
                                 </table>
-                                <!-- <button class="btn btn-primary" id="save-btn">Klaim</button>
-                                <h5 style="margin-top:15px" id="totalDiklaim"></h5> -->
+                                <!-- <button class="btn btn-primary" id="save-btn">Klaim</button> -->
                             </div>
                         </div>
                     </div>
@@ -336,40 +395,10 @@
         </div>
     </div>
 
-    <!-- Done Modal -->
-    <div class="modal fade" id="DoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Inputkan tanggal penyerahan nota</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                <form action="/kas_selesai" method="POST">
-                    @csrf
-                    <input type="hidden" name="modal_id" id="modal_id">
-                        <div class="form-group">
-                            <label for="tanggal">Tanggal Serah Nota :</label>
-                                <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal" name="tanggal" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div> 
-                        </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>function set_modal_id(id) {
-        document.getElementById("modal_id").value = id;
-    } </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>  
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
@@ -382,15 +411,13 @@
     <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
-   <!-- Checkbox -->
-   <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <!-- Checkbox -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>    
     <!-- <script type="text/javascript">
         var table;
         $(document).ready(function () {
-            table = $('#dataTable2').DataTable({
+            table = $('#dataTable').DataTable({
                 'columnDefs' :[{
                     'targets':0,
                     'checkboxes':{
@@ -404,46 +431,29 @@
             var selected_rows = table.column(0).checkboxes.selected();
 
             const rowIds = [];
-            $.each(selected_rows, function(key, pengeluaranId){
-                rowIds.push(pengeluaranId);
+            $.each(selected_rows, function(key, pengajuanId){
+                rowIds.push(pengajuanId);
             });
             console.table(rowIds);
             $.ajaxSetup({
-                headers: {
+                    headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            let totalDiklaim = document.querySelector("#totalDiklaim");
-            $.ajax({
-                url: 'klaim',
-                type: 'get',  
-                datatype: 'json',
-                data: {pengeluaranId: rowIds},
-                success: function (data) {
-                    data = currencyIdrUser(data, 'Rp ');
-                    totalDiklaim.innerHTML = "Total pengeluaran diklaim :  "+data;
-                    
-                },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(data);
-                },
-            });
+                    }
+                });
+                $.ajax({
+                    url: '/klaim',
+                    type: "POST",  
+                    datatype: "json",
+                    data: {pengajuanId: rowIds},
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (data, textStatus, errorThrown) {
+                        console.log(data);
+ 
+                    },
+                });
         });
-        function currencyIdrUser(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ?'.':'';
-                rupiah += separator + ribuan.join('.');
-            }
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-            }
         </script> -->
 </body>
 

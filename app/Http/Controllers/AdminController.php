@@ -26,15 +26,18 @@ class AdminController extends Controller
         $this->endDate = Carbon::now()->endOfMonth();
     }
     
-    public function index(){
+    public function index(Request $request){
+        $saldoAwal = $request->session()->get('saldo_awal');
+        $startDate = $this->startDate;
+        $endDate = $this->endDate;
         $laporan = FALSE;
-        $data_kas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->get();
-        $saldo = Saldo::findOrFail(Auth::user()->id);
+        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->get();
+        $Saldo = Saldo::findOrFail(Auth::user()->id);
         $divisi = Divisi::get();
         $title = "Admin Kas Kecil";
        
         // Perhitungan sisa dan total belanja
-        foreach ($data_kas as $masuk) {
+        foreach ($dataKas as $masuk) {
             $total = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
@@ -44,10 +47,29 @@ class AdminController extends Controller
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
 
+        // Perhitungan sisa dan total belanja pada card
+        $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
+        $data_pengajuan = $pengajuan->filter(function($item, $key){
+            return $item->User->kk_access != '1';
+        });
+        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
+        $data_pengeluaran = $pengeluaran->filter(function($item, $key){
+            return $item->User->kk_access != '1';
+        });
+        $total_pengajuan = 0;
+        foreach ($data_pengajuan as $masuk){
+            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
+        }
+        $total_pengeluaran = 0;
+        foreach ($data_pengeluaran as $keluar){
+            $total_pengeluaran = $total_pengeluaran + $keluar->jumlah;
+        }
+        $sisa = $total_pengajuan - $total_pengeluaran;
+
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('admin/main', ['dataKas' => $data_kas, 'admin'=>$admin], ['Saldo'=>$saldo,'divisi' => $divisi, 'title' => $title, 'laporan' => $laporan, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate]);
+        return view('admin/main', compact('dataKas','admin','Saldo','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
     }
 
     public function laporan(){
@@ -56,10 +78,17 @@ class AdminController extends Controller
         $laporan = TRUE;
         $dataKas = Pengajuan::with('Sumber','User', 'Status')->where('status',5)->get();
         $divisi = Divisi::get();
-        $data_pengajuan = Pengajuan::get();
-        // dd($data_pengajuan);
-        $data_pengeluaran = Pengeluaran::get();
+
         // Perhitungan sisa dan total belanja pada card
+        $data_pengajuan = Pengajuan::with('User')->where('status','!=',3)->where('status','!=',6)->get();
+        $data_pengajuan = $data_pengajuan->filter(function($item, $key){
+            return $item->User->kk_access != '1';
+        });
+        // dd($data_pengajuan);
+        $data_pengeluaran = Pengeluaran::with('User')->where('status','!=',3)->where('status','!=',6)->get();
+        $data_pengeluaran = $data_pengeluaran->filter(function($item, $key){
+            return $item->User->kk_access != '1';
+        });
         $total_pengajuan = 0;
         foreach ($data_pengajuan as $masuk){
             $total_pengajuan = $total_pengajuan + $masuk->jumlah;
@@ -80,20 +109,17 @@ class AdminController extends Controller
             $masuk->total_belanja = $total;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
-
-
         $title = "Laporan Pengajuan";
 
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
-
 
         return view('admin/main', compact('dataKas', 'admin', 'divisi', 'title', 'laporan','total_pengajuan','total_pengeluaran','sisa','startDate','endDate'));
     }
 
     public function laporan_keluar()
     {
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->get();
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->where('status', 7)->get();
         $title = "Laporan Kas Kecil";
         $kategori = Kategori::with('pengeluaran')->get();
 
@@ -124,8 +150,9 @@ class AdminController extends Controller
         $edit = TRUE;
         $sumber = Sumber::select('id', 'sumber_dana')->get();
         $pengajuan = Pengajuan::with('sumber', 'Divisi')->findOrFail($id);
+        $saldo = Saldo::findOrFail($pengajuan->user_id);
 
-        return view('admin/form-edit', ['pengajuan' => $pengajuan], ['sumber' => $sumber, 'edit' => $edit]);
+        return view('admin/form-edit', ['pengajuan' => $pengajuan, 'saldo'=> $saldo], ['sumber' => $sumber, 'edit' => $edit]);
     }
 
     public function update(Request $request, $id)
@@ -141,7 +168,7 @@ class AdminController extends Controller
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->sumber = $request->sumber;     
         //pengajuan admin
-        if ($pengajuan->User->access == 'admin') {
+        if ($pengajuan->User->kk_access == '1') {
             //update tabel saldo
             $tunai_awal = $saldo->tunai;
             $bank_awal = $saldo->bank;
@@ -150,8 +177,8 @@ class AdminController extends Controller
             $saldo->saldo = $saldo->saldo - ($tunai_awal+$bank_awal) + ($pengajuan->tunai+$pengajuan->bank);
             //update tabel pengajuan
             $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
-            $pengajuan->tunai = preg_replace("/[^0-9]/","",$request->tunai);
-            $pengajuan->bank = preg_replace("/[^0-9]/","",$request->bank);
+            $pengajuan->tunai = $saldo->tunai;
+            $pengajuan->bank = $saldo->bank;
         } else {
             // EDIT PENGAJUAN NON-ADMIN
             // if ($pengajuan->jumlah > $saldo->saldo){
@@ -217,14 +244,14 @@ class AdminController extends Controller
         $pengajuan->sumber = $request->sumber;
         $pengajuan->status = "2";        
 
-        if ($pengajuan->User->access == 'admin') {
+        if ($pengajuan->User->kk_access == '1') {
             $pengajuan->tunai = preg_replace("/[^0-9]/","",$request->tunai);
             $pengajuan->bank = preg_replace("/[^0-9]/","",$request->bank);
             $pengajuan->jumlah = $pengajuan->tunai + $pengajuan->bank;
             $saldo_user->tunai = $pengajuan->tunai;
             $saldo_user->bank = $pengajuan->bank;
             $saldo_user->saldo = $pengajuan->tunai + $pengajuan->bank;
-
+            session(['saldo_awal' => $saldo_user->saldo]);
             $saldo_user->save();
         //PENGAJUAN USER
         } else {
@@ -280,13 +307,13 @@ class AdminController extends Controller
     public function done($id)
     {
         $pengeluaran = Pengeluaran::with('Divisi', 'pengajuan')->findOrFail($id);
-        $pengeluaran->status = 5;
+        $pengeluaran->status = 7;
         
         $pengeluaran->save();
 
         $pengeluaran2 = Pengeluaran::with('pengajuan')->where('pemasukan',$pengeluaran->pemasukan)->get();
         $count_pengeluaran = $pengeluaran2->filter(function($item, $key){
-            return $item->status == 5;
+            return $item->status == 7;
         });
 
         if (count($count_pengeluaran) == count($pengeluaran2)) {
@@ -309,7 +336,7 @@ class AdminController extends Controller
             $saldo = Saldo::findOrFail($delete->user_id);
             $saldo_admin = Saldo::findOrFail(Auth::user()->id);
             //HAPUS ADMIN
-            if ($delete->User->access == 'admin') {
+            if ($delete->User->kk_access == '1') {
                 $saldo->saldo = $saldo->saldo - $delete->jumlah;
             } else {
                 //JIKA STATUSNYA BELUM DIAPPROVE ATAU DECLINE
@@ -362,13 +389,22 @@ class AdminController extends Controller
         return view('admin/main', ['dataKas' => $data_kas], ['divisi' => $divisi, 'title'=>$title, 'laporan'=>$laporan,'startDate'=>$this->startDate, 'endDate'=>$this->endDate, 'Saldo'=>$saldo]);
     }
 
-    public function detail_divisi($id)
+    public function detail_divisi(Request $request, $id)
     {
-        $pengajuan = Pengajuan::find($id);
-        $kas = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->where('status','!=',6)->get();
+        $idPengajuan = ($id)??$request->session()->get('key');
+        $pengajuan = Pengajuan::find($idPengajuan);
+        $totalDiklaim = 0; $totalPengeluaran = 0;
+        $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->get();
+        foreach($kas as $k) {
+            $totalPengeluaran = $totalPengeluaran + $k->jumlah;
+        }
         session(['key' => $id]);
-        
-        return view ('admin/detail_pengajuan', ['dataKas' => $kas], ['pengajuan' => $pengajuan]);
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->where('status',7)->get();
+        foreach($kasTotal as $k) {
+            $totalDiklaim = $totalDiklaim + $k->jumlah;
+        }
+    
+        return view ('admin/detail_pengajuan', ['dataKas' => $kas], ['pengajuan' => $pengajuan, 'totalDiklaim'=>$totalDiklaim, 'totalPengeluaran'=>$totalPengeluaran]);
     }
 
     public function edit_done($id)
@@ -415,6 +451,19 @@ class AdminController extends Controller
         }
         
         return back();
+    }
+
+    public function klaim(Request $request) {
+        $total = 0;
+        $id = $request->get('pengeluaranId');
+        $dataKas = Pengeluaran::with('pengajuan')->whereIn('id',$id)->get();
+        foreach ($dataKas as $kas){
+            $kas->status = 7;
+            $total = $total + $kas->jumlah;
+        }
+        $dataKas->save();
+
+        return response()->json(['data' => $total]);
     }
 
 }

@@ -22,7 +22,7 @@ class Pengajuan extends Model
         return [
             'kode' => [
                 'format' => function () {
-                    return 'PKK' . '/' . $this->divisi . '/?'; 
+                    return 'KKc' . '/' . $this->divisi . '/?'; 
                 }, // Format kode yang akan digunakan.
                 'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
             ]
@@ -57,5 +57,20 @@ class Pengajuan extends Model
     public function Saldo() 
     {
         return $this->belongsTo(Saldo::class, 'user_id', 'id');
+    }
+
+    public function COA() 
+    {
+        return $this->belongsTo(COA::class, 'coa', 'coa_id');
+    }
+
+    public function Company() 
+    {
+        return $this->belongsTo(Company::class, 'company', 'project_company_id');
+    }
+
+    public function Project() 
+    {
+        return $this->belongsTo(Project::class, 'project', 'project_id');
     }
 }

@@ -267,8 +267,9 @@
                                             <th>Saldo Masuk</th>
                                             @endif
                                             <th>Kas Keluar</th>
-                                            <th>Kategori</th>
+                                            <th>COA</th>
                                             <th>Pembebanan</th>
+                                            <th>Dibayarkan pada</th>
                                             <th>Status</th>
                                             <th>Tanggal Respon</th>
                                             <th>Aksi</th>
@@ -281,21 +282,25 @@
                                             <td>{{$row->deskripsi}}</td>
                                             @if ($button_kas==FALSE)
                                             <td>{{$row->pengajuan->kode}}</td>
-                                            <td>Rp. {{number_format($row->pengajuan->jumlah)}}</td>
+                                            <td>Rp. {{number_format($row->pengajuan->jumlah,2,",", ".")}}</td>
                                             @endif
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>
-                                            <td>@if ($row->kategori)
-                                                {{$row->Kategori->nama_kategori}}
+                                            <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td>@if ($row->coa)
+                                                {{$row->COA->code}}
                                                 @endif
                                             </td>
                                             <td>@if ($row->pembebanan)
-                                                {{$row->Pembebanan->nama_pembebanan}}
+                                                {{$row->Pembebanan->name}}
+                                                @endif
+                                            </td>
+                                            <td>@if ($row->tujuan)
+                                                {{$row->tujuan}}
                                                 @endif
                                             </td>
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>{{$row->tanggal_respon}}</td>
                                             <td>
-                                                @if ($row->status != 5 AND $row->status != 6)
+                                                @if ($row->status != 7 AND $row->status != 6)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
                                                     Edit</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">

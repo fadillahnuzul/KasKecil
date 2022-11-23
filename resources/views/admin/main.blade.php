@@ -11,18 +11,22 @@
     <meta name="author" content="">
 
     <title>{{$title}}</title>
-
+    <!-- Checkbox -->
+    <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
-    
+
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+    <!-- Ajax -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 
@@ -91,6 +95,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <div class="d-sm-flex align-items-center justify-content-between">
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
+                </div>
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -166,12 +173,12 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                 <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                </div>
+
+                <!-- Saldo, Tunai, Bank -->
+                <!-- Card Saldo -->
                 <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card border-left-success shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
@@ -194,10 +201,10 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        
+                
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card border-left-warning shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
@@ -222,7 +229,7 @@
                         <!-- End Card Tunai -->
                         <!-- Card Bank -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card border-left-info shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
@@ -244,7 +251,66 @@
                             </div>
                         </div>
                         <!-- End Card Bank -->
-                    
+                        </div>
+
+                <!-- terpakai, sisa dashboard -->
+                <!-- Card Terpakai -->
+                @if ($laporan == FALSE)
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
+                                                Total Pengajuan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Saldo -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                Terpakai</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Saldo -->
+                        <!-- Card Bank -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
+                                                Sisa</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa ,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Bank -->
+                        </div>
+                        @endif
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -298,7 +364,7 @@
                         
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Kode</th>
@@ -323,7 +389,7 @@
                                             <td>{{$row->User->username}}</td>
                                             <td>{{$row->Divisi->name}}</td>
                                             <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>                           
+                                            <td>Rp. {{number_format($row->jumlah ,2, ",", ".")}}</td>                           
                                             <td>@if ($row->sumber == NULL) 
                                                 -
                                                 @endif
@@ -331,14 +397,14 @@
                                                     {{$row->Sumber->sumber_dana}}
                                                 @endif
                                             </td>
-                                            <td>Rp. {{number_format($row->total_belanja)}}</td>
-                                            <td>Rp. {{number_format($row->sisa)}}</td>
+                                            <td>Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
+                                            <td>Rp. {{number_format($row->sisa,2, ",", ".")}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>
                                             @if ($row->Status->id != 6)
                                             <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                             <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
-                                            @if ($row->Status->id == 1)
+                                            @if ($row->Status->id == 1 AND $row->User->kk_access == 2)
                                                 <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
                                                 Approve</a> 
                                                 <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
@@ -353,6 +419,8 @@
                                         @endforeach 
                                     </tbody>
                                 </table>
+                                <!-- <button class="btn btn-primary" id="save-btn">Klaim</button>
+                                <h5 style="margin-top:15px" id="totalDiklaim"></h5> -->
                             </div>
                         </div>
                     </div>
@@ -403,11 +471,10 @@
         </div>
     </div>
 
-    
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>  
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
@@ -420,8 +487,67 @@
     <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+    <!-- Checkbox -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>    
+    <!-- <script type="text/javascript">
+        var table;
+        $(document).ready(function () {
+            table = $('#dataTable').DataTable({
+                'columnDefs' :[{
+                    'targets':0,
+                    'checkboxes':{
+                        'selectRow':true
+                    }
+                }]
+            });
+        });
 
+        $('#save-btn').on('click',function(){
+            var selected_rows = table.column(0).checkboxes.selected();
+
+            const rowIds = [];
+            $.each(selected_rows, function(key, pengajuanId){
+                rowIds.push(pengajuanId);
+            });
+            console.table(rowIds);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            let totalDiklaim = document.querySelector("#totalDiklaim");
+            $.ajax({
+                url: 'klaim',
+                type: 'get',  
+                datatype: 'json',
+                data: {pengajuanId: rowIds},
+                success: function (data) {
+                    data = currencyIdrUser(data, 'Rp ');
+                    totalDiklaim.innerHTML = "Total pengajuan diklaim :  "+data;
+                    
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+        function currencyIdrUser(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+        </script> -->
 </body>
 
 </html>

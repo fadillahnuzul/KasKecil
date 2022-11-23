@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Edit Pengajuan</title>
+    <title>{{$title}}</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -48,11 +48,11 @@
 
              <!-- Nav Item - Dashboard -->
              <li class="nav-item">
-                <a class="nav-link" href="/home_admin">
+                <a class="nav-link" href="/home_bank">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Buat Pengajuan</span></a>
@@ -61,14 +61,14 @@
                 <a class="nav-link" href="/#">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Pengajuan Admin</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
-                <a class="nav-link" href="/admin_laporan">
+                <a class="nav-link" href="/bank_laporan">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Laporan Pengajuan</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin_laporan_kas_keluar">
+                <a class="nav-link" href="/bank_laporan_kas_keluar">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
@@ -131,9 +131,10 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                @include('sweetalert::alert')
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Form Persetujuan</h1>
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
                     </div>
                     
                     <!-- DataTales Example -->
@@ -143,26 +144,32 @@
                     
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/simpan_done/{{$pengeluaran->id}}" method="POST">
+                            @if ($edit == FALSE)
+                            <form action="/setujui_bank/{{$pengajuan->id}}" method="POST">
+                            @endif
+                            @if ($edit == TRUE)
+                            <form action="/update_bank/{{$pengajuan->id}}" method="POST">
+                            @endif
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
                                     <label for="tanggal">Tanggal :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Pengajuan" id="tanggal" name="tanggal" value="{{$pengeluaran->tanggal}}" required>
+                                    <input type="date" class="form-control" placeholder="Tanggal Pengajuan" id="tanggal" name="tanggal" value="{{$pengajuan->tanggal}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" value="{{$pengeluaran->deskripsi}}" required>
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" value="{{$pengajuan->deskripsi}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="debit">Jumlah Pengeluaran :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="jumlah" name="jumlah" value="Rp. {{substr($pengeluaran->jumlah,0,-3)}}">
+                                    <label for="jumlah">Nominal :</label>
+                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="Rp. {{substr($pengajuan->jumlah, 0, -3)}}" required />
                                 </div>
-                                <div class="form-group">
-                                    <label for="tanggal_respon">Tanggal Penyerahan Nota :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal_respon" name="tanggal_respon" value="{{$pengeluaran->tanggal_respon}}" required>
-                                </div>
+                                @if ($edit == FALSE) 
+                                <button type="submit" class="btn btn-primary">Setujui</button>
+                                @endif
+                                @if ($edit == TRUE)
                                 <button type="submit" class="btn btn-primary">Simpan</button>
+                                @endif
                                 </form>
                             </div>
                         </div>
@@ -191,7 +198,7 @@
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
+    <a class="scroll-to-0top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
@@ -210,32 +217,6 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-primary" href="/logout">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Done Modal -->
-    <div class="modal fade" id="SumberModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Form Sumber</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                <form action="/input_sumber" method="POST">
-                    @csrf
-                        <div class="form-group">
-                            <label for="sumber">Input sumber :</label>
-                            <input type="text" class="form-control" placeholder="Input nama sumber" id="sumber" name="sumber" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div> 
-                        </form>
                 </div>
             </div>
         </div>

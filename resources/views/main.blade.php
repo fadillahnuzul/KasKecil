@@ -285,10 +285,10 @@
                                             <td>{{$row->kode}}</td>
                                             <td>{{$row->tanggal}}</td>
                                             <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>
+                                            <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
-                                            <td>Rp. {{number_format($row->total_belanja)}}</td>
-                                            <td>Rp. {{number_format($row->sisa)}}</td>
+                                            <td>Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
+                                            <td>Rp. {{number_format($row->sisa,2,",", ".")}}</td>
                                             <td>
                                             @if ($row->Status->id != 6)
                                             <a onclick="set_modal_id({{$row->id}})" href="" target="_blank" data-toggle="modal" data-target="#PrintModal" class="btn btn-info btn-sm" data-id="{{ $row->id }}">Cetak</a>

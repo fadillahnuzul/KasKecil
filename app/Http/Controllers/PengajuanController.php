@@ -9,6 +9,9 @@ use App\Models\Pengeluaran;
 use App\Models\Divisi;
 use App\Models\Sumber;
 use App\Models\Saldo;
+use App\Models\COA;
+use App\Models\Company;
+use App\Models\Project;
 use App\Exports\PengajuanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Alert;
@@ -26,10 +29,23 @@ class PengajuanController extends Controller
         $this->endDate = Carbon::now()->endOfMonth('Y-m-d');
     }
 
-    public function index(){
+    public function welcome() {
+        $Company = Company::get();
+        return view('welcome_user',compact('Company'));
+    }
+
+    public function getCompany(Request $request){
+        session(['company' => $request->company]);
+        session(['project' => $request->project]);
+
+        return redirect('home');
+    }
+
+    public function index(Request $request){
+        $company = $request->session()->get('company');
+        $project = $request->session()->get('project');
         $title = "Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status','!=','5')->get();
-        // dd($data_pengajuan);
+        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status','!=','5')->where('company',$company)->where('project',$project)->get();
         //Menghitung total belanja, sisa
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
@@ -49,9 +65,11 @@ class PengajuanController extends Controller
         return view ('main', ['dataKas' => $data_pengajuan, 'admin' => $admin],['title'=>$title, 'Saldo'=>$saldo]);
     }
 
-    public function laporan(){
+    public function laporan(Request $request){
+        $company = $request->session()->get('company');
+        $project = $request->session()->get('project');
         $title = "Laporan Pengajuan Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status', 5)->get();
+        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status', 5)->where('company',$company)->where('project',$project)->get();
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
@@ -62,7 +80,7 @@ class PengajuanController extends Controller
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
         $saldo = Saldo::findOrFail(Auth::user()->id);
-        if (Auth::user()->access == 'admin') {
+        if (Auth::user()->kk_access == '1') {
             return view ('admin/main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
         } else {
             return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
@@ -70,7 +88,14 @@ class PengajuanController extends Controller
         
     }
 
-    public function create()
+    //Memilih project
+    public function project($id)
+    {
+        $project = Project::where('project_company_id',$id)->pluck('name','project_id');
+        return json_encode($project);
+    }
+
+    public function create(Request $request)
     {
         // if (Auth::user()->saldo == 0) {
         //     return view('form_pengajuan');
@@ -78,7 +103,12 @@ class PengajuanController extends Controller
         //     Alert::error('Pengajuan gagal', 'Selesaikan pengajuan sebelumnya');
         //     return redirect('home');
         // }
-        return view('form_pengajuan');
+        $company = $request->session()->get('company');
+        $project = $request->session()->get('project');
+        $Company = Company::where('project_company_id',$company)->get();
+        $Project = Project::where('project_id',$project)->get();
+        // $Coa = COA::where('status','!=',0)->get();
+        return view('form_pengajuan', compact('Company','Project'));
     }
 
     public function save(Request $request)
@@ -88,6 +118,9 @@ class PengajuanController extends Controller
         $pengajuan->deskripsi = $request->deskripsi;
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->sumber = $request->sumber;
+        // $pengajuan->coa = $request->coa;
+        // $pengajuan->company = $request->company;
+        // $pengajuan->project = $request->project;
         $pengajuan->status = "1";
         $pengajuan->user_id = Auth::user()->id;
         $pengajuan->divisi_id = Auth::user()->level;
