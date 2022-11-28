@@ -181,8 +181,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="coa">COA :</label>
-                                    <select name="coa" id="coa" class="form-control" required>
+                                    <select name="coa" id="coa" class="form-control">
+                                        @if ($kas->coa)
                                         <option value="{{$kas->coa}}">{{$kas->COA->name}}</option>
+                                        @else
+                                        <option value="">--</option>
+                                        @endif
                                         @foreach ($Coa as $Coa)
                                             <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
                                         @endforeach
@@ -191,7 +195,11 @@
                                 <div class="form-group">
                                     <label for="company">Company :</label>
                                     <select name="company" id="company" class="form-control">
+                                        @if ($kas->pembebanan)
                                         <option value="{{$kas->pembebanan}}">{{$kas->Pembebanan->name}}</option>
+                                        @else
+                                        <option value="">--</option>
+                                        @endif
                                         @foreach ($Company as $Company)
                                             <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
                                         @endforeach
@@ -199,7 +207,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="tujuan" name="tujuan" value="{{$kas->tujuan}}" required>
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="tujuan" name="tujuan" value="{{$kas->tujuan}}">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>

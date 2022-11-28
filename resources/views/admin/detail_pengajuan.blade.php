@@ -12,8 +12,8 @@
 
     <title>Detail Pengeluaran</title>
      <!-- Checkbox -->
-    <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+    <!-- <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" /> -->
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -231,11 +231,24 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h5 style="float:right;">Kode Pengajuan : {{$pengajuan->kode}}</h5>
+                            <!-- Dropdown Company -->
+                            <div class="dropdown" style="float:left;">
+                                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pilih Company
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/detail_divisi/{{$pengajuan->id}}">All</a>
+                                    @foreach ($company as $company)
+                                        <a class="dropdown-item" href="/kas_company/{{$company->project_company_id}}">{{$company->name}}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        <!-- End Dropdown Company -->
+                        <h5 style="float:right;">Kode Pengajuan : {{$pengajuan->kode}}</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table id="dataTable2" class="table table-bordered" width="100%" cellspacing="0">
+                            <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <!-- <th></th> -->
@@ -384,9 +397,9 @@
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 
-   <!-- Checkbox -->
+   <!-- Checkbox
    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>    
+    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>     -->
     <!-- <script type="text/javascript">
         var table;
         $(document).ready(function () {

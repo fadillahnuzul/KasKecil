@@ -201,6 +201,43 @@
                                 </div>
                             </div>
                         </div>
+                         <!-- End Card Saldo -->
+                         @if ($button_kas==TRUE)
+                         <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
+                                                Total Pengeluaran</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalPengeluaran, 2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Card Tunai -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
+                                                Total Diklaim</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalDiklaim, 2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                         <!-- End Card Saldo -->
                         @if (Auth::user()->access=='admin')
                         <!-- Card Tunai -->
@@ -245,16 +282,66 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            @if ($button_kas == TRUE AND $saldo->saldo != 0)
-                            <a href="{{url('/kas')}}" class="btn btn-warning btn-icon-split">
-                                <span class="text">Catat Kas</span>
-                            </a>
+                        @if ($button_kas == TRUE)
+                            @if ($saldo->saldo != 0)
+                                <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split" style="float:left;margin-right:10px">
+                                    <span class="text">Catat Kas</span>
+                                </a>
                             @endif
-                            @if ($button_kas==TRUE)
-                            
-                            @endif
+                            <!-- Dropdown Company -->
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pilih Company
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/detail_pengajuan/{{$pengajuan->id}}">All</a>
+                                    @foreach ($company as $company)
+                                        <a class="dropdown-item" href="/kas_company/1/{{$company->project_company_id}}">{{$company->name}}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <!-- End Dropdown Company -->
+                        @endif
+                            @if ($button_kas==FALSE)
+                            <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        <div class="container">
+                            <div class="row">
+                                <form action="/filter_pengeluaran" method="POST">
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                                <!-- Dropdown Company -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Pilih Company
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/laporan_kas_keluar">All</a>
+                                        @foreach ($company as $company)
+                                            <a class="dropdown-item" href="/kas_company/2/{{$company->project_company_id}}">{{$company->name}}</a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                        <!-- End Dropdown Company -->
+                            </div>
                         </div>
-
+                        @endif
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

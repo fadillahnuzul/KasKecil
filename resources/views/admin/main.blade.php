@@ -11,22 +11,20 @@
     <meta name="author" content="">
 
     <title>{{$title}}</title>
-    <!-- Checkbox -->
-    <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
-
+    
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <!-- Ajax -->
+
+    <!-- Ajax
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}"> -->
 
 </head>
 
@@ -471,10 +469,9 @@
         </div>
     </div>
 
-
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>  
+    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
@@ -487,67 +484,7 @@
     <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
 
     <!-- Page level custom scripts -->
-    <!-- Checkbox -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>    
-    <!-- <script type="text/javascript">
-        var table;
-        $(document).ready(function () {
-            table = $('#dataTable').DataTable({
-                'columnDefs' :[{
-                    'targets':0,
-                    'checkboxes':{
-                        'selectRow':true
-                    }
-                }]
-            });
-        });
-
-        $('#save-btn').on('click',function(){
-            var selected_rows = table.column(0).checkboxes.selected();
-
-            const rowIds = [];
-            $.each(selected_rows, function(key, pengajuanId){
-                rowIds.push(pengajuanId);
-            });
-            console.table(rowIds);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            let totalDiklaim = document.querySelector("#totalDiklaim");
-            $.ajax({
-                url: 'klaim',
-                type: 'get',  
-                datatype: 'json',
-                data: {pengajuanId: rowIds},
-                success: function (data) {
-                    data = currencyIdrUser(data, 'Rp ');
-                    totalDiklaim.innerHTML = "Total pengajuan diklaim :  "+data;
-                    
-                },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(data);
-                },
-            });
-        });
-        function currencyIdrUser(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ?'.':'';
-                rupiah += separator + ribuan.join('.');
-            }
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-            }
-        </script> -->
+    <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 </body>
 
 </html>

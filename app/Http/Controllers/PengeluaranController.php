@@ -30,14 +30,26 @@ class PengeluaranController extends Controller
 
     public function index(Request $request, $id)
     {
+        $pengajuan = Pengajuan::find($id);
+        $company = Company::get();
         $button_kas = TRUE;
         $title = "Detail Pengajuan";
-        $kas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->where('pemasukan', '=', $id)->get();
+        $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->where('pemasukan', '=', $id)->get();
         session(['key' => $id]);
-        $total = $kas->sum('jumlah');
+        $total = $dataKas->sum('jumlah');
         $saldo = Saldo::find(Auth::id());
+        $totalDiklaim = 0; $totalPengeluaran = 0;
+        $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->get();
+        foreach($dataKas as $k) {
+            $totalPengeluaran = $totalPengeluaran + $k->jumlah;
+        }
+        session(['key' => $id]);
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->where('status',7)->get();
+        foreach($kasTotal as $k) {
+            $totalDiklaim = $totalDiklaim + $k->jumlah;
+        }
 
-        return view('detail_pengajuan', ['dataKas' => $kas], ['title' => $title, 'button_kas' => $button_kas, 'saldo' => $saldo]);
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'saldo','totalDiklaim', 'totalPengeluaran','pengajuan','company'));
     }
 
     public function laporan()
@@ -45,12 +57,44 @@ class PengeluaranController extends Controller
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $button_kas = FALSE;
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 7)->get();
+        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 7)->get();
         $title = "Laporan Pengeluaran Kas Kecil";
         // dd(view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate]));
         $saldo = Saldo::find(Auth::id());
+        $company = Company::get();
         
-        return view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate, 'saldo' => $saldo]);
+        return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company'));
+    }
+
+    public function kas_company(Request $request, $id, $id_comp) {
+        $idPengajuan = $request->session()->get('key');
+        $pengajuan = Pengajuan::find($idPengajuan);
+        $totalDiklaim = 0; $totalPengeluaran = 0;
+        if ($id == 1) { //index
+            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
+        } elseif ($id == 2) { //laporan
+            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('status',7)->where('pembebanan',$id_comp)->get();
+        }
+        foreach($dataKas as $k) {
+            $totalPengeluaran = $totalPengeluaran + $k->jumlah;
+        }
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->where('status',7)->where('pembebanan',$id_comp)->get();
+        foreach($kasTotal as $k) {
+            $totalDiklaim = $totalDiklaim + $k->jumlah;
+        }
+        $company = Company::get();
+        $saldo = Saldo::find(Auth::id());
+        if ($id == 1) { //index
+            $title = "Detail Pengajuan";
+            $button_kas = TRUE; 
+            return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'saldo','totalDiklaim', 'totalPengeluaran','pengajuan','company'));
+        } elseif ($id == 2) { //laporan
+            $title = "Laporan Pengeluaran Kas Kecil";
+            $button_kas = FALSE; 
+            $startDate = $this->startDate;
+            $endDate = $this->endDate;
+            return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company'));
+        }
     }
 
     public function create()
@@ -75,10 +119,15 @@ class PengeluaranController extends Controller
         $kas->pemasukan = $request->session()->get('key');
         $kas->user_id = Auth::user()->id;
         $kas->divisi_id = Auth::user()->level;
+        $pengajuan = Pengajuan::find($kas->pemasukan);
+        if ($pengajuan->status == 5) {
+            $pengajuan->status = 4;
+            $pengajuan->save();
+        }
         //Kas admin
         if (Auth::user()->kk_access == '1') {
-            $tunai = preg_replace("/[^0-9]/", "", $request->tunai);
-            $bank = preg_replace("/[^0-9]/", "", $request->bank);
+            $tunai =  (float) preg_replace("/[^0-9]/", "", $request->tunai);
+            $bank =  (float) preg_replace("/[^0-9]/", "", $request->bank);
             $kas->jumlah = $tunai + $bank;
             $saldo = Saldo::findOrFail(Auth::user()->id);
             if ($kas->jumlah > $saldo->saldo) {
@@ -88,7 +137,6 @@ class PengeluaranController extends Controller
                 $saldo_akhir = $saldo->saldo - $kas->jumlah;
                 $saldo->saldo = $saldo_akhir;
                 $kas->save();
-
                 #mengurangi saldo tunai dan bank
                 $lastInsertedId = $kas->id;
                 $pengeluaran = Pengeluaran::with('pengajuan')->find($lastInsertedId);
@@ -175,27 +223,41 @@ class PengeluaranController extends Controller
 
     public function filter(Request $request)
     {
+        $button_kas = FALSE;
         $this->startDate = $request->startDate;
         $this->endDate = $request->endDate;
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
+        if (Auth::user()->kk_access == 1) {
+            $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 7)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
+        } elseif (Auth::user()->kk_access == 2) {
+            $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('user_id', Auth::user()->id)->where('status', 7)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
+        }
         $title = "Laporan Pengeluaran Kas Kecil";
         $kategori = Kategori::with('pengeluaran')->get();
+        $saldo = Saldo::find(Auth::id());
 
-        return view(
-            '/admin/laporan_kas',
-            ['kategori' => $kategori, 'title' => $title, 'startDate' => $this->startDate, 'endDate' => $this->endDate],
-            ['dataKas' => $data_pengeluaran]
-        );
+        if (Auth::user()->kk_access == 1) {
+            return view('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate' => $this->startDate, 'endDate' => $this->endDate],['dataKas' => $data_pengeluaran]);
+        } elseif (Auth::user()->kk_access == 2) {
+            return view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'saldo' => $saldo]);
+        }
     }
 
     public function export(Request $request)
     {
         $startDate = $request->session()->get('startDate');
         $endDate = $request->session()->get('endDate');
-        if ($startDate and $endDate) {
-            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
-        } else {
-            $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->get();
+        if (Auth::user()->kk_access == 1) {
+            if ($startDate and $endDate) {
+                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
+            } else {
+                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->get();
+            }
+        } elseif (Auth::user()->kk_access == 2){
+            if ($startDate and $endDate) {
+                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->where('tanggal', '>=', $startDate)->where('tanggal', '<=', $endDate)->get();
+            } else {
+                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->get();
+            }
         }
         for ($i = 0; $i < count($data_pengeluaran); $i++) {
             $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id', $data_pengeluaran[$i]->pemasukan)->get();

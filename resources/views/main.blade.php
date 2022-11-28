@@ -188,6 +188,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+                
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -257,9 +258,36 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
+                        @if ($laporan==FALSE)
                         <a href="{{url('/pengajuan')}}" class="btn btn-success btn-icon-split">
                             <span class="text">Buat Pengajuan</span>
                         </a>
+                        @else
+                        <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        <div class="container">
+                            <div class="row">
+                                <form action="/filter_pengajuan/2" method="POST">
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                        @endif
                         @include('sweetalert::alert')
                         </div>
                         
@@ -271,10 +299,10 @@
                                             <th>Kode</th>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
-                                            <th>Saldo Masuk</th>
+                                            <th>Jumlah Pengajuan</th>
                                             <th>Status</th>
                                             <th>Total Belanja</th>
-                                            <th>Sisa</th>
+                                            <th>Total Diklaim</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -288,7 +316,7 @@
                                             <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
-                                            <td>Rp. {{number_format($row->sisa,2,",", ".")}}</td>
+                                            <td>Rp. {{number_format($row->diklaim,2,",", ".")}}</td>
                                             <td>
                                             @if ($row->Status->id != 6)
                                             <a onclick="set_modal_id({{$row->id}})" href="" target="_blank" data-toggle="modal" data-target="#PrintModal" class="btn btn-info btn-sm" data-id="{{ $row->id }}">Cetak</a>
