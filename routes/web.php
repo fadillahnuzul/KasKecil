@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\KasController;
 use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -86,12 +85,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/setujui_bank/{id}', [BankController::class, 'setujui']);
     Route::get('/tolak_bank/{id}', [BankController::class, 'tolak']);
     Route::put('/update_bank/{id}', [BankController::class, 'update']);
+
+    Route::get('/test', [PengeluaranController::class, 'coba_export']);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authentic'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
 
 Route::get('/rekening', [RekeningController::class, 'index'])->middleware('auth');
 
