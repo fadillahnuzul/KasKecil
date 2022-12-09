@@ -151,7 +151,7 @@ class BankController extends Controller
         $pengajuan->tanggal = $request->tanggal;
         $pengajuan->status = "2";        
         $pengajuan->jumlah = $jumlah;
-        $saldo_user->saldo = $pengajuan->jumlah;
+        $saldo_user->saldo = $saldo_user->saldo + $pengajuan->jumlah;
 
         $saldo_user->save();
         $pengajuan->save();

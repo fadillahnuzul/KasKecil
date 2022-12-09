@@ -175,11 +175,12 @@ class AdminController extends Controller
             //update tabel saldo
             $tunai_awal = $saldo->tunai;
             $bank_awal = $saldo->bank;
-            $saldo->tunai = preg_replace("/[^0-9]/","",$request->tunai);
-            $saldo->bank = preg_replace("/[^0-9]/","",$request->bank);
-            $saldo->saldo = $saldo->saldo - ($tunai_awal+$bank_awal) + ($pengajuan->tunai+$pengajuan->bank);
-            //update tabel pengajuan
+            $pengajuan_lama = $pengajuan->jumlah;
             $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
+            $saldo->tunai = $saldo->tunai - $pengajuan->tunai + preg_replace("/[^0-9]/","",$request->tunai);
+            $saldo->bank = $saldo->bank - $pengajuan->bank + preg_replace("/[^0-9]/","",$request->bank);
+            $saldo->saldo = $saldo->saldo - $pengajuan_lama + $pengajuan->jumlah;
+            //update tabel pengajuan
             $pengajuan->tunai = $saldo->tunai;
             $pengajuan->bank = $saldo->bank;
         } else {
@@ -364,6 +365,7 @@ class AdminController extends Controller
         //HAPUS PENGELUARAN
         } else if ($pengajuan == 2) {
             $delete = Pengeluaran::with('Divisi', ' User')->findOrFail($id);
+            $saldo = Saldo::findOrFail($delete->user_id);
             $saldo->saldo = $saldo->saldo + $delete->jumlah;
         }
         $delete->status = 6;

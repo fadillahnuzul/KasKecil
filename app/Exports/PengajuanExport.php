@@ -10,8 +10,9 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class PengajuanExport implements FromCollection, WithHeadings, WithMapping
+class PengajuanExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
     use Exportable;
 
@@ -58,7 +59,20 @@ class PengajuanExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
+    public function styles(Worksheet $sheet)
+    {
+        $array = $sheet->getRowIterator();
+        $returnData = array();
 
+        foreach ($array as $key => $value) {
+            $cell = $sheet->getCell("D" . $key);
+
+            if ($key == 1) {
+                $returnData[$key] =  ['font' => ['bold' => true]];
+            }
+        }
+        return $returnData;
+    }
 
     
 }

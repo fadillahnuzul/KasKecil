@@ -181,12 +181,12 @@
                                 @if ($pengajuan->User->kk_access == 1)
                                 <div class="form-group">
                                     <label for="tunai">Pengajuan Tunai :</label>
-                                    <small style="color:red;"> *Kosongi jika tidak ada</small>
+                                    <small style="color:red;"> *Beri nilai 0 jika tidak ada</small>
                                     <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" value="Rp. {{substr($pengajuan->tunai,0,-3)}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="bank">Pengajuan Bank :</label>
-                                    <small style="color:red;"> *Kosongi jika tidak ada</small>
+                                    <small style="color:red;"> *Beri nilai 0 jika tidak ada</small>
                                     <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank" value="Rp. {{substr($pengajuan->bank,0,-3)}}">
                                 </div>
                                 @endif 
