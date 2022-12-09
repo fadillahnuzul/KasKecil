@@ -26,8 +26,10 @@ class PengeluaranController extends Controller
     {
         $this->startDate = Carbon::now()->startOfMonth('d-m-Y');
         $this->endDate = Carbon::now()->endOfMonth('d-m-Y');
+        $this->company = NULL;
         session(['startDate' => $this->startDate]);
         session(['endDate' => $this->endDate]);
+        session(['company' => $this->company]);
     }
 
     public function index(Request $request, $id)
@@ -56,6 +58,7 @@ class PengeluaranController extends Controller
 
     public function laporan()
     {
+        session(['company' => $this->company]);
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $button_kas = FALSE;
@@ -70,6 +73,7 @@ class PengeluaranController extends Controller
 
     public function kas_company(Request $request, $id, $id_comp) {
         $idPengajuan = $request->session()->get('key');
+        session(['company' => $id_comp]);
         $pengajuan = Pengajuan::find($idPengajuan);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         if ($id == 1) { //index
@@ -249,8 +253,9 @@ class PengeluaranController extends Controller
     {
         $startDate = $request->session()->get('startDate');
         $endDate = $request->session()->get('endDate');
+        $company = $request->session()->get('company');
         
-        return (new KasKecilExport($startDate,$endDate))->download("Laporan_Kas_Kecil" . ".xlsx");
+        return (new KasKecilExport($startDate,$endDate,$company))->download("Laporan_Kas_Kecil" . ".xlsx");
     }
 
     public function coba_export(Request $request)

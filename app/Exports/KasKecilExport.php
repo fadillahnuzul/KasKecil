@@ -30,11 +30,12 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
     protected $startDate;
     protected $endDate;
 
-    public function __construct($startDate, $endDate)
+    public function __construct($startDate, $endDate, $company=null)
     {
         // $this->data = $data;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->company = $company;
     }
 
     // public function collection()
@@ -47,12 +48,21 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
         $dateNow = Carbon::now()->format('d-m-Y');
         $startDate = $this->startDate;
         $endDate = $this->endDate;
+        $company = $this->company;
         if (Auth::user()->kk_access == 1) {
             if ($startDate and $endDate) {
-                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                if ($company) {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                } else {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 4)->whereBetween('tanggal', [$startDate, $endDate])->get();
             } else {
-                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->get();
+                if ($company) {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 7)->get();
+                } else {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->get();
+                }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 4)->get();
             }
             $pengajuan = Pengajuan::with('User')->where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
@@ -61,10 +71,18 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
             });
         } elseif (Auth::user()->kk_access == 2){
             if ($startDate and $endDate) {
-                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                if ($company) {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                } else {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->whereBetween('tanggal', [$startDate, $endDate])->get();
             } else {
-                $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->get();
+                if ($company) {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status', 7)->get();
+                } else {
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->get();
+                }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->get();
             }
             $data_pengajuan = Pengajuan::with('User')->where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->where('user_id',Auth::user()->id)->get();
