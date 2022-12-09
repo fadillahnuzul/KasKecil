@@ -373,7 +373,7 @@
                                             <th>Pengajuan</th>
                                             <th>Sumber Dana</th>
                                             <th>Total Belanja</th>
-                                            <th>Sisa</th>
+                                            <th>Total Diklaim</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -396,7 +396,7 @@
                                                 @endif
                                             </td>
                                             <td>Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
-                                            <td>Rp. {{number_format($row->sisa,2, ",", ".")}}</td>
+                                            <td>Rp. {{number_format($row->diklaim,2, ",", ".")}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>
                                             @if ($row->Status->id != 6)

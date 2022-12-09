@@ -42,11 +42,17 @@ class BankController extends Controller
         // Perhitungan sisa dan total belanja
         foreach ($dataKas as $masuk) {
             $total = 0;
+            $diklaim = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
+            foreach ($data_diklaim as $keluar){
+                $diklaim = $diklaim + $keluar->jumlah;
+            }
             $masuk->total_belanja = $total;
+            $masuk->diklaim = $diklaim;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
 
@@ -88,11 +94,17 @@ class BankController extends Controller
         // Perhitungan sisa dan total belanja
         foreach ($dataKas as $masuk) {
             $total = 0;
+            $diklaim = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
+            foreach ($data_diklaim as $keluar){
+                $diklaim = $diklaim + $keluar->jumlah;
+            }
             $masuk->total_belanja = $total;
+            $masuk->diklaim = $diklaim;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
 

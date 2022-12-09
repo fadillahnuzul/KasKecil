@@ -55,12 +55,13 @@ class PengajuanController extends Controller
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
-            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->where('status',7)->get();
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
             foreach ($data_diklaim as $keluar){
                 $diklaim = $diklaim + $keluar->jumlah;
             }
             $masuk->total_belanja = $total;
             $masuk->diklaim = $diklaim;
+            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
 
         $saldo = Saldo::findOrFail(Auth::user()->id);
@@ -79,11 +80,17 @@ class PengajuanController extends Controller
         $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status', 5)->where('company',$company)->where('project',$project)->get();
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
+            $diklaim = 0;
             $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
+            foreach ($data_diklaim as $keluar){
+                $diklaim = $diklaim + $keluar->jumlah;
+            }
             $masuk->total_belanja = $total;
+            $masuk->diklaim = $diklaim;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
         $saldo = Saldo::findOrFail(Auth::user()->id);

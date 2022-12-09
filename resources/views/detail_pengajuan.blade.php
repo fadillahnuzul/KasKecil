@@ -283,11 +283,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         @if ($button_kas == TRUE)
-                            @if ($saldo->saldo != 0)
-                                <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split" style="float:left;margin-right:10px">
-                                    <span class="text">Catat Kas</span>
-                                </a>
-                            @endif
+                        <div class="row" style="margin-left:5px">
                             <!-- Dropdown Company -->
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -301,6 +297,12 @@
                                 </div>
                             </div>
                             <!-- End Dropdown Company -->
+                            @if ($saldo->saldo != 0)
+                                <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split" style="margin-left:10px">
+                                    <span class="text">Catat Kas</span>
+                                </a>
+                            @endif
+                            </div>
                         @endif
                             @if ($button_kas==FALSE)
                             <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
