@@ -137,8 +137,9 @@ class AdminController extends Controller
         $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->where('status', 7)->get();
         $title = "Laporan Kas Kecil";
         $kategori = Kategori::with('pengeluaran')->get();
+        $company = Company::get();
 
-        return view ('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 
+        return view ('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate, 'company'=>$company], 
         ['dataKas' => $data_pengeluaran]);
     }
 

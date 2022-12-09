@@ -243,7 +243,7 @@ class PengeluaranController extends Controller
         $saldo = Saldo::find(Auth::id());
 
         if (Auth::user()->kk_access == 1) {
-            return view('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate' => $this->startDate, 'endDate' => $this->endDate],['dataKas' => $data_pengeluaran]);
+            return view('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'company'=>$company],['dataKas' => $data_pengeluaran]);
         } elseif (Auth::user()->kk_access == 2) {
             return view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'saldo' => $saldo, 'company'=>$company]);
         }

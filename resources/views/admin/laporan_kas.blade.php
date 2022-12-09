@@ -176,18 +176,6 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <div class="dropdown" style="float:right;">
-                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Pilih Kategori
-                            </button>
-                            
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/admin_laporan_kas_keluar">All</a>
-                            @foreach ($kategori as $kategori)
-                                <a class="dropdown-item" href="/admin_kas_kategori/{{$kategori->id}}">{{$kategori->nama_kategori}}</a>
-                            @endforeach
-                            </div>
-                        </div>
                         <!-- End Dropdown Divisi -->
                             <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
@@ -211,6 +199,19 @@
                                     </div>
                                 </div>
                                 </form>
+                                <!-- Dropdown Company -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Pilih Company
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/laporan_kas_keluar">All</a>
+                                        @foreach ($company as $company)
+                                            <a class="dropdown-item" href="/kas_company/2/{{$company->project_company_id}}">{{$company->name}}</a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                        <!-- End Dropdown Company -->
                             </div>
                         </div>
                         </div>
