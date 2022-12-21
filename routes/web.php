@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/setujui_bank/{id}', [BankController::class, 'setujui']);
     Route::get('/tolak_bank/{id}', [BankController::class, 'tolak']);
     Route::put('/update_bank/{id}', [BankController::class, 'update']);
+    Route::get('/bank_kas_divisi/{id}', [BankController::class, 'kas_divisi']);
 
     Route::get('/test', [PengeluaranController::class, 'coba_export']);
 });

@@ -68,12 +68,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="/bank_laporan">
                     <i class="fas fa-fw fa-book"></i>
-                    <span>Laporan Pengajuan</span></a>
+                    <span>Daftar Pengajuan</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/bank_laporan_kas_keluar">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Laporan Kas Keluar</span></a>
+                    <span>Daftar Kas Keluar</span></a>
             </li>
 
             <!-- Divider -->
@@ -175,8 +175,8 @@
                 <!-- Page Heading -->
 
                 <!-- Saldo, Tunai, Bank -->
-                <!-- Card Saldo -->
                 <div class="row">
+                    <!-- Card Saldo -->
                     <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100">
                                 <div class="card-body">
@@ -246,7 +246,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="/home_admin">All</a>
                             @foreach ($divisi as $divisi)
-                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->name}}</a>
+                                <a class="dropdown-item" href="/bank_kas_divisi/{{$divisi->id}}">{{$divisi->name}}</a>
                             @endforeach
                             </div>
                         </div>
@@ -301,7 +301,9 @@
                                             <th>Total Belanja</th>
                                             <th>Sisa</th>
                                             <th>Status</th>
+                                            @if($laporan == FALSE)
                                             <th>Aksi</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -325,6 +327,7 @@
                                             <td>Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
                                             <td>Rp. {{number_format($row->sisa,2,",", ".")}}</td>
                                             <td>{{$row->Status->nama_status}}</td>
+                                            @if ($laporan == FALSE)
                                             <td>
                                             @if ($row->Status->id != 6)
                                             <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_bank/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
@@ -339,6 +342,7 @@
                                             @endif
                                             @endif
                                             </td>
+                                            @endif
                                         </tr>
                                         <?php $no++ ;?>
                                         @endforeach 

@@ -27,7 +27,6 @@ class BankController extends Controller
     }
 
     public function index(Request $request){
-        $saldoAwal = $request->session()->get('saldo_awal');
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $laporan = FALSE;
@@ -35,7 +34,6 @@ class BankController extends Controller
         $dataKas = $dataKas->filter(function($item, $key){
             return $item->User->kk_access == '1';
         });
-        $Saldo = Saldo::findOrFail(Auth::user()->id);
         $divisi = Divisi::get();
         $title = "Bank Kas Kecil";
        
@@ -78,18 +76,16 @@ class BankController extends Controller
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','Saldo','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
     }
 
     public function laporan(Request $request){
-        $saldoAwal = $request->session()->get('saldo_awal');
         $startDate = $this->startDate;
         $endDate = $this->endDate;
-        $laporan = FALSE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','==',5)->get();
-        $Saldo = Saldo::findOrFail(Auth::user()->id);
+        $laporan = TRUE;
+        $dataKas = Pengajuan::with('Sumber','User','Status')->get();
         $divisi = Divisi::get();
-        $title = "Bank Kas Kecil";
+        $title = "Daftar Pengajuan";
        
         // Perhitungan sisa dan total belanja
         foreach ($dataKas as $masuk) {
@@ -130,7 +126,57 @@ class BankController extends Controller
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','Saldo','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
+    }
+
+    public function kas_divisi(Request $request, $id){
+        $startDate = $this->startDate;
+        $endDate = $this->endDate;
+        $laporan = TRUE;
+        $dataKas = Pengajuan::with('Sumber','User','Status')->where('divisi_id',$id)->get();
+        $divisi = Divisi::get();
+        $title = "Daftar Pengajuan";
+       
+        // Perhitungan sisa dan total belanja
+        foreach ($dataKas as $masuk) {
+            $total = 0;
+            $diklaim = 0;
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
+            foreach ($data_pengeluaran as $keluar){
+                $total = $total + $keluar->jumlah;
+            }
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
+            foreach ($data_diklaim as $keluar){
+                $diklaim = $diklaim + $keluar->jumlah;
+            }
+            $masuk->total_belanja = $total;
+            $masuk->diklaim = $diklaim;
+            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
+        }
+
+        // Perhitungan sisa dan total belanja pada card
+        $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
+        $data_pengajuan = $pengajuan->filter(function($item, $key){
+            return $item->User->kk_access != '1';
+        });
+        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
+        $data_pengeluaran = $pengeluaran->filter(function($item, $key){
+            return $item->User->kk_access != '1';
+        });
+        $total_pengajuan = 0;
+        foreach ($data_pengajuan as $masuk){
+            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
+        }
+        $total_pengeluaran = 0;
+        foreach ($data_pengeluaran as $keluar){
+            $total_pengeluaran = $total_pengeluaran + $keluar->jumlah;
+        }
+        $sisa = $total_pengajuan - $total_pengeluaran;
+
+        $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
+        $admin = $pengajuan_admin->last();
+
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
     }
 
     public function acc(Request $request, $id)
@@ -195,8 +241,8 @@ class BankController extends Controller
 
     public function laporan_keluar()
     {
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->get();
-        $title = "Laporan Kas Kecil";
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->get();
+        $title = "Daftar Kas Keluar";
         $kategori = Kategori::with('pengeluaran')->get();
 
         return view ('/bank/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 

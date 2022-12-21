@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function Saldo()
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(Saldo::class);
     }
 }

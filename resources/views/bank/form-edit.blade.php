@@ -95,7 +95,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                <div class="d-sm-flex align-items-center justify-content-between">
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
+                </div>
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -133,9 +135,9 @@
                 <div class="container-fluid">
                 @include('sweetalert::alert')
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                    </div>
+                    </div> -->
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">

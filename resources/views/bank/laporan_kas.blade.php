@@ -64,12 +64,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="/bank_laporan">
                     <i class="fas fa-fw fa-book"></i>
-                    <span>Laporan Pengajuan</span></a>
+                    <span>Daftar Pengajuan</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/bank_laporan_kas_keluar">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Laporan Kas Keluar</span></a>
+                    <span>Daftar Kas Keluar</span></a>
             </li>
 
 
@@ -92,7 +92,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                <div class="d-sm-flex align-items-center justify-content-between">
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
+                </div>
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -167,16 +169,12 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Laporan Kas Keluar</h1>
-                        <!-- <a href="/export" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a> -->
-                    </div>
+                    
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <div class="dropdown" style="float:right;">
+                        <!-- <div class="dropdown" style="float:right;">
                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Pilih Kategori
                             </button>
@@ -187,7 +185,7 @@
                                 <a class="dropdown-item" href="/admin_kas_kategori/{{$kategori->id}}">{{$kategori->nama_kategori}}</a>
                             @endforeach
                             </div>
-                        </div>
+                        </div> -->
                         <!-- End Dropdown Divisi -->
                             <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
@@ -224,11 +222,11 @@
                                             <th>User</th>
                                             <th>Kode Pengajuan</th>
                                             <th>Kas Keluar</th>
-                                            <th>Kategori</th>
+
                                             <th>Pembebanan</th>
                                             <th>Status</th>
                                             <th>Tanggal Respon</th>
-                                            <th>Aksi</th>
+                                            <!-- <th>Aksi</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -237,19 +235,18 @@
                                         <td>{{$row->tanggal}}</td>
                                         <td>{{$row->deskripsi}}</td>
                                         <td>{{$row->User->username}}</td>
-                                        <td>{{$row->pengajuan->kode}}</td>
+                                        <td>@if ($row->pengajuan)
+                                            {{$row->pengajuan->kode}}
+                                            @endif
+                                        </td>
                                         <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                        <td>@if ($row->kategori)
-                                                {{$row->Kategori->nama_kategori}}
-                                                @endif
-                                            </td>
-                                            <td>@if ($row->pembebanan)
-                                                {{$row->Pembebanan->nama_pembebanan}}
-                                                @endif
-                                            </td>
+                                        <td>@if ($row->pembebanan)
+                                            {{$row->Pembebanan->nama_pembebanan}}
+                                            @endif
+                                        </td>
                                         <td>{{$row->Status->nama_status}}</td>
                                         <td>{{$row->tanggal_respon}}</td>
-                                        <td>
+                                        <!-- <td>
                                         <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                         @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
@@ -258,7 +255,7 @@
                                             <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
                                             <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
                                         @endif 
-                                        </td>
+                                        </td> -->
                                         </tr>
                                         @endforeach 
                                     </tbody>
