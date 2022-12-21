@@ -46,7 +46,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            @if (Auth::user()->access=='admin')
+            @if (Auth::user()->kk_access=='1')
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -215,7 +215,7 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        @if (Auth::user()->access=='admin')
+                        @if (Auth::user()->kk_access=='1')
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">

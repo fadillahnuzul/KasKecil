@@ -47,7 +47,7 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
-             @if (Auth::user()->access=='admin')
+             @if (Auth::user()->kk_access=='1')
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>

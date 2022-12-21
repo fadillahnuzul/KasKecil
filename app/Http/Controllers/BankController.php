@@ -33,7 +33,7 @@ class BankController extends Controller
         $laporan = FALSE;
         $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->get();
         $dataKas = $dataKas->filter(function($item, $key){
-            return $item->User->access == 'admin';
+            return $item->User->kk_access == '1';
         });
         $Saldo = Saldo::findOrFail(Auth::user()->id);
         $divisi = Divisi::get();
@@ -59,11 +59,11 @@ class BankController extends Controller
         // Perhitungan sisa dan total belanja pada card
         $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
         $data_pengajuan = $pengajuan->filter(function($item, $key){
-            return $item->User->access != 'admin';
+            return $item->User->kk_access != '1';
         });
         $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
         $data_pengeluaran = $pengeluaran->filter(function($item, $key){
-            return $item->User->access != 'admin';
+            return $item->User->kk_access != '1';
         });
         $total_pengajuan = 0;
         foreach ($data_pengajuan as $masuk){
@@ -111,11 +111,11 @@ class BankController extends Controller
         // Perhitungan sisa dan total belanja pada card
         $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
         $data_pengajuan = $pengajuan->filter(function($item, $key){
-            return $item->User->access != 'admin';
+            return $item->User->kk_access != '1';
         });
         $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
         $data_pengeluaran = $pengeluaran->filter(function($item, $key){
-            return $item->User->access != 'admin';
+            return $item->User->kk_access != '1';
         });
         $total_pengajuan = 0;
         foreach ($data_pengajuan as $masuk){
