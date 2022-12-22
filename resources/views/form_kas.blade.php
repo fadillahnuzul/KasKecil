@@ -195,13 +195,6 @@
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
                                 </div>
                                 @endif
-                                <!-- <form action="/kas" method="GET">
-                                <div class="form-group">
-                                    <label for="search_coa">Cari COA</label>
-                                    <input type="text" class="form-control" placeholder="Cari COA" id="search_coa" name="search_coa" required>
-                                    <button type="submit" class="btn btn-primary">Cari</button>
-                                </div>
-                                </form> -->
                                 <div class="form-group">
                                     <label for="coa">COA :</label>
                                     <select name="coa" id="coa" class="form-control" required>
@@ -360,7 +353,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script>
+        $(document).ready(function(){
+            $("#coa").select2();
+        });
+    </script>
     <!-- Custom scripts for all pages-->
     <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>
 
