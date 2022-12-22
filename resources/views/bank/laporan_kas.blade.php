@@ -222,7 +222,7 @@
                                             <th>User</th>
                                             <th>Kode Pengajuan</th>
                                             <th>Kas Keluar</th>
-
+                                            <th>COA</th>
                                             <th>Pembebanan</th>
                                             <th>Status</th>
                                             <th>Tanggal Respon</th>
@@ -240,6 +240,11 @@
                                             @endif
                                         </td>
                                         <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                        <td>@if ($row->coa)
+                                                {{$row->COA->code}} <br>
+                                                {{$row->COA->name}}
+                                            @endif
+                                        </td>
                                         <td>@if ($row->pembebanan)
                                             {{$row->Pembebanan->nama_pembebanan}}
                                             @endif

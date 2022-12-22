@@ -103,10 +103,14 @@ class PengeluaranController extends Controller
         }
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $kategori = Kategori::get();
         $Company = Company::get();
+        if ($request->search_coa) {
+            dd($request->search_coa);
+            
+        }
         $Coa = COA::where('status','!=',0)->get();
 
         return view('form_kas', ['kategori' => $kategori, 'Company' => $Company, 'Coa' => $Coa]);

@@ -378,7 +378,8 @@
                                             @endif
                                             <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td>@if ($row->coa)
-                                                {{$row->COA->code}}
+                                                {{$row->COA->code}} <br>
+                                                {{$row->COA->name}}
                                                 @endif
                                             </td>
                                             <td>@if ($row->pembebanan)

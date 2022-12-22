@@ -11,7 +11,7 @@
     <meta name="author" content="">
 
     <title>Pencatatan Kas</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -47,7 +47,7 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
-             @if (Auth::user()->role_id==1)
+             @if (Auth::user()->kk_access=='1')
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -74,7 +74,7 @@
                     <span>Laporan Kas Keluar</span></a>
             </li>
              @endif
-             @if (Auth::user()->role_id!=1)
+             @if (Auth::user()->kk_access=='2')
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -194,6 +194,14 @@
                                     <label for="kredit">Nominal :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
                                 </div>
+                                @endif
+                                <!-- <form action="/kas" method="GET">
+                                <div class="form-group">
+                                    <label for="search_coa">Cari COA</label>
+                                    <input type="text" class="form-control" placeholder="Cari COA" id="search_coa" name="search_coa" required>
+                                    <button type="submit" class="btn btn-primary">Cari</button>
+                                </div>
+                                </form> -->
                                 <div class="form-group">
                                     <label for="coa">COA :</label>
                                     <select name="coa" id="coa" class="form-control" required>
@@ -215,8 +223,7 @@
                                 <div class="form-group">
                                     <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
                                     <input type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
-                                </div>
-                                @endif 
+                                </div> 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             <script type="text/javascript">
@@ -350,6 +357,9 @@
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>

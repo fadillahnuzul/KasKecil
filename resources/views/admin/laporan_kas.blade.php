@@ -54,7 +54,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Buat Pengajuan</span></a>
+                    <span>Pengajuan Dana</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/home">
@@ -243,7 +243,8 @@
                                         <td>{{$row->pengajuan->kode}}</td>
                                         <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                         <td>@if ($row->coa)
-                                                {{$row->COA->code}}
+                                                {{$row->COA->code}} <br>
+                                                {{$row->COA->name}}
                                             @endif
                                             </td>
                                             <td>@if ($row->pembebanan)

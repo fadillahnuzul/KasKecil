@@ -56,7 +56,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Buat Pengajuan</span></a>
+                    <span>Pengajuan Dana</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/home">

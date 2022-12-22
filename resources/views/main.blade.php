@@ -73,7 +73,7 @@
                     <span>Laporan Kas Keluar</span></a>
             </li>
              @endif
-             @if (Auth::user()->access!='admin')
+             @if (Auth::user()->kk_access=='2')
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
