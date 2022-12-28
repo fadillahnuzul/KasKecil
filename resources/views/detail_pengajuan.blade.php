@@ -304,6 +304,9 @@
                                 <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split" style="margin-left:10px">
                                     <span class="text">Catat Kas</span>
                                 </a>
+                                <a data-toggle="modal" data-target="#KembalianSaldoModal" class="btn btn-success btn-sm btn-icon-split" style="margin-left:10px">
+                                    <span class="text">Pengembalian Saldo</span>
+                                </a>
                             @endif
                             </div>
                         @endif
@@ -481,9 +484,94 @@
             </div>
         </div>
     </div>
+    <!-- Kembalikan Saldo Modal -->
+    <div class="modal fade" id="KembalianSaldoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pengembalian Sisa Saldo Pengajuan</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/pengembalian_saldo/{{$pengajuan->id}}" method="GET">
+                        @csrf
+                        <input type="hidden" name="id" id="id" value="{{$pengajuan->id}}">
+                        <div class="form-group">
+                            <label for="tanggal">Tanggal Pengembalian :</label>
+                            <input type="date" class="form-control" placeholder="Input tanggal pengembalian sisa saldo" id="tanggal" name="tanggal" required>
+                        </div>
+                        @if(Auth::user()->kk_access == 1)
+                        <div class="form-group">
+                            <label for="jumlah">Jumlah Pengembalian Saldo Tunai</label>
+                            <input type="text" class="form-control" placeholder="Input jumlah pengembalian saldo tunai" id="tunai" name="tunai" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jumlah">Jumlah Pengembalian Saldo Bank</label>
+                            <input type="text" class="form-control" placeholder="Input jumlah pengembalian saldo bank" id="bank" name="bank" required>
+                        </div>
+                        @elseif (Auth::user()->kk_access == 2)
+                        <div class="form-group">
+                            <label for="jumlah">Jumlah Pengembalian Saldo</label>
+                            <input type="text" class="form-control" placeholder="Input jumlah pengembalian saldo" id="jumlah" name="jumlah" required>
+                        </div>
+                        @endif
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         function set_modal_id(id) {
             document.getElementById("modal_id").value = id;
+        }
+    </script>
+    <script type="text/javascript">
+        var jumlah = document.getElementById('bank');
+        jumlah.addEventListener('keyup', function(e) {
+            jumlah.value = currencyIdrUser2(this.value, 'Rp ');
+        });
+        var jumlah = document.getElementById('tunai');
+        jumlah.addEventListener('keyup', function(e) {
+            jumlah.value = currencyIdrUser2(this.value, 'Rp ');
+        });
+        function currencyIdrUser2(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+        }
+    </script>
+    <script type="text/javascript">
+        var jumlah = document.getElementById('jumlah');
+        jumlah.addEventListener('keyup', function(e) {
+            jumlah.value = currencyIdrUser(this.value, 'Rp ');
+        });
+        function currencyIdrUser(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ?'.':'';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
         }
     </script>
 

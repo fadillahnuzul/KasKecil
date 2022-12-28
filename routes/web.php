@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
     Route::get('/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
     Route::get('/kas_company/{id}/{id_comp}', [PengeluaranController::class, 'kas_company']);
+    Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
 
 //Halaman admin
     Route::get('/home_admin', [AdminController::class, 'index']);
@@ -87,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/update_bank/{id}', [BankController::class, 'update']);
     Route::get('/bank_kas_divisi/{id}', [BankController::class, 'kas_divisi']);
 
-    Route::get('/test', [PengeluaranController::class, 'coba_export']);
+    // Route::get('/test', [PengeluaranController::class, 'coba_export']);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

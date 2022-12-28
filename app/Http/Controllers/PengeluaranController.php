@@ -44,7 +44,7 @@ class PengeluaranController extends Controller
         $saldo = Saldo::find(Auth::id());
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->get();
-        foreach($dataKas as $k) {
+        foreach($kas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
         session(['key' => $id]);
@@ -157,7 +157,7 @@ class PengeluaranController extends Controller
                 $pengeluaran->pengajuan->save();
                 $saldo->save();
             }
-            //Kas non admin
+        //Kas non admin
         } else {
             $kas->jumlah = preg_replace("/[^0-9]/", "", $request->kredit);
             $saldo = Saldo::findOrFail(Auth::user()->id);
@@ -315,5 +315,74 @@ class PengeluaranController extends Controller
         $saldo = Saldo::find(Auth::user()->id);
         $data_pengeluaran->saldo = $saldo->saldo;
         return view('export_kaskecil', compact('data_pengeluaran','startDate','endDate','dateNow'));
+    }
+
+    public function pengembalian_saldo(Request $request, $id) {
+        $kas = new Pengeluaran;
+        $kas->tanggal = $request->tanggal;
+        $kas->deskripsi = "PENGEMBALIAN SALDO PENGAJUAN";
+        $kas->pemasukan = $id;
+        $kas->user_id = Auth::user()->id;
+        $kas->status = "4";
+        $kas->divisi_id = Auth::user()->level;
+        $pengajuan = Pengajuan::find($id);
+        if ($pengajuan->status == 5) {
+            $pengajuan->status = 4;
+            $pengajuan->save();
+        }
+        $pengajuan = Pengajuan::findOrFail($id);
+        $saldo = Saldo::findOrFail(Auth::user()->id);
+        //Ambil saldo admin
+        $saldo_admin = Saldo::with('User')->where('kk_access',1)->first();
+        //Kas admin
+        if (Auth::user()->kk_access == '1') {
+            $tunai =  (float) preg_replace("/[^0-9]/", "", $request->tunai);
+            $bank =  (float) preg_replace("/[^0-9]/", "", $request->bank);
+            $kas->jumlah = $tunai + $bank;
+            $saldo = Saldo::findOrFail(Auth::user()->id);
+            if ($kas->jumlah > $pengajuan->jumlah) {
+                Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
+                return back();
+            } else {
+                $kas->save();
+                $saldo_akhir = $saldo->saldo - $kas->jumlah;
+                $saldo->saldo = $saldo_akhir;
+                $saldo->tunai = $saldo->tunai - $tunai;
+                $saldo->bank = $saldo->bank - $bank;
+                $saldo->save();
+                $saldo_admin = Saldo::findOrFail(Auth::user()->id);
+                $saldo_admin->saldo = $saldo_admin->saldo + $kas->jumlah;
+                $saldo_admin->tunai = $saldo_admin->tunai + $tunai;
+                $saldo_admin->bank = $saldo_admin->bank + $bank;
+                $saldo_admin->save();
+                #mengurangi saldo tunai dan bank
+                $lastInsertedId = $kas->id;
+                $pengeluaran = Pengeluaran::with('pengajuan')->find($lastInsertedId);
+                $pengeluaran->pengajuan->tunai = $pengeluaran->pengajuan->tunai - $tunai;
+                $pengeluaran->pengajuan->bank = $pengeluaran->pengajuan->bank - $bank;
+                $pengeluaran->pengajuan->save();
+            }
+        //Kas non admin
+        } else {
+            $kas->jumlah = preg_replace("/[^0-9]/", "", $request->jumlah);
+            if ($kas->jumlah > $pengajuan->jumlah) {
+                Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
+                return back();
+            } else {
+                $saldo_akhir = $saldo->saldo - $kas->jumlah;
+                $saldo->saldo = $saldo_akhir;
+                $saldo_admin->saldo = $saldo_admin->saldo + $kas->jumlah;
+                if ($pengajuan->sumber == 1) { //pengajuan tunai
+                    $saldo_admin->tunai = $saldo_admin->tunai + $kas->jumlah;
+                } elseif ($pengajuan->sumber == 2) { //pengajuan bank
+                    $saldo_admin->bank = $saldo_admin->bank + $kas->jumlah;
+                }
+                $saldo_admin->save();
+                $saldo->save();
+                $kas->save();
+            }
+        }
+        return redirect('home');
+        dd($kas);
     }
 }
