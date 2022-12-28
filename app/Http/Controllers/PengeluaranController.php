@@ -333,7 +333,7 @@ class PengeluaranController extends Controller
         $pengajuan = Pengajuan::findOrFail($id);
         $saldo = Saldo::findOrFail(Auth::user()->id);
         //Ambil saldo admin
-        $saldo_admin = Saldo::with('User')->where('kk_access',1)->first();
+        $saldo_admin = Saldo::with('User')->where('kk_access',1)->where('id','!=',23)->first();
         //Kas admin
         if (Auth::user()->kk_access == '1') {
             $tunai =  (float) preg_replace("/[^0-9]/", "", $request->tunai);
