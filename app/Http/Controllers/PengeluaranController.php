@@ -371,13 +371,6 @@ class PengeluaranController extends Controller
             } else {
                 $saldo_akhir = $saldo->saldo - $kas->jumlah;
                 $saldo->saldo = $saldo_akhir;
-                $saldo_admin->saldo = $saldo_admin->saldo + $kas->jumlah;
-                if ($pengajuan->sumber == 1) { //pengajuan tunai
-                    $saldo_admin->tunai = $saldo_admin->tunai + $kas->jumlah;
-                } elseif ($pengajuan->sumber == 2) { //pengajuan bank
-                    $saldo_admin->bank = $saldo_admin->bank + $kas->jumlah;
-                }
-                $saldo_admin->save();
                 $saldo->save();
                 $kas->save();
             }

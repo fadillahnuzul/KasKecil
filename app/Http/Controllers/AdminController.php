@@ -325,9 +325,20 @@ class AdminController extends Controller
     {
         $pengeluaran = Pengeluaran::with('User', 'pengajuan')->findOrFail($id);
         if ($pengeluaran->User->kk_access==2) {
-            $saldo = Saldo::findOrFail($pengeluaran->user_id);
-            $saldo->saldo = $saldo->saldo + $pengeluaran->jumlah;
-            $saldo->save();
+            if ($pengeluaran->deskripsi != "PENGEMBALIAN SALDO PENGAJUAN") {
+                $saldo = Saldo::findOrFail($pengeluaran->user_id);
+                $saldo->saldo = $saldo->saldo + $pengeluaran->jumlah;
+                $saldo->save();
+            } elseif ($pengeluaran->deskripsi == "PENGEMBALIAN SALDO PENGAJUAN") {
+                $saldo_admin = Saldo::findOrFail(Auth::user()->id);
+                $saldo_admin->saldo = $saldo_admin->saldo + $pengeluaran->jumlah;
+                if ($pengeluaran->pengajuan->sumber == 1) { //pengajuan tunai
+                    $saldo_admin->tunai = $saldo_admin->tunai + $pengeluaran->jumlah;
+                } elseif ($pengeluaran->pengajuan->sumber == 2) { //pengajuan bank
+                    $saldo_admin->bank = $saldo_admin->bank + $pengeluaran->jumlah;
+                }
+                $saldo_admin->save();
+            }
         }
         $pengeluaran->status = 7;
         $pengeluaran->save();
