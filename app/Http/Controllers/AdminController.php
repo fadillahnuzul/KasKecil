@@ -145,7 +145,7 @@ class AdminController extends Controller
 
     public function kategori($id)
     {
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('kategori',$id)->get();
+        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 5)->where('kategori',$id)->orderBy('status','asc')->get();
         $title = "Laporan Kas Kecil";
         $kategori = Kategori::with('pengeluaran')->get();
 
@@ -432,7 +432,7 @@ class AdminController extends Controller
         $idPengajuan = ($id)??$request->session()->get('key');
         $pengajuan = Pengajuan::find($idPengajuan);
         $totalDiklaim = 0; $totalPengeluaran = 0;
-        $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->get();
+        $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->orderBy('status','asc')->get();
         foreach($dataKas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
@@ -449,7 +449,7 @@ class AdminController extends Controller
         $idPengajuan = $request->session()->get('key');
         $pengajuan = Pengajuan::find($idPengajuan);
         $totalDiklaim = 0; $totalPengeluaran = 0;
-        $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id)->get();
+        $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id)->orderBy('status','asc')->get();
         foreach($dataKas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }

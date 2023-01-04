@@ -3,7 +3,11 @@
         <thead>
             <tr>
                 <!-- <th colspan="2" rowspan="2"></th> -->
+                @if ($company)
+                <th><strong>{{$company}}</strong></th>
+                @else
                 <th><strong>PT ABDAEL NUSA</strong></th>
+                @endif
                 <th></th>
                 <th></th>
                 <th></th>
@@ -13,7 +17,7 @@
                 <th>PIC : ___________</th>
             </tr>
             <tr>
-                <th>LAPORAN PENGELUARAN KAS KECIL</th>
+                <th><strong>LAPORAN PENGELUARAN KAS KECIL</strong></th>
                 <th></th>
                 <th></th>
                 <th></th>
