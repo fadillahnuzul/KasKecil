@@ -310,7 +310,7 @@
                             @endif
                             </div>
                         @endif
-                            @if ($button_kas==FALSE)
+                        @if ($button_kas==FALSE)
                             <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
                         <div class="container">
@@ -484,6 +484,7 @@
             </div>
         </div>
     </div>
+    @if ($saldo->saldo != 0 && $button_kas == TRUE)
     <!-- Kembalikan Saldo Modal -->
     <div class="modal fade" id="KembalianSaldoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -525,6 +526,7 @@
             </div>
         </div>
     </div>
+    @endif
     <script>
         function set_modal_id(id) {
             document.getElementById("modal_id").value = id;
