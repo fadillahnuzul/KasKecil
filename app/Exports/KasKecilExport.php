@@ -29,6 +29,7 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
     protected $data;
     protected $startDate;
     protected $endDate;
+    protected $company;
 
     public function __construct($startDate, $endDate, $company=null)
     {

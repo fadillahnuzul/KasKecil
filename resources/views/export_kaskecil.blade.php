@@ -59,7 +59,7 @@
                     {{$row->tujuan}}
                     @endif
                 </td>
-                <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                <td>{{$row->jumlah}}</td>
                 </tr>
                 <?php $no++ ;?>
             @endforeach 
@@ -71,7 +71,7 @@
                 <th></th>
                 <th></th>
                 <th style="border: 2px solid;"><strong>Total Pengeluaran</strong></th>
-                <th style="border: 2px solid;"><strong>Rp. {{number_format($data_pengeluaran->total,2,",", ".")}}</strong></th>
+                <th style="border: 2px solid;"><strong>{{$data_pengeluaran->total}}</strong></th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid;"></th>
@@ -81,7 +81,7 @@
                 <th></th>
                 <th></th>
                 <th style="border: 2px solid;">Proses Pengajuan Klaim</th>
-                <th style="border: 2px solid;">Rp. {{number_format($data_pengeluaran->belum_diklaim,2,",", ".")}}</th>
+                <th style="border: 2px solid;">{{$data_pengeluaran->belum_diklaim}}</th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid;"></th>
@@ -91,7 +91,7 @@
                 <th></th>
                 <th></th>
                 <th style="border: 2px solid;">Sisa pengajuan belum terpakai</th>
-                <th style="border: 2px solid;">Rp. {{number_format($data_pengeluaran->sisa,2,",", ".")}}</th>
+                <th style="border: 2px solid;">{{$data_pengeluaran->sisa}}</th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid;"></th>
@@ -101,7 +101,7 @@
                 <th></th>
                 <th></th>
                 <th style="border: 2px solid;">Saldo Kas Kecil</th>
-                <th style="border: 2px solid;">Rp. {{number_format($data_pengeluaran->saldo,2,",", ".")}}</th>
+                <th style="border: 2px solid;">{{$data_pengeluaran->saldo}}</th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid; border-bottom: 2px solid;"></th>
@@ -111,7 +111,7 @@
                 <th style="border-bottom: 2px solid;"></th>
                 <th style="border-bottom: 2px solid;"></th>
                 <th style="border: 2px solid;">Total</th>
-                <th style="border: 2px solid;">Rp. {{number_format($data_pengeluaran->total_all,2,",", ".")}}</th>
+                <th style="border: 2px solid;">{{$data_pengeluaran->total_all}}</th>
             </tr>
         </tbody>
     </table>

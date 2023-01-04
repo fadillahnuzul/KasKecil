@@ -41,7 +41,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithMapping, With
             $pengajuan['user'],
             $pengajuan['divisi'],
             $pengajuan['deskripsi'],
-            number_format($pengajuan['jumlah'], 2, ",", "."),
+            $pengajuan['jumlah'],
             substr($pengajuan['nama_sumber'],17,-3),
         ];
     }
