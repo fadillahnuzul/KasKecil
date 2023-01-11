@@ -64,7 +64,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #858796;
+  color: #000000;
   text-align: left;
   background-color: #fff;
 }
@@ -215,7 +215,7 @@ table {
 caption {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  color: #858796;
+  color: #000000;
   text-align: left;
   caption-side: bottom;
 }

@@ -10,7 +10,8 @@
     <meta name="author" content="">
 
     <title>Home</title>
-
+    <!-- css table -->
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -352,7 +353,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
@@ -396,7 +397,10 @@
                                             <td>{{$row->Status->nama_status}}</td>
                                             <td>{{$row->tanggal_respon}}</td>
                                             <td>
-                                                @if ($row->status != 7 AND $row->status != 6)
+                                                @if(Auth::user()->kk_access==1 && $row->status == 7)
+                                                <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
+                                                @endif
+                                                @if ($row->status != 7 && $row->status != 6 && $row->status != 8)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
                                                     Edit</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">
@@ -593,7 +597,25 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
+    <!-- table js -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    @if ($button_kas == FALSE)
+    <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable({
+        stateSave: true,
+        order: [[8, 'asc']],
+    });
+    } );</script>
+    @elseif ($button_kas == TRUE)
+    <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable({
+        stateSave: true,
+        order: [[6, 'asc']],
+    });
+    } );</script>
+    @endif
 </body>
 
 </html>

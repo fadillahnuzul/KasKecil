@@ -21,7 +21,8 @@ class PengeluaranController extends Controller
 {
     public $startDate;
     public $endDate;
-
+    public $company;
+    
     public function __construct()
     {
         $this->startDate = Carbon::now()->startOfMonth('d-m-Y');
@@ -62,7 +63,11 @@ class PengeluaranController extends Controller
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $button_kas = FALSE;
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', 7)->get();
+        if(Auth::user()->kk_access==1) {
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->whereIn('status', [7, 8])->get();
+        } else {
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->whereIn('status', [7, 8])->get();
+        }
         $title = "Laporan Pengeluaran Kas Kecil";
         // dd(view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $startDate, 'endDate' => $endDate]));
         $saldo = Saldo::find(Auth::id());
@@ -74,17 +79,19 @@ class PengeluaranController extends Controller
     public function kas_company(Request $request, $id, $id_comp) {
         $idPengajuan = $request->session()->get('key');
         session(['company' => $id_comp]);
+        $startDate = $request->session()->get('startDate');
+        $endDate = $request->session()->get('endDate');
         $pengajuan = Pengajuan::find($idPengajuan);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         if ($id == 1) { //index
-            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
         } elseif ($id == 2) { //laporan
-            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('status',7)->where('pembebanan',$id_comp)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->whereIn('status',[7,8])->where('pembebanan',$id_comp)->get();
         }
         foreach($dataKas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
-        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->where('status',7)->where('pembebanan',$id_comp)->get();
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->whereIn('status', [7, 8])->where('pembebanan',$id_comp)->get();
         foreach($kasTotal as $k) {
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
@@ -97,9 +104,22 @@ class PengeluaranController extends Controller
         } elseif ($id == 2) { //laporan
             $title = "Laporan Pengeluaran Kas Kecil";
             $button_kas = FALSE; 
-            $startDate = $this->startDate;
-            $endDate = $this->endDate;
-            return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company'));
+            if (Auth::user()->kk_access == 1) {
+                $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->whereIn('status', [7,8])->whereBetween('tanggal',[$startDate,$endDate])->where('pembebanan',$id_comp)->orderBy('status','desc')->get();
+                $Saldo = Saldo::findOrFail(Auth::user()->id);
+                $totalKeluar = 0; $totalSetBKK = 0; $totalBelumSetBKK = 0;
+                foreach($dataKas as $value) {
+                    $totalKeluar = $totalKeluar + $value->jumlah;
+                    if($value->status == 7) {
+                        $totalBelumSetBKK = $totalBelumSetBKK + $value->jumlah;
+                    } elseif ($value->status == 8) {
+                        $totalSetBKK = $totalSetBKK + $value->jumlah;
+                    }
+                }
+                return view('/admin/laporan_kas', compact('title', 'startDate', 'endDate', 'company','dataKas','Saldo','totalKeluar','totalSetBKK','totalBelumSetBKK'));
+            } elseif (Auth::user()->kk_access == 2) {
+                return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company'));
+            }
         }
     }
 
@@ -237,9 +257,9 @@ class PengeluaranController extends Controller
         $this->startDate = $request->startDate; session(['startDate' => $request->startDate]);
         $this->endDate = $request->endDate; session(['endDate' => $request->endDate]);
         if (Auth::user()->kk_access == 1) {
-            $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('status', 7)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->whereIn('status', [7,8])->whereBetween('tanggal',[$this->startDate,$this->endDate])->orderBy('status','desc')->get();
         } elseif (Auth::user()->kk_access == 2) {
-            $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->where('user_id', Auth::user()->id)->where('status', 7)->where('tanggal', '>=', $this->startDate)->where('tanggal', '<=', $this->endDate)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA')->where('user_id', Auth::user()->id)->whereIn('status', [7,8])->whereBetween('tanggal',[$this->startDate,$this->endDate])->orderBy('status','desc')->get();
         }
         $company = Company::get();
         $title = "Laporan Pengeluaran Kas Kecil";
@@ -247,9 +267,20 @@ class PengeluaranController extends Controller
         $saldo = Saldo::find(Auth::id());
 
         if (Auth::user()->kk_access == 1) {
-            return view('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'company'=>$company],['dataKas' => $data_pengeluaran]);
+            $startDate = $this->startDate; $endDate = $this->endDate;
+            $Saldo = Saldo::findOrFail(Auth::user()->id);
+            $totalKeluar = 0; $totalSetBKK = 0; $totalBelumSetBKK = 0;
+            foreach($dataKas as $value) {
+                $totalKeluar = $totalKeluar + $value->jumlah;
+                if($value->status == 7) {
+                    $totalBelumSetBKK = $totalBelumSetBKK + $value->jumlah;
+                } elseif ($value->status == 8) {
+                    $totalSetBKK = $totalSetBKK + $value->jumlah;
+                }
+            }
+            return view('/admin/laporan_kas', compact('title', 'startDate', 'endDate', 'company','dataKas','Saldo','totalKeluar','totalSetBKK','totalBelumSetBKK'));
         } elseif (Auth::user()->kk_access == 2) {
-            return view('detail_pengajuan', ['dataKas' => $data_pengeluaran], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'saldo' => $saldo, 'company'=>$company]);
+            return view('detail_pengajuan', ['dataKas' => $dataKas], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'saldo' => $saldo, 'company'=>$company]);
         }
     }
 
@@ -310,17 +341,11 @@ class PengeluaranController extends Controller
         //Kas non admin
         } else {
             $kas->jumlah = preg_replace("/[^0-9]/", "", $request->jumlah);
-            if ($kas->jumlah > $pengajuan->jumlah) {
-                Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
-                return back();
-            } else {
-                $saldo_akhir = $saldo->saldo - $kas->jumlah;
-                $saldo->saldo = $saldo_akhir;
-                $saldo->save();
-                $kas->save();
-            }
+            $saldo_akhir = $saldo->saldo - $kas->jumlah;
+            $saldo->saldo = $saldo_akhir;
+            $saldo->save();
+            $kas->save();
         }
         return redirect('home');
-        dd($kas);
     }
 }

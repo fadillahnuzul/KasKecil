@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hapus_admin/{pengajuan}/{id}', [AdminController::class, 'hapus']);
     Route::get('/klaim', [AdminController::class, 'klaim']);
     Route::get('/kas_company/{id}', [AdminController::class, 'kas_company']);
+    Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
 
     //Filter tanggal
     Route::post('/filter_pengajuan/{id}', [PengajuanController::class, 'filter']);

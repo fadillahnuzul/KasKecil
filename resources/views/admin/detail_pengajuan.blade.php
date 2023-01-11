@@ -15,6 +15,9 @@
     <!-- <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" /> -->
     <!-- Custom fonts for this template -->
+    <!-- css table -->
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
+
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -250,7 +253,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table class="table table-bordered" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <!-- <th></th> -->
@@ -399,6 +402,16 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+
+    <!-- table js -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable({
+        stateSave: true,
+        order: [[6, 'asc']],
+    });
+    });</script>
 
    <!-- Checkbox
    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>

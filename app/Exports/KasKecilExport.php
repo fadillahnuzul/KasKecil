@@ -53,20 +53,20 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
         if (Auth::user()->kk_access == 1) {
             if ($startDate and $endDate) {
                 if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 8)->whereBetween('tanggal', [$startDate, $endDate])->get();
                     $Company = Company::find($company);
                     $company = $Company->name;
                 } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 8)->whereBetween('tanggal', [$startDate, $endDate])->get();
                 }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 4)->whereBetween('tanggal', [$startDate, $endDate])->get();
             } else {
                 if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 7)->get();
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 8)->get();
                     $Company = Company::find($company);
                     $company = $Company->name;
                 } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 7)->get();
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 8)->get();
                 }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 4)->get();
             }
@@ -81,7 +81,7 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
                     $Company = Company::find($company);
                     $company = $Company->name;
                 } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->whereBetween('tanggal', [$startDate, $endDate])->get();
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 8)->whereBetween('tanggal', [$startDate, $endDate])->get();
                 }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->whereBetween('tanggal', [$startDate, $endDate])->get();
             } else {
@@ -90,7 +90,7 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
                     $Company = Company::find($company);
                     $company = $Company->name;
                 } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 7)->get();
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 8)->get();
                 }
                 $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->get();
             }

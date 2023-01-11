@@ -21,10 +21,12 @@ class AdminController extends Controller
 {
     public $startDate;
     public $endDate;
+    public $company;
 
     public function __construct() {
         $this->startDate = Carbon::now()->startOfMonth();
         $this->endDate = Carbon::now()->endOfMonth();
+        $this->company = null;
     }
     
     public function index(Request $request){
@@ -134,13 +136,22 @@ class AdminController extends Controller
 
     public function laporan_keluar()
     {
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->where('status', 7)->get();
         $title = "Laporan Kas Kecil";
-        $kategori = Kategori::with('pengeluaran')->get();
-        $company = Company::get();
+        $company = Company::get(); 
+        $startDate = $this->startDate; $endDate = $this->endDate;
+        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->whereIn('status', [7,8])->whereBetween('tanggal',[$startDate,$endDate])->orderBy('status','desc')->get();
+        $Saldo = Saldo::findOrFail(Auth::user()->id);
+        $totalKeluar = 0; $totalSetBKK = 0; $totalBelumSetBKK = 0;
+        foreach($dataKas as $value) {
+            $totalKeluar = $totalKeluar + $value->jumlah;
+            if($value->status == 7) {
+                $totalBelumSetBKK = $totalBelumSetBKK + $value->jumlah;
+            } elseif ($value->status == 8) {
+                $totalSetBKK = $totalSetBKK + $value->jumlah;
+            }
+        }
 
-        return view ('/admin/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate, 'company'=>$company], 
-        ['dataKas' => $data_pengeluaran]);
+        return view ('/admin/laporan_kas', compact('title','startDate','endDate','company','dataKas','Saldo','totalKeluar','totalSetBKK','totalBelumSetBKK'));
     }
 
     public function kategori($id)
@@ -453,7 +464,7 @@ class AdminController extends Controller
         foreach($dataKas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
-        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->where('status',7)->where('pembebanan',$id)->get();
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->where('status',7)->orWhere('status',8)->where('pembebanan',$id)->get();
         foreach($kasTotal as $k) {
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
@@ -518,6 +529,15 @@ class AdminController extends Controller
         $dataKas->save();
 
         return response()->json(['data' => $total]);
+    }
+
+    public function set_bkk($id)
+    {
+        $dataKas = Pengeluaran::find($id);
+        $dataKas->status = 8;
+        $dataKas->save();
+
+        return back();
     }
 
 }

@@ -11,7 +11,8 @@
     <meta name="author" content="">
 
     <title>{{$title}}</title>
-
+    <!-- css table -->
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -174,7 +175,77 @@
                         <a href="/export" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div> -->
-                    
+                    <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
+                                                Saldo</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Saldo -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
+                                                Total Terpakai</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalKeluar,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Card Tunai -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
+                                                Total Set BKK</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalSetBKK,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Tunai -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
+                                                Belum Set BKK</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalBelumSetBKK,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -207,7 +278,7 @@
                                         Pilih Company
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/laporan_kas_keluar">All</a>
+                                        <a class="dropdown-item" href="/admin_laporan_kas_keluar">All</a>
                                         @foreach ($company as $company)
                                             <a class="dropdown-item" href="/kas_company/2/{{$company->project_company_id}}">{{$company->name}}</a>
                                         @endforeach
@@ -219,7 +290,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
@@ -254,14 +325,9 @@
                                         <td>{{$row->Status->nama_status}}</td>
                                         <td>{{$row->tanggal_respon}}</td>
                                         <td>
-                                        <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
-                                        @if ($row->status == 4)
-                                            <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Approve</a> 
+                                        @if($row->status != 8)
+                                            <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
                                         @endif
-                                        @if ($row->status == 5)
-                                            <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
-                                        @endif 
                                         </td>
                                         </tr>
                                         @endforeach 
@@ -365,6 +431,15 @@
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 
+    <!-- table js -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable({
+        stateSave: true,
+        order: [[7, 'desc']],
+    });
+    } );</script>
 </body>
 
 </html>

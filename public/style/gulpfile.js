@@ -65,6 +65,13 @@ function modules() {
       './node_modules/datatables.net-bs4/css/*.css'
     ])
     .pipe(gulp.dest('./vendor/datatables'));
+  // dataTables2
+  var dataTables2 = gulp.src([
+    './node_modules/datatables.net/js/*.js',
+    './node_modules/datatables.net-bs4/js/*.js',
+    './node_modules/datatables.net-bs4/css/*.css'
+  ])
+  .pipe(gulp.dest('./vendor/datatables'));
   // Font Awesome
   var fontAwesome = gulp.src('./node_modules/@fortawesome/**/*')
     .pipe(gulp.dest('./vendor'));

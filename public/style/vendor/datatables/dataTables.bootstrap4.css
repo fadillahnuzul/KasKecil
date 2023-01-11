@@ -22,7 +22,7 @@ table.dataTable.nowrap td {
 }
 
 div.dataTables_wrapper div.dataTables_length label {
-  font-weight: normal;
+  font-weight: bold;
   text-align: left;
   white-space: nowrap;
 }
@@ -34,7 +34,7 @@ div.dataTables_wrapper div.dataTables_filter {
   text-align: right;
 }
 div.dataTables_wrapper div.dataTables_filter label {
-  font-weight: normal;
+  font-weight: bold;
   white-space: nowrap;
   text-align: left;
 }
@@ -67,7 +67,7 @@ div.dataTables_wrapper div.dataTables_processing {
   padding: 1em 0;
 }
 
-table.dataTable > thead > tr > th:active,
+/* table.dataTable > thead > tr > th:active,
 table.dataTable > thead > tr > td:active {
   outline: none;
 }
@@ -142,7 +142,7 @@ div.dataTables_scrollBody table thead .sorting_desc:after {
 div.dataTables_scrollBody table tbody tr:first-child th,
 div.dataTables_scrollBody table tbody tr:first-child td {
   border-top: none;
-}
+} */
 
 div.dataTables_scrollFoot > .dataTables_scrollFootInner {
   box-sizing: content-box;
@@ -163,7 +163,7 @@ div.dataTables_wrapper div.dataTables_paginate {
     justify-content: center !important;
   }
 }
-table.dataTable.table-sm > thead > tr > th:not(.sorting_disabled) {
+/* table.dataTable.table-sm > thead > tr > th:not(.sorting_disabled) {
   padding-right: 20px;
 }
 table.dataTable.table-sm .sorting:before,
@@ -176,7 +176,7 @@ table.dataTable.table-sm .sorting:after,
 table.dataTable.table-sm .sorting_asc:after,
 table.dataTable.table-sm .sorting_desc:after {
   top: 5px;
-}
+} */
 
 table.table-bordered.dataTable {
   border-right-width: 0;
