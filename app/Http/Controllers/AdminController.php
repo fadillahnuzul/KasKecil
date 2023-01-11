@@ -43,11 +43,11 @@ class AdminController extends Controller
         foreach ($dataKas as $masuk) {
             $total = 0;
             $diklaim = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
-            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->whereIn('status',[7,8])->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
             foreach ($data_diklaim as $keluar){
                 $diklaim = $diklaim + $keluar->jumlah;
             }
@@ -61,7 +61,7 @@ class AdminController extends Controller
         $data_pengajuan = $pengajuan->filter(function($item, $key){
             return $item->User->kk_access != '1';
         });
-        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
+        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
         $data_pengeluaran = $pengeluaran->filter(function($item, $key){
             return $item->User->kk_access != '1';
         });
@@ -75,7 +75,7 @@ class AdminController extends Controller
         }
         $sisa = $total_pengajuan - $total_pengeluaran;
 
-        $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
+        $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status','4')->get();
         $admin = $pengajuan_admin->last();
         session(['total_pengajuan' => $total_pengajuan]);
         session(['total_pengeluaran' => $total_pengeluaran]);
@@ -96,7 +96,7 @@ class AdminController extends Controller
             return $item->User->kk_access != '1';
         });
         // dd($data_pengajuan);
-        $data_pengeluaran = Pengeluaran::with('User')->where('status','!=',3)->where('status','!=',6)->get();
+        $data_pengeluaran = Pengeluaran::with('User')->where('status','!=',3)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
         $data_pengeluaran = $data_pengeluaran->filter(function($item, $key){
             return $item->User->kk_access != '1';
         });
@@ -114,11 +114,11 @@ class AdminController extends Controller
         foreach ($dataKas as $masuk) {
             $total = 0;
             $diklaim = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }
-            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
+            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->whereIn('status',[7,8])->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
             foreach ($data_diklaim as $keluar){
                 $diklaim = $diklaim + $keluar->jumlah;
             }
@@ -144,9 +144,9 @@ class AdminController extends Controller
         $totalKeluar = 0; $totalSetBKK = 0; $totalBelumSetBKK = 0;
         foreach($dataKas as $value) {
             $totalKeluar = $totalKeluar + $value->jumlah;
-            if($value->status == 7) {
+            if($value->status == 7 && $value->deskripsi!="PENGEMBALIAN SALDO PENGAJUAN") {
                 $totalBelumSetBKK = $totalBelumSetBKK + $value->jumlah;
-            } elseif ($value->status == 8) {
+            } elseif ($value->status == 8 && $value->deskripsi!="PENGEMBALIAN SALDO PENGAJUAN") {
                 $totalSetBKK = $totalSetBKK + $value->jumlah;
             }
         }
@@ -445,10 +445,12 @@ class AdminController extends Controller
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->orderBy('status','asc')->get();
         foreach($dataKas as $k) {
-            $totalPengeluaran = $totalPengeluaran + $k->jumlah;
+            if ($k->deskripsi != "PENGEMBALIAN SALDO PENGAJUAN") {
+                $totalPengeluaran = $totalPengeluaran + $k->jumlah;
+            }
         }
         session(['key' => $id]);
-        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->where('status',7)->get();
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->whereIn('status',[7,8])->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
         foreach($kasTotal as $k) {
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
@@ -464,7 +466,7 @@ class AdminController extends Controller
         foreach($dataKas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
-        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->where('status',7)->orWhere('status',8)->where('pembebanan',$id)->get();
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->whereIn('status',[7,8])->where('pembebanan',$id)->get();
         foreach($kasTotal as $k) {
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }

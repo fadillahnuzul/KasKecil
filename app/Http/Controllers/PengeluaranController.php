@@ -44,12 +44,12 @@ class PengeluaranController extends Controller
         $total = $dataKas->sum('jumlah');
         $saldo = Saldo::find(Auth::id());
         $totalDiklaim = 0; $totalPengeluaran = 0;
-        $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->get();
+        $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
         foreach($kas as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
         session(['key' => $id]);
-        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->where('status',7)->get();
+        $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$id)->whereIn('status',[7,8])->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
         foreach($kasTotal as $k) {
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
