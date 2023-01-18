@@ -69,6 +69,7 @@ class PengajuanController extends Controller
         $admin = $pengajuan_admin->last();
         // dd($admin);
 
+        
         return view ('main', ['dataKas' => $data_pengajuan, 'admin' => $admin],['title'=>$title, 'Saldo'=>$saldo, 'laporan'=>$laporan]);
     }
 
