@@ -365,40 +365,40 @@
                                 <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Kode</th>
-                                            <th>Tanggal</th>
-                                            <th>User</th>
-                                            <th>Divisi</th>
-                                            <th>Keterangan</th>
-                                            <th>Pengajuan</th>
-                                            <th>Sumber Dana</th>
-                                            <th>Total Belanja</th>
-                                            <th>Total Diklaim</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th class="font-weight-bold text-dark">Kode</th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">User</th>
+                                            <th class="font-weight-bold text-dark">Divisi</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">Pengajuan</th>
+                                            <th class="font-weight-bold text-dark">Sumber Dana</th>
+                                            <th class="font-weight-bold text-dark">Total Belanja</th>
+                                            <th class="font-weight-bold text-dark">Total Diklaim</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td>{{$row->kode}}</td>
-                                            <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->User->username}}</td>
-                                            <td>{{$row->Divisi->name}}</td>
-                                            <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah ,2, ",", ".")}}</td>                           
-                                            <td>@if ($row->sumber == NULL) 
+                                            <td class="font-weight-bold text-dark">{{$row->kode}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->Divisi->name}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah ,2, ",", ".")}}</td>                           
+                                            <td class="font-weight-bold text-dark">@if ($row->sumber == NULL) 
                                                 -
                                                 @endif
                                                 @if ($row->sumber != NULL)
                                                     {{$row->Sumber->sumber_dana}}
                                                 @endif
                                             </td>
-                                            <td>Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
-                                            <td>Rp. {{number_format($row->diklaim,2, ",", ".")}}</td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark">
                                             @if ($row->Status->id != 6)
                                             <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                             <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>

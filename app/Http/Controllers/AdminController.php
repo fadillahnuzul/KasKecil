@@ -537,6 +537,7 @@ class AdminController extends Controller
     {
         $dataKas = Pengeluaran::find($id);
         $dataKas->status = 8;
+        $dataKas->tanggal_set_bkk = Carbon::now();
         $dataKas->save();
 
         return back();

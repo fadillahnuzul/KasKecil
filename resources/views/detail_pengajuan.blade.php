@@ -356,47 +356,47 @@
                                 <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Tanggal</th>
-                                            <th>Keterangan</th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
                                             @if ($button_kas==FALSE)
-                                            <th>Kode Pengajuan</th>
-                                            <th>Saldo Masuk</th>
+                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
+                                            <th class="font-weight-bold text-dark">Saldo Masuk</th>
                                             @endif
-                                            <th>Kas Keluar</th>
-                                            <th>COA</th>
-                                            <th>Pembebanan</th>
-                                            <th>Dibayarkan pada</th>
-                                            <th>Status</th>
-                                            <th>Tanggal Respon</th>
-                                            <th>Aksi</th>
+                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
+                                            <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Dibayarkan pada</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             @if ($button_kas==FALSE)
-                                            <td>{{$row->pengajuan->kode}}</td>
-                                            <td>Rp. {{number_format($row->pengajuan->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->pengajuan->kode}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->pengajuan->jumlah,2,",", ".")}}</td>
                                             @endif
-                                            <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                            <td>@if ($row->coa)
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
                                                 {{$row->COA->name}}
                                                 @endif
                                             </td>
-                                            <td>@if ($row->pembebanan)
+                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
                                                 @endif
                                             </td>
-                                            <td>@if ($row->tujuan)
+                                            <td class="font-weight-bold text-dark">@if ($row->tujuan)
                                                 {{$row->tujuan}}
                                                 @endif
                                             </td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td>{{$row->tanggal_respon}}</td>
-                                            <td>
+                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                            <td class="font-weight-bold text-dark">
                                                 @if(Auth::user()->kk_access==1 && $row->status == 7)
                                                 <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
                                                 @endif

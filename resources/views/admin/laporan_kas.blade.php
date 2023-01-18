@@ -250,19 +250,19 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         <!-- End Dropdown Divisi -->
-                            <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                            <!-- <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
                         <div class="container">
                             <div class="row">
                                 <form action="/filter_pengeluaran" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <label for="date" class="col-form-label col-sm"></label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                         </div>
-                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <label for="date" class="col-form-label col-sm"></label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
@@ -285,6 +285,26 @@
                                     </div>
                                 </div>
                         <!-- End Dropdown Company -->
+                        <!-- Filter tanggal cetak -->
+                            <form action="/pengeluaran.export.admin" method="POST">
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm"></label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm"></label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-success">Cetak</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                                <!-- End Filter tanggal cetak -->
                             </div>
                         </div>
                         </div>
@@ -293,38 +313,40 @@
                                 <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Tanggal</th>
-                                            <th>Keterangan</th>
-                                            <th>User</th>
-                                            <th>Kode Pengajuan</th>
-                                            <th>Kas Keluar</th>
-                                            <th>COA</th>
-                                            <th>Pembebanan</th>
-                                            <th>Status</th>
-                                            <th>Tanggal Respon</th>
-                                            <th>Aksi</th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">User</th>
+                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
+                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
+                                            <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Tanggal BKK</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                        <td>{{$row->tanggal}}</td>
-                                        <td>{{$row->deskripsi}}</td>
-                                        <td>{{$row->User->username}}</td>
-                                        <td>{{$row->pengajuan->kode}}</td>
-                                        <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                        <td>@if ($row->coa)
-                                                {{$row->COA->code}} <br>
-                                                {{$row->COA->name}}
+                                        <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->pengajuan->kode}}</td>
+                                        <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                        <td class="font-weight-bold text-dark">@if ($row->coa)
+                                            {{$row->COA->code}} <br>
+                                            {{$row->COA->name}}
                                             @endif
-                                            </td>
-                                            <td>@if ($row->pembebanan)
-                                                {{$row->Pembebanan->name}}
-                                                @endif
-                                            </td>
-                                        <td>{{$row->Status->nama_status}}</td>
-                                        <td>{{$row->tanggal_respon}}</td>
-                                        <td>
+                                        </td>
+                                        <td class="font-weight-bold text-dark">@if ($row->pembebanan)
+                                            {{$row->Pembebanan->name}}
+                                            @endif
+                                        </td>
+                                        <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->tanggal_set_bkk}}</td>
+                                        <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
                                             <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
                                         @endif
@@ -437,7 +459,7 @@
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
-        order: [[7, 'desc']],
+        order: [[7, 'asc']],
     });
     } );</script>
 </body>

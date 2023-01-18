@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pengajuan.export', [PengajuanController::class, 'export'])->name('pengajuan.export');
     Route::get('/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export');
     Route::post('/download.pdf', [PengajuanController::class, 'export_pdf'])->name('download.pdf');
+    Route::post('/pengeluaran.export.admin', [PengeluaranController::class, 'export'])->name('pengeluaran.export.admin');
 
     //Halaman Bank
     Route::get('/home_bank', [BankController::class, 'index']);

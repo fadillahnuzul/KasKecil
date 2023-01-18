@@ -257,15 +257,15 @@
                                     <thead>
                                         <tr>
                                             <!-- <th></th> -->
-                                            <th>Tanggal</th>
-                                            <th>Keterangan</th>
-                                            <th>User</th>
-                                            <th>Kas Keluar</th>
-                                            <th>COA</th>
-                                            <th>Pembebanan</th>
-                                            <th>Status</th>
-                                            <th>Tanggal Respon</th>
-                                            <th>Aksi</th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">User</th>
+                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
+                                            <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -273,22 +273,22 @@
                                         @foreach ($dataKas as $row)
                                         <tr>
                                         <!-- <td>{{$row->id}}</td> -->
-                                        <td>{{$row->tanggal}}</td>
-                                        <td>{{$row->deskripsi}}</td>
-                                        <td>{{$row->User->username}}</td>
-                                        <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                        <td>@if ($row->coa)
+                                        <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
+                                        <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                        <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
                                                 {{$row->COA->name}}
                                             @endif
                                             </td>
-                                            <td>@if ($row->pembebanan)
+                                        <td class="font-weight-bold text-dark">@if ($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
-                                                @endif
-                                            </td>
-                                        <td>{{$row->Status->nama_status}}</td>
-                                        <td>{{$row->tanggal_respon}}</td>
-                                        <td>
+                                            @endif
+                                        </td>
+                                        <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                        <td class="font-weight-bold text-dark">
                                         @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Klaim</a> 
                                         @endif

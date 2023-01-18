@@ -169,31 +169,31 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Tanggal</th>
-                                            <th>Divisi</th>
-                                            <th>Keterangan</th>
-                                            <th>Pengajuan</th>
-                                            <th>Sumber Dana</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Divisi</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">Pengajuan</th>
+                                            <th class="font-weight-bold text-dark">Sumber Dana</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->Divisi->nama_divisi}}</td>
-                                            <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah)}}</td>                           
-                                            <td>@if ($row->sumber == NULL) 
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->Divisi->nama_divisi}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah)}}</td>                           
+                                            <td class="font-weight-bold text-dark">@if ($row->sumber == NULL) 
                                                 -
                                                 @endif
                                                 @if ($row->sumber != NULL)
                                                     {{$row->Sumber->sumber_dana}}
                                                 @endif
                                             </td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td>
+                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark">
                                             @if ($row->Status->id == 1)
                                                 <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
                                                 Approve</a> 

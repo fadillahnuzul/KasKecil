@@ -46,7 +46,7 @@ class PengajuanController extends Controller
         // $company = $request->session()->get('company');
         // $project = $request->session()->get('project');
         $title = "Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->where('status','!=','5')->get();
+        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->get();
         //Menghitung total belanja, sisa
         foreach ($data_pengajuan as $masuk) {
             $total = 0;

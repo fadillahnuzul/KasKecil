@@ -298,28 +298,28 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Kode</th>
-                                            <th>Tanggal</th>
-                                            <th>Keterangan</th>
-                                            <th>Jumlah Pengajuan</th>
-                                            <th>Status</th>
-                                            <th>Total Belanja</th>
-                                            <th>Total Diklaim</th>
-                                            <th>Aksi</th>
+                                            <th class="font-weight-bold text-dark">Kode</th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">Jumlah Pengajuan</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Total Belanja</th>
+                                            <th class="font-weight-bold text-dark">Total Diklaim</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td>{{$row->kode}}</td>
-                                            <td>{{$row->tanggal}}</td>
-                                            <td>{{$row->deskripsi}}</td>
-                                            <td>Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                            <td>{{$row->Status->nama_status}}</td>
-                                            <td>Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
-                                            <td>Rp. {{number_format($row->diklaim,2,",", ".")}}</td>
-                                            <td>
+                                            <td class="font-weight-bold text-dark">{{$row->kode}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">
                                             @if ($row->Status->id != 6)
                                             <a onclick="set_modal_id({{$row->id}})" href="" target="_blank" data-toggle="modal" data-target="#PrintModal" class="btn btn-info btn-sm" data-id="{{ $row->id }}">Cetak</a>
                                             @if ($row->Status->id != 1 AND $row->Status->id != 3 AND $row->Status->id != 5)
