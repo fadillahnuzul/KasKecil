@@ -34,7 +34,7 @@ class AdminController extends Controller
         $startDate = $this->startDate;
         $endDate = $this->endDate;
         $laporan = FALSE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->get();
+        $dataKas = Pengajuan::with('Sumber','User','Status')->get();
         $Saldo = Saldo::findOrFail(Auth::user()->id);
         $divisi = Divisi::get();
         $title = "Admin Kas Kecil";

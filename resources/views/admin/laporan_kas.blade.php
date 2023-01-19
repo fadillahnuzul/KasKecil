@@ -455,13 +455,17 @@
 
     <!-- table js -->
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>     
     <script>
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
         order: [[7, 'asc']],
     });
-    } );</script>
+    } );
+    </script>
+    
 </body>
 
 </html>
