@@ -245,7 +245,7 @@ class PengeluaranController extends Controller
 
     public function done(Request $request)
     {
-        Pengeluaran::whereIn('id',$request->ids)->update(['status'=>'4','tanggal_respon'=>Carbon::now()]);
+        Pengeluaran::whereIn('id',$request->ids)->update(['status'=>'7','tanggal_respon'=>Carbon::now()]);
         Pengajuan::find($request->session()->get('key'))->update(['status'=>'4']);
 
         return response()->json(true);
