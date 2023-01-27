@@ -304,7 +304,7 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" href="/home_admin">All</a>
                                         @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
+                                        <a class="dropdown-item" href="/index_filter_keluar/1/{{$list->id}}">{{$list->username}}</a>
                                         @endforeach 
                                         </div>
                                         </div>
@@ -316,9 +316,9 @@
                                         </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <a class="dropdown-item" href="/home_admin">All</a>
-                                        
-                                                <a class="dropdown-item" value=""></a>
-                                        
+                                                @foreach($companyList as $list)
+                                                <a class="dropdown-item" href="/index_filter_keluar/2/{{$list->id}}">{{$list->name}}</a>
+                                                @endforeach
                                             </div>
                                         </div>
                                         <!-- End Dropdown Company -->
@@ -419,7 +419,7 @@
                                             <th class="font-weight-bold text-dark">Sumber Dana</th>
                                             <th class="font-weight-bold text-dark">Belum Diklaim</th>
                                             <th class="font-weight-bold text-dark">Total Diklaim</th>
-                                            @if ($laporan == 1)
+                                            @if ($filter_keluar == TRUE)
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
@@ -453,21 +453,8 @@
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">
-                                            @if ($row->Status->id != 6)
-                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
-                                            <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
-                                            @if ($row->Status->id == 1 AND $row->User->kk_access == 2)
-                                                <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
-                                                Approve</a> 
-                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
-                                                Decline</a>
-                                            @elseif ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
-                                                <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
-                                            @endif
-                                            @endif
-                                            </td>
-                                            @if ($laporan == 1)
+                                            <!-- filter kas keluar di dashboard admin -->
+                                            @if ($filter_keluar == TRUE)
                                             <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
@@ -484,6 +471,21 @@
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
                                             @endif
+                                            <!-- filter kas keluar di dashboard admin -->
+                                            <td class="font-weight-bold text-dark">
+                                            @if ($row->Status->id != 6)
+                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
+                                            <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
+                                            @if ($row->Status->id == 1 AND $row->User->kk_access == 2)
+                                                <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
+                                                Approve</a> 
+                                                <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
+                                                Decline</a>
+                                            @elseif ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
+                                                <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
+                                            @endif
+                                            @endif
+                                            </td>
                                         </tr>
                                         <?php $no++ ;?>
                                         @endforeach 

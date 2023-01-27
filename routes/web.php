@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
 //Halaman admin
     Route::match(['GET', 'POST'], '/home_admin', [AdminController::class, 'index']);
     Route::match(['GET', 'POST'], '/home_admin/{id}', [AdminController::class, 'index']);
+    Route::match(['GET', 'POST'], '/index_filter_keluar/{filter}/{id}', [AdminController::class, 'index_filter_keluar']); //1 = filter user, 2 = filter company
     Route::get('/acc/{id}', [AdminController::class, 'acc']);
     Route::put('/setujui/{id}', [AdminController::class, 'setujui']);
     Route::get('/tolak/{id}', [AdminController::class, 'tolak']);
@@ -77,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Download
     Route::get('/pengajuan.export', [PengajuanController::class, 'export'])->name('pengajuan.export');
-    Route::get('/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export');
+    Route::match(['GET', 'POST'],'/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export');
     Route::post('/download.pdf', [PengajuanController::class, 'export_pdf'])->name('download.pdf');
 
     //Halaman Bank

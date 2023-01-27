@@ -286,7 +286,7 @@
                                 </div>
                         <!-- End Dropdown Company -->
                         <!-- Filter tanggal cetak -->
-                            <!-- <form action="/pengeluaran.export" method="POST">
+                            <form action="/pengeluaran.export" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
@@ -303,7 +303,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                </form> -->
+                                </form>
                                 <!-- End Filter tanggal cetak -->
                             </div>
                         </div>
@@ -438,17 +438,6 @@
     <script>function set_modal_id(id) {
         document.getElementById("modal_id").value = id;
     } 
-    function show_alert(){
-        var otable = document.getElementById("ABCTable");
-        alert(otable);
-        var cellVal = new Array(2)
-        for (i = 1; i < 3; i++) { 
-            var oCells = otable.rows.item(i).cells;
-            // var cellLength = oCells.length;
-            cellVal = oCells.item(1).value;
-            alert(cellVal);
-        }
-    }
     </script>
 
     <!-- Bootstrap core JavaScript-->

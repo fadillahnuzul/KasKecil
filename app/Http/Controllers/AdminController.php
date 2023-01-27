@@ -32,12 +32,13 @@ class AdminController extends Controller
         $this->company = null;
     }
     
-    public function index(Request $request,$kas_keluar=null,$id=null){
+    public function index(Request $request,$id=null){
         // $saldoAwal = $request->session()->get('saldo_awal');
         // $startDate = ($request->startDate) ? $request->startDate : $this->startDate; 
         // $endDate = ($request->endDate) ? $this->endDate : $this->endDate;
         $startDate = $request->startDate; $endDate = $request->endDate;
         $company = $request->id ? $request->id : null;
+        $filter_keluar = FALSE;
         // $startDate = $this->startDate; $endDate = $this->endDate;
         $laporan = FALSE;
 
@@ -56,7 +57,7 @@ class AdminController extends Controller
         $divisi = Divisi::get();
         $title = "Admin Kas Kecil";
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get();
-        
+        $companyList = DB::table('project_company')->join('pettycash_pengeluaran', 'project_company.project_company_id', '=', 'pettycash_pengeluaran.pembebanan')->get();
         // Perhitungan sisa dan total belanja
         foreach ($dataKas as $masuk) {
             $total = 0;
@@ -95,61 +96,22 @@ class AdminController extends Controller
         }
 
         // Perhitungan sisa dan total belanja pada card
-        $pengajuan = Pengajuan::whereNotIn('status',[1,3,6])->where(function ($query) use ($id) 
-        {
-            if ($id) {
-                $query->where('user_id', $id);
-            }
-        })
-        ->where(function ($query) use ($startDate, $endDate) {
-            if ($startDate && $endDate) {
-                $query->whereBetween('tanggal', [$startDate, $endDate]);
-            }
-        })->get();
-        $data_pengajuan = $pengajuan->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $total_pengajuan = 0;
-        foreach ($data_pengajuan as $masuk){
-            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
-        }
-
-        $pengeluaran = Pengeluaran::whereNotIn('status',[3,6,7,8])->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")
-        ->where(function ($query) use ($id) {
-            if ($id) {
-                $query->where('user_id', $id);
-            }
-        })
-        ->where(function ($query) use ($startDate, $endDate) {
-            if ($startDate && $endDate) {
-                $query->whereBetween('tanggal', [$startDate, $endDate]);
-            }
-        })->get();
-        $data_pengeluaran = $pengeluaran->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $total_pengeluaran = 0;
-        foreach ($data_pengeluaran as $keluar){
-            $total_pengeluaran = $total_pengeluaran + $keluar->jumlah;
-        }
-
-        $diklaim = Pengeluaran::whereIn('status',[7,8])->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")
-        ->where(function ($query) use ($id) {
-            if ($id) {
-                $query->where('user_id', $id);
-            }
-        })
-        ->where(function ($query) use ($startDate, $endDate) {
-            if ($startDate && $endDate) {
-                $query->whereBetween('tanggal', [$startDate, $endDate]);
-            }
-        })->get();
-        $diklaim = $diklaim->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $total_diklaim = 0;
-        foreach ($diklaim as $keluar){
-            $total_diklaim = $total_diklaim + $keluar->jumlah;
+        if ($id && $startDate && $endDate) {
+            $total_pengajuan = $this->hitung_pengajuan($id,$startDate,$endDate);
+            $total_pengeluaran = $this->hitung_belum_klaim($id,$startDate,$endDate);
+            $total_diklaim = $this->hitung_klaim($id,$startDate,$endDate);
+        } else if ($id) {
+            $total_pengajuan = $this->hitung_pengajuan($id);
+            $total_pengeluaran = $this->hitung_belum_klaim($id);
+            $total_diklaim = $this->hitung_klaim($id);
+        } else if ($startDate && $endDate) {
+            $total_pengajuan = $this->hitung_pengajuan(null,$startDate,$endDate);
+            $total_pengeluaran = $this->hitung_belum_klaim(null,$startDate,$endDate);
+            $total_diklaim = $this->hitung_klaim(null,$startDate,$endDate);
+        } else {
+            $total_pengajuan = $this->hitung_pengajuan();
+            $total_pengeluaran = $this->hitung_belum_klaim();
+            $total_diklaim = $this->hitung_klaim();
         }
 
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status','4')->get();
@@ -157,7 +119,38 @@ class AdminController extends Controller
         session(['total_pengajuan' => $total_pengajuan]);
         session(['total_pengeluaran' => $total_pengeluaran]);
         session(['total_diklaim' => $total_diklaim]);
-        return view('admin/main', compact('dataKas','admin','Saldo','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','total_diklaim','userList'));
+        return view('admin/main', compact('dataKas','admin','Saldo','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','total_diklaim','filter_keluar','userList','companyList'));
+    }
+
+    public function index_filter_keluar(Request $request, $filter=null, $id=null)
+    {
+        $startDate = $request->startDate; $endDate = $request->endDate;
+        $company = $request->id ? $request->id : null;
+        $Saldo = Saldo::findOrFail(Auth::user()->id);
+        $divisi = Divisi::get();
+        $filter_keluar = TRUE;
+        $title = "Admin Kas Kecil";
+        $laporan = 9999;
+        $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get();
+        $companyList = DB::table('project_company')->join('pettycash_pengeluaran', 'project_company.project_company_id', '=', 'pettycash_pengeluaran.pembebanan')->get();
+
+        if($filter==1) {
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->where('user_id',$id)
+            ->where(function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('tanggal', [$startDate, $endDate]);
+                }
+            })->get();
+        } else if ($filter==2) {
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->where('pembebanan',$id)
+            ->where(function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('tanggal', [$startDate, $endDate]);
+                }
+            })->get();
+        }
+
+        return view('admin/main', compact('dataKas','Saldo','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','total_diklaim','filter_keluar','userList','companyList'));
     }
 
     public function hitung_pengajuan($id=null, $startDate=null, $endDate=null){
@@ -231,7 +224,7 @@ class AdminController extends Controller
     public function laporan(Request $request){
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
-        $laporan = TRUE;
+        $laporan = TRUE; $filter_keluar = FALSE;
         $dataKas = Pengajuan::with('Sumber','User', 'Status')->where('status',5)->whereBetween('tanggal',[$startDate,$endDate])->get();
         $divisi = Divisi::get();
 
@@ -241,9 +234,7 @@ class AdminController extends Controller
             return $item->User->kk_access != '1';
         });
         // dd($data_pengajuan);
-        $data_pengeluaran = Pengeluaran::with('User')->where('status','!=',3)->where('status','!=',6)
-                            ->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")
-                            ->whereBetween('tanggal',[$startDate,$endDate])->get();
+        $data_pengeluaran = Pengeluaran::with('User')->where('status','!=',3)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->whereBetween('tanggal',[$startDate,$endDate])->get();
         $data_pengeluaran = $data_pengeluaran->filter(function($item, $key){
             return $item->User->kk_access != '1';
         });
@@ -280,7 +271,7 @@ class AdminController extends Controller
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('admin/main', compact('dataKas', 'admin', 'divisi', 'title', 'laporan','total_pengajuan','total_pengeluaran','sisa','startDate','endDate'));
+        return view('admin/main', compact('dataKas', 'admin', 'divisi', 'title', 'laporan','total_pengajuan','total_pengeluaran','sisa','filter_keluar','startDate','endDate'));
     }
 
     public function laporan_keluar(Request $request)
