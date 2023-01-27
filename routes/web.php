@@ -39,20 +39,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kas', [PengeluaranController::class, 'create']);
     Route::post('/simpan_kas', [PengeluaranController::class, 'save']);
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
-    Route::get('/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
+    Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
     Route::get('/kas_company/{id}/{id_comp}', [PengeluaranController::class, 'kas_company']);
     Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
+    Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
 
 //Halaman admin
-    Route::get('/home_admin', [AdminController::class, 'index']);
+    Route::match(['GET', 'POST'], '/home_admin', [AdminController::class, 'index']);
+    Route::match(['GET', 'POST'], '/home_admin/{id}', [AdminController::class, 'index']);
     Route::get('/acc/{id}', [AdminController::class, 'acc']);
     Route::put('/setujui/{id}', [AdminController::class, 'setujui']);
     Route::get('/tolak/{id}', [AdminController::class, 'tolak']);
-    Route::get('/done/{id}', [AdminController::class, 'done']);
+    Route::post('/done', [AdminController::class, 'done']);
     Route::get('/kas_divisi/{id}', [AdminController::class, 'kas_divisi']);
     Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi']);
-    Route::get('/admin_laporan', [AdminController::class, 'laporan']);
-    Route::get('/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar']);
+    Route::match(['GET', 'POST'], '/admin_laporan', [AdminController::class, 'laporan']);
+    Route::match(['GET', 'POST'], '/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar']);
     Route::get('/admin_kas_kategori/{id}', [AdminController::class, 'kategori']);
     Route::get('/edit_done/{id}', [AdminController::class, 'edit_done']);
     Route::get('/edit_admin/{id}', [AdminController::class, 'edit']);
@@ -62,7 +64,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hapus_admin/{pengajuan}/{id}', [AdminController::class, 'hapus']);
     Route::get('/klaim', [AdminController::class, 'klaim']);
     Route::get('/kas_company/{id}', [AdminController::class, 'kas_company']);
-    Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
+    // Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
+    Route::post('/set_bkk_checkbox', [AdminController::class, 'set_bkk']);
 
     //Filter tanggal
     Route::post('/filter_pengajuan/{id}', [PengajuanController::class, 'filter']);
@@ -76,7 +79,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pengajuan.export', [PengajuanController::class, 'export'])->name('pengajuan.export');
     Route::get('/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export');
     Route::post('/download.pdf', [PengajuanController::class, 'export_pdf'])->name('download.pdf');
-    Route::post('/pengeluaran.export.admin', [PengeluaranController::class, 'export'])->name('pengeluaran.export.admin');
 
     //Halaman Bank
     Route::get('/home_bank', [BankController::class, 'index']);

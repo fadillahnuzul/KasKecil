@@ -13,6 +13,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "livewire/livewire": "^2.11",
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.25",
         "realrashid/sweet-alert": "^5.1"

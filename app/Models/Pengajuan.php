@@ -10,6 +10,7 @@ class Pengajuan extends Model
 {
     use HasFactory;
     protected $table = 'pettycash_pengajuan';
+    protected $fillable = ['status'];
     use AutoNumberTrait;
     
     /**
@@ -57,11 +58,6 @@ class Pengajuan extends Model
     public function Saldo() 
     {
         return $this->belongsTo(Saldo::class, 'user_id', 'id');
-    }
-
-    public function COA() 
-    {
-        return $this->belongsTo(COA::class, 'coa', 'coa_id');
     }
 
     public function Company() 

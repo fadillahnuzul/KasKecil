@@ -256,7 +256,7 @@
                             <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <!-- <th></th> -->
+                                            <th><input type="checkbox" id="head-cb"></th>
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
@@ -272,7 +272,7 @@
                                     <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                        <!-- <td>{{$row->id}}</td> -->
+                                        <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
                                         <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
@@ -289,9 +289,9 @@
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
                                         <td class="font-weight-bold text-dark">
-                                        @if ($row->status == 4)
+                                        <!-- @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Klaim</a> 
-                                        @endif
+                                        @endif -->
                                         @if ($row->status == 5)
                                             <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
                                             <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
@@ -303,6 +303,7 @@
                                         <?php $no++ ;?>
                                     </tbody>
                                 </table>
+                                <button id="button-klaim" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
                                 <!-- <button class="btn btn-primary" id="save-btn">Klaim</button>
                                 <h5 style="margin-top:15px" id="totalDiklaim"></h5> -->
                             </div>
@@ -405,13 +406,47 @@
 
     <!-- table js -->
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script>
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
         order: [[6, 'asc']],
     });
-    });</script>
+    });
+    
+    $("#head-cb").on('click', function(){
+        var isChecked = $("#head-cb").prop('checked')
+        $(".cb-child").prop('checked',isChecked)
+        $("#button-klaim").prop('disabled',!isChecked)
+    })
+
+    $("#myTable tbody").on('click','.cb-child',function(){
+        if($(this).prop('checked')!=true){
+            $("#head-cb").prop('checked',false)
+        }
+
+        let semua_checkbox = $("#myTable tbody .cb-child:checked")
+        let button_bkk = (semua_checkbox.length > 0)
+        $("#button-klaim").prop('disabled',!button_bkk)
+    })
+
+    function klaim() {
+        let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+        let semua_id = []
+        $.each(checkbox_terpilih, function(index,elm){
+            semua_id.push(checkbox_terpilih[index].value)
+        })
+        $.ajax({
+            url:"{{url('')}}/done",
+            method:'post',
+            data:{ids:semua_id},
+            success:function(res){
+                table.ajax.reload(null,false)
+            }
+        })
+    }</script>
 
    <!-- Checkbox
    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>

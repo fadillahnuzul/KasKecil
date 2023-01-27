@@ -316,15 +316,15 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
                         <div class="container">
                             <div class="row">
-                                <form action="/filter_pengeluaran" method="POST">
+                                <form action="/laporan_kas_keluar" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <label for="date" class="col-form-label col-sm"></label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                         </div>
-                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <label for="date" class="col-form-label col-sm"></label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
@@ -347,6 +347,26 @@
                                     </div>
                                 </div>
                         <!-- End Dropdown Company -->
+                        <!-- Filter tanggal cetak -->
+                        <form action="/pengeluaran.export" method="POST">
+                                @csrf
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm"></label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm"></label>
+                                        <div class="col-sm">
+                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                        </div>
+                                        <div class="col-sm">
+                                            <button type="submit" class="btn btn-sm btn-success">Cetak</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                                <!-- End Filter tanggal cetak -->
                             </div>
                         </div>
                         @endif
@@ -356,6 +376,9 @@
                                 <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            @if ($button_kas==TRUE)
+                                            <th><input type="checkbox" id="head-cb"></th>
+                                            @endif
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             @if ($button_kas==FALSE)
@@ -374,11 +397,16 @@
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
+                                            @if ($button_kas==TRUE)
+                                            <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
+                                            @endif
                                             <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             @if ($button_kas==FALSE)
                                             <td class="font-weight-bold text-dark">{{$row->pengajuan->kode}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->pengajuan->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
+                                                Rp. {{number_format($row->pengajuan->jumlah,2,",", ".")}}
+                                            @endif</td>
                                             @endif
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">@if ($row->coa)
@@ -405,14 +433,17 @@
                                                     Edit</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">
                                                     Hapus</a>
-                                                <a onclick="set_modal_id({{$row->id}})" data-toggle="modal" data-target="#DoneModal" class="btn btn-success btn-sm" data-id="{{ $row->id }}">
-                                                    Selesai</a>
+                                                <!-- <a onclick="set_modal_id({{$row->id}})" data-toggle="modal" data-target="#DoneModal" class="btn btn-success btn-sm" data-id="{{ $row->id }}">
+                                                    Selesai</a> -->
                                                 @endif
                                             </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @if ($button_kas==TRUE)
+                                <button id="button-set-bkk" type="button" disabled onclick="done()" class="btn btn-sm btn-success">Selesai</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -599,6 +630,8 @@
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
     <!-- table js -->
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>  
     @if ($button_kas == FALSE)
     <script>
     $(document).ready( function () {
@@ -606,15 +639,49 @@
         stateSave: true,
         order: [[8, 'asc']],
     });
-    } );</script>
-    @elseif ($button_kas == TRUE)
+    } );
+    </script>
+    @elseif ($button_kas == TRUE) 
     <script>
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
         order: [[6, 'asc']],
     });
-    } );</script>
+    } );
+    
+    // checkbox selesaikan kas
+    $("#head-cb").on('click', function(){
+        var isChecked = $("#head-cb").prop('checked')
+        $(".cb-child").prop('checked',isChecked)
+        $("#button-set-bkk").prop('disabled',!isChecked)
+    })
+
+    $("#myTable tbody").on('click','.cb-child',function(){
+        if($(this).prop('checked')!=true){
+            $("#head-cb").prop('checked',false)
+        }
+
+        let semua_checkbox = $("#myTable tbody .cb-child:checked")
+        let button_bkk = (semua_checkbox.length > 0)
+        $("#button-set-bkk").prop('disabled',!button_bkk)
+    })
+
+    function done() {
+        let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+        let semua_id = []
+        $.each(checkbox_terpilih, function(index,elm){
+            semua_id.push(checkbox_terpilih[index].value)
+        })
+        $.ajax({
+            url:"{{url('')}}/kas_selesai",
+            method:'post',
+            data:{ids:semua_id},
+            success:function(res){
+                table.ajax.reload(null,false)
+            }
+        })
+    }</script>
     @endif
 </body>
 

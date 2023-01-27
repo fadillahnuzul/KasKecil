@@ -250,11 +250,11 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         <!-- End Dropdown Divisi -->
-                            <!-- <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
+                            <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
                         <div class="container">
                             <div class="row">
-                                <form action="/filter_pengeluaran" method="POST">
+                                <form action="/admin_laporan_kas_keluar" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
@@ -286,7 +286,7 @@
                                 </div>
                         <!-- End Dropdown Company -->
                         <!-- Filter tanggal cetak -->
-                            <form action="/pengeluaran.export.admin" method="POST">
+                            <!-- <form action="/pengeluaran.export" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
@@ -299,11 +299,11 @@
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
                                         <div class="col-sm">
-                                            <button type="submit" class="btn btn-sm btn-success">Cetak</button>
+                                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm (show_alert())">Cetak</button>
                                         </div>
                                     </div>
                                 </div>
-                                </form>
+                                </form> -->
                                 <!-- End Filter tanggal cetak -->
                             </div>
                         </div>
@@ -313,6 +313,7 @@
                                 <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" id="head-cb"></th>
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
@@ -323,12 +324,13 @@
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Tanggal BKK</th>
-                                            <th class="font-weight-bold text-dark">Aksi</th>
+                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
+                                        <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
                                         <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
@@ -346,15 +348,16 @@
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->tanggal_set_bkk}}</td>
-                                        <td class="font-weight-bold text-dark">
+                                        <!-- <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
                                             <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
                                         @endif
-                                        </td>
+                                        </td> -->
                                         </tr>
                                         @endforeach 
                                     </tbody>
                                 </table>
+                                <button id="button-set-bkk" type="button" disabled onclick="setBKK()" class="btn btn-sm btn-success">Set BKK</button>
                             </div>
                         </div>
                     </div>
@@ -434,7 +437,19 @@
     </div>
     <script>function set_modal_id(id) {
         document.getElementById("modal_id").value = id;
-    } </script>
+    } 
+    function show_alert(){
+        var otable = document.getElementById("ABCTable");
+        alert(otable);
+        var cellVal = new Array(2)
+        for (i = 1; i < 3; i++) { 
+            var oCells = otable.rows.item(i).cells;
+            // var cellLength = oCells.length;
+            cellVal = oCells.item(1).value;
+            alert(cellVal);
+        }
+    }
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
@@ -460,10 +475,48 @@
     <script>
     $(document).ready( function () {
     $('#myTable').DataTable({
+        columnDefs: [
+            {
+                targets: [0],
+                ordering: false,
+            },
+        ],
         stateSave: true,
         order: [[7, 'asc']],
     });
     } );
+
+    $("#head-cb").on('click', function(){
+        var isChecked = $("#head-cb").prop('checked')
+        $(".cb-child").prop('checked',isChecked)
+        $("#button-set-bkk").prop('disabled',!isChecked)
+    })
+
+    $("#myTable tbody").on('click','.cb-child',function(){
+        if($(this).prop('checked')!=true){
+            $("#head-cb").prop('checked',false)
+        }
+
+        let semua_checkbox = $("#myTable tbody .cb-child:checked")
+        let button_bkk = (semua_checkbox.length > 0)
+        $("#button-set-bkk").prop('disabled',!button_bkk)
+    })
+
+    function setBKK() {
+        let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+        let semua_id = []
+        $.each(checkbox_terpilih, function(index,elm){
+            semua_id.push(checkbox_terpilih[index].value)
+        })
+        $.ajax({
+            url:"{{url('')}}/set_bkk_checkbox",
+            method:'post',
+            data:{ids:semua_id},
+            success:function(res){
+                table.ajax.reload(null,false)
+            }
+        })
+    }
     </script>
     
 </body>

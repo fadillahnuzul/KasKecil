@@ -264,8 +264,22 @@
                                                 Total Pengajuan</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
                                         </div>
+                                        <div>
+                                        <!-- Dropdown User -->
+                                        <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/home_admin">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
+                                        </div>
+                                        </div>
+                                        <!-- End Dropdown User -->
+                                        </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -278,11 +292,38 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                                Terpakai</div>
+                                                Belum Diklaim</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                         </div>
+                                        <div class="col">
+                                        <!-- Dropdown User -->
+                                        <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/home_admin">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
+                                        </div>
+                                        </div>
+                                        <!-- End Dropdown User -->
+                                        <!-- Dropdown Company -->
+                                        <div class="dropdown" style="float:right; margin-top:5px;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih Company
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="/home_admin">All</a>
+                                        
+                                                <a class="dropdown-item" value=""></a>
+                                        
+                                            </div>
+                                        </div>
+                                        <!-- End Dropdown Company -->
+                                        </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -296,11 +337,15 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Sisa</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa ,2, ",", ".")}}</div>
+                                                Diklaim</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
+                                        </div>
+                                        
+                                        <div class="col">
+                                        <livewire:filter-user/>
+                                        <livewire:filter-company />
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -316,7 +361,7 @@
                         <!-- Dropdown Divisi -->
                         <div class="dropdown" style="float:right;">
                             <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Pilih Divisi
+                                Pilih Unit
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="/home_admin">All</a>
@@ -333,20 +378,20 @@
                         <div class="container">
                             <div class="row">
                                 @if ($laporan == FALSE)
-                                <form action="/filter_pengajuan/1" method="POST">
+                                <form action="/home_admin" method="POST">
                                 @elseif ($laporan == TRUE)
-                                <form action="/filter_pengajuan/2" method="POST">
+                                <form action="" method="POST">
                                 @endif
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
                                         <label for="date" class="col-form-label col-sm">Tanggal awal</label>
                                         <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                        <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
                                         </div>
                                         <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
                                         <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                            <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
                                         </div>
                                         <div class="col-sm">
                                             <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
@@ -372,8 +417,18 @@
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Sumber Dana</th>
-                                            <th class="font-weight-bold text-dark">Total Belanja</th>
+                                            <th class="font-weight-bold text-dark">Belum Diklaim</th>
                                             <th class="font-weight-bold text-dark">Total Diklaim</th>
+                                            @if ($laporan == 1)
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">User</th>
+                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
+                                            <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            @endif
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
@@ -412,6 +467,23 @@
                                             @endif
                                             @endif
                                             </td>
+                                            @if ($laporan == 1)
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">@if ($row->coa)
+                                                {{$row->COA->code}} <br>
+                                                {{$row->COA->name}}
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
+                                                {{$row->Pembebanan->name}}
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                            @endif
                                         </tr>
                                         <?php $no++ ;?>
                                         @endforeach 
@@ -485,6 +557,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+    
 </body>
 
 </html>

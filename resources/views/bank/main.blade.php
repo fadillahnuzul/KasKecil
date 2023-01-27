@@ -241,7 +241,7 @@
                         <!-- Dropdown Divisi -->
                         <div class="dropdown" style="float:right;">
                             <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Pilih Divisi
+                                Pilih Unit
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="/home_admin">All</a>

@@ -12,6 +12,8 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'set_bkk_checkbox',
+        'done',
+        'kas_selesai'
     ];
 }

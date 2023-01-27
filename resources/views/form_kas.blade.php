@@ -216,6 +216,10 @@
                                 <div class="form-group">
                                     <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
                                     <input type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
+                                    <input type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
                                 </div> 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
