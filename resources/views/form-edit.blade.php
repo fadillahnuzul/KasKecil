@@ -211,6 +211,10 @@
                                     <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="tujuan" name="tujuan" value="{{$kas->tujuan}}">
                                 </div>
+                                <div class="form-group">
+                                    <label for="pic">PIC :</label>
+                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic" required>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                             <script type="text/javascript">

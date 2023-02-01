@@ -303,8 +303,8 @@
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Jumlah Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Status</th>
-                                            <th class="font-weight-bold text-dark">Total Belanja</th>
-                                            <th class="font-weight-bold text-dark">Total Diklaim</th>
+                                            <th class="font-weight-bold text-dark">Belum Diklaim</th>
+                                            <th class="font-weight-bold text-dark">Diklaim</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>

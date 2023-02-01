@@ -263,6 +263,7 @@
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
@@ -286,6 +287,7 @@
                                                 {{$row->Pembebanan->name}}
                                             @endif
                                         </td>
+                                        <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
                                         <td class="font-weight-bold text-dark">
@@ -412,7 +414,7 @@
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
-        order: [[6, 'asc']],
+        order: [[8, 'asc']],
     });
     });
     

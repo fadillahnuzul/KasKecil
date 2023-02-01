@@ -69,7 +69,7 @@ class AdminController extends Controller
                 }
             })
             ->where(function ($query) use ($startDate, $endDate) {
-                if ($startDate && $endDate) {
+                if ($startDate && $endDate && $startDate!=$this->startDate && $endDate!=$this->endDate) {
                     $query->whereBetween('tanggal', [$startDate, $endDate]);
                 }
             })->get();
@@ -83,7 +83,7 @@ class AdminController extends Controller
                 }
             })
             ->where(function ($query) use ($startDate, $endDate) {
-                if ($startDate && $endDate) {
+                if ($startDate && $endDate && $startDate!=$this->startDate && $endDate!=$this->endDate) {
                     $query->whereBetween('tanggal', [$startDate, $endDate]);
                 }
             })->get();
@@ -96,7 +96,7 @@ class AdminController extends Controller
         }
 
         // Perhitungan sisa dan total belanja pada card
-        if ($id && $startDate && $endDate) {
+        if ($id && $startDate && $endDate && $startDate!=$this->startDate && $endDate!=$this->endDate) {
             $total_pengajuan = $this->hitung_pengajuan($id,$startDate,$endDate);
             $total_pengeluaran = $this->hitung_belum_klaim($id,$startDate,$endDate);
             $total_diklaim = $this->hitung_klaim($id,$startDate,$endDate);
@@ -104,7 +104,7 @@ class AdminController extends Controller
             $total_pengajuan = $this->hitung_pengajuan($id);
             $total_pengeluaran = $this->hitung_belum_klaim($id);
             $total_diklaim = $this->hitung_klaim($id);
-        } else if ($startDate && $endDate) {
+        } else if ($startDate && $endDate && $startDate!=$this->startDate && $endDate!=$this->endDate) {
             $total_pengajuan = $this->hitung_pengajuan(null,$startDate,$endDate);
             $total_pengeluaran = $this->hitung_belum_klaim(null,$startDate,$endDate);
             $total_diklaim = $this->hitung_klaim(null,$startDate,$endDate);

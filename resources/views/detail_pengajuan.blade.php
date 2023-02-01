@@ -213,7 +213,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Pengeluaran</div>
+                                                Belum Diklaim</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalPengeluaran, 2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
@@ -388,7 +388,8 @@
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
-                                            <th class="font-weight-bold text-dark">Dibayarkan pada</th>
+                                            <th class="font-weight-bold text-dark">Nota Tujuan</th>
+                                            <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
@@ -422,6 +423,7 @@
                                                 {{$row->tujuan}}
                                                 @endif
                                             </td>
+                                            <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
                                             <td class="font-weight-bold text-dark">
@@ -637,7 +639,7 @@
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
-        order: [[8, 'asc']],
+        order: [[9, 'asc']],
     });
     } );
     </script>
@@ -646,7 +648,7 @@
     $(document).ready( function () {
     $('#myTable').DataTable({
         stateSave: true,
-        order: [[6, 'asc']],
+        order: [[8, 'asc']],
     });
     } );
     

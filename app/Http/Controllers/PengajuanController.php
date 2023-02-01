@@ -51,7 +51,7 @@ class PengajuanController extends Controller
         foreach ($data_pengajuan as $masuk) {
             $total = 0;
             $diklaim = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
+            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',4)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
             foreach ($data_pengeluaran as $keluar){
                 $total = $total + $keluar->jumlah;
             }

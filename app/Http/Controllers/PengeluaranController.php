@@ -46,7 +46,8 @@ class PengeluaranController extends Controller
         $saldo = Saldo::find(Auth::id());
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
-        foreach($kas as $k) {
+        $kas_belum_klaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status',4)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
+        foreach($kas_belum_klaim as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
         session(['key' => $id]);
@@ -148,6 +149,7 @@ class PengeluaranController extends Controller
         $kas->deskripsi = $request->deskripsi;
         $kas->kategori = $request->kategori;
         $kas->coa = $request->coa;
+        $kas->pic = $request->pic;
         $kas->pembebanan = $request->company;
         $kas->tujuan = $request->tujuan;
         $kas->status = "4";
@@ -213,6 +215,7 @@ class PengeluaranController extends Controller
         $kas = Pengeluaran::with('pengajuan', 'Divisi')->findOrFail($id);
         $kas_input = preg_replace("/[^0-9]/", "", $request->jumlah);
         $kas->tanggal = $request->tanggal;
+        $kas->pic = $request->pic;
         $kas->deskripsi = $request->deskripsi;
         $kas->kategori = $request->kategori;
         $kas->coa = $request->coa;
