@@ -47,12 +47,13 @@ Route::middleware(['auth'])->group(function () {
 //Halaman admin
     Route::match(['GET', 'POST'], '/home_admin', [AdminController::class, 'index']);
     Route::match(['GET', 'POST'], '/home_admin/{id}', [AdminController::class, 'index']);
-    Route::match(['GET', 'POST'], '/index_filter_keluar/{filter}/{id}', [AdminController::class, 'index_filter_keluar']); //1 = filter user, 2 = filter company
+    Route::match(['GET', 'POST'], '/index_filter_keluar/{filter}/{klaim}/{id}', [AdminController::class, 'index_filter_keluar']); //1 = filter user, 2 = filter company
+    Route::match(['GET', 'POST'], '/index_filter_keluar', [AdminController::class, 'index_filter_keluar']);
     Route::get('/acc/{id}', [AdminController::class, 'acc']);
     Route::put('/setujui/{id}', [AdminController::class, 'setujui']);
     Route::get('/tolak/{id}', [AdminController::class, 'tolak']);
     Route::post('/done', [AdminController::class, 'done']);
-    Route::get('/kas_divisi/{id}', [AdminController::class, 'kas_divisi']);
+    Route::get('/kas_divisi/{laporan}/{id}', [AdminController::class, 'kas_divisi']);
     Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi']);
     Route::match(['GET', 'POST'], '/admin_laporan', [AdminController::class, 'laporan']);
     Route::match(['GET', 'POST'], '/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar']);

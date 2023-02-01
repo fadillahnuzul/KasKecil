@@ -213,7 +213,7 @@
                                             
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Dipakai</div>
+                                                Total Belum Diklaim</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
@@ -237,8 +237,8 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank ,2, ",", ".")}}</div>
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Sisa</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa ,2, ",", ".")}}</div>
+                                                Total Diklaim</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
                                         <div class="col-auto">
@@ -302,9 +302,9 @@
                                             Pilih User
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/home_admin">All</a>
+                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
                                         @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/index_filter_keluar/1/{{$list->id}}">{{$list->username}}</a>
+                                        <a class="dropdown-item" href="/index_filter_keluar/1/1/{{$list->id}}">{{$list->username}}</a>
                                         @endforeach 
                                         </div>
                                         </div>
@@ -315,9 +315,9 @@
                                             Pilih Company
                                         </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/home_admin">All</a>
+                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
                                                 @foreach($companyList as $list)
-                                                <a class="dropdown-item" href="/index_filter_keluar/2/{{$list->id}}">{{$list->name}}</a>
+                                                <a class="dropdown-item" href="/index_filter_keluar/2/1/{{$list->project_company_id}}">{{$list->name}}</a>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -342,8 +342,32 @@
                                         </div>
                                         
                                         <div class="col">
-                                        <livewire:filter-user/>
-                                        <livewire:filter-company />
+                                        <!-- Dropdown User -->
+                                        <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/index_filter_keluar/1/2/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
+                                        </div>
+                                        </div>
+                                        <!-- End Dropdown User -->
+                                        <!-- Dropdown Company -->
+                                        <div class="dropdown" style="float:right; margin-top:5px;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih Company
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                                @foreach($companyList as $list)
+                                                <a class="dropdown-item" href="/index_filter_keluar/2/2/{{$list->project_company_id}}">{{$list->name}}</a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <!-- End Dropdown Company -->
                                         </div>
                                         <div class="col-auto">
                                         </div>
@@ -364,10 +388,19 @@
                                 Pilih Unit
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @if ($laporan==TRUE)
+                                <a class="dropdown-item" href="/admin_laporan">All</a>
+                                @foreach ($divisi as $divisi)
+                                <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
+                                    <a class="dropdown-item" href="/kas_divisi/2/{{$divisi->id}}">{{$divisi->name}}</a>
+                                @endforeach
+                            @else if ($laporan==FALSE)
                                 <a class="dropdown-item" href="/home_admin">All</a>
-                            @foreach ($divisi as $divisi)
-                                <a class="dropdown-item" href="/kas_divisi/{{$divisi->id}}">{{$divisi->name}}</a>
-                            @endforeach
+                                @foreach ($divisi as $divisi)
+                                <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
+                                    <a class="dropdown-item" href="/kas_divisi/1/{{$divisi->id}}">{{$divisi->name}}</a>
+                                @endforeach
+                            @endif
                             </div>
                         </div>
                         <!-- End Dropdown Divisi -->
@@ -377,11 +410,7 @@
                         @endif
                         <div class="container">
                             <div class="row">
-                                @if ($laporan == FALSE)
-                                <form action="/home_admin" method="POST">
-                                @elseif ($laporan == TRUE)
                                 <form action="" method="POST">
-                                @endif
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
@@ -410,6 +439,7 @@
                                 <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            @if ($filter_keluar == FALSE)
                                             <th class="font-weight-bold text-dark">Kode</th>
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">User</th>
@@ -419,17 +449,19 @@
                                             <th class="font-weight-bold text-dark">Sumber Dana</th>
                                             <th class="font-weight-bold text-dark">Belum Diklaim</th>
                                             <th class="font-weight-bold text-dark">Total Diklaim</th>
-                                            @if ($filter_keluar == TRUE)
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            @elseif ($filter_keluar == TRUE)
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
+                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Tanggal BKK</th>
                                             @endif
-                                            <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
@@ -437,6 +469,7 @@
                                     <?php $no=1;?>
                                         @foreach ($dataKas as $row)
                                         <tr>
+                                            @if ($filter_keluar == FALSE)
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
@@ -454,10 +487,11 @@
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <!-- filter kas keluar di dashboard admin -->
-                                            @if ($filter_keluar == TRUE)
+                                            @elseif ($filter_keluar == TRUE)
                                             <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->Pengajuan->kode}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
@@ -470,6 +504,7 @@
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->tanggal_set_bkk}}</td>
                                             @endif
                                             <!-- filter kas keluar di dashboard admin -->
                                             <td class="font-weight-bold text-dark">
@@ -481,7 +516,7 @@
                                                 Approve</a> 
                                                 <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
                                                 Decline</a>
-                                            @elseif ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5)
+                                            @elseif ($filter_keluar==FALSE && ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5))
                                                 <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
                                             @endif
                                             @endif
