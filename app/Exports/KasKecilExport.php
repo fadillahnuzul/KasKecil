@@ -81,15 +81,15 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
         } elseif (Auth::user()->kk_access == 2){
             if ($startDate and $endDate) {
                 if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status','!=',6)->whereBetween('tanggal_set_bkk', [$startDate, $endDate])
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status','!=',6)->whereBetween('tanggal', [$startDate, $endDate])
                     ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
                     $Company = Company::find($company);
                     $company = $Company->name;
                 } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status','!=',6)->whereBetween('tanggal_set_bkk', [$startDate, $endDate])
+                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status','!=',6)->whereBetween('tanggal', [$startDate, $endDate])
                     ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
                 }
-                $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->whereBetween('tanggal_set_bkk', [$startDate, $endDate])->get();
+                $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->whereBetween('tanggal', [$startDate, $endDate])->get();
             } else {
                 if ($company) {
                     $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status','!=',6)
