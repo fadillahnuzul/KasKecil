@@ -42,7 +42,7 @@ class AdminController extends Controller
         // $startDate = $this->startDate; $endDate = $this->endDate;
         $laporan = FALSE;
 
-        $dataKas = Pengajuan::with('Sumber','User','Status')
+        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)
         ->where(function ($query) use ($id) {
             if ($id) {
                 $query->where('user_id', $id);
