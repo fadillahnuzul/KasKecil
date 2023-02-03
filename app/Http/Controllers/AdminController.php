@@ -569,7 +569,8 @@ class AdminController extends Controller
             $saldo_admin = Saldo::findOrFail(Auth::user()->id);
             //HAPUS ADMIN
             if ($delete->User->kk_access == '1') {
-                $saldo->saldo = $saldo->saldo - $delete->jumlah;
+                $saldo->saldo = $saldo->saldo + $delete->jumlah;
+                $saldo->tunai = $saldo->tunai + $delete->jumlah;
             } else {
                 //JIKA STATUSNYA BELUM DIAPPROVE ATAU DECLINE
                 if ($delete->status != 1 AND $delete->status != 3) {
@@ -588,10 +589,13 @@ class AdminController extends Controller
             }
         //HAPUS PENGELUARAN
         } else if ($pengajuan == 2) {
-            $delete = Pengeluaran::with('Divisi', ' User')->findOrFail($id);
+            $delete = Pengeluaran::with('Divisi', 'User')->findOrFail($id);
             $saldo = Saldo::findOrFail($delete->user_id);
             $saldo->saldo = $saldo->saldo + $delete->jumlah;
-        }
+            if ($delete->User->kk_access == '1') {
+                $saldo->tunai = $saldo->tunai + $delete->jumlah;
+            }
+        } 
         $delete->status = 6;
         $saldo->save();
         $delete->save();
@@ -639,8 +643,9 @@ class AdminController extends Controller
         $idPengajuan = ($id)??$request->session()->get('key');
         $pengajuan = Pengajuan::find($idPengajuan);
         $totalDiklaim = 0; $totalPengeluaran = 0;
-        $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->orderBy('status','asc')->get();
-        foreach($dataKas as $k) {
+        $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->orderBy('status','asc')->get();
+        $dataBelumKlaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->whereNotIn('status',[3,6,7,8])->orderBy('status','asc')->get();
+        foreach($dataBelumKlaim as $k) {
             if ($k->deskripsi != "PENGEMBALIAN SALDO PENGAJUAN") {
                 $totalPengeluaran = $totalPengeluaran + $k->jumlah;
             }
@@ -716,18 +721,18 @@ class AdminController extends Controller
         return back();
     }
 
-    public function klaim(Request $request) {
-        $total = 0;
-        $id = $request->get('pengeluaranId');
-        $dataKas = Pengeluaran::with('pengajuan')->whereIn('id',$id)->get();
-        foreach ($dataKas as $kas){
-            $kas->status = 7;
-            $total = $total + $kas->jumlah;
-        }
-        $dataKas->save();
+    // public function klaim(Request $request) {
+    //     $total = 0;
+    //     $id = $request->get('pengeluaranId');
+    //     $dataKas = Pengeluaran::with('pengajuan')->whereIn('id',$id)->get();
+    //     foreach ($dataKas as $kas){
+    //         $kas->status = 7;
+    //         $total = $total + $kas->jumlah;
+    //     }
+    //     $dataKas->save();
 
-        return response()->json(['data' => $total]);
-    }
+    //     return response()->json(['data' => $total]);
+    // }
 
     public function set_bkk(Request $request)
     {

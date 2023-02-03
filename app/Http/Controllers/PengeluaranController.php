@@ -234,10 +234,13 @@ class PengeluaranController extends Controller
 
     public function delete($id)
     {
-        $delete = Pengeluaran::with('Divisi')->findOrFail($id);
+        $delete = Pengeluaran::with('Divisi','User')->findOrFail($id);
         $saldo = Saldo::findOrFail(Auth::user()->id);
         $saldo_awal = $saldo->saldo;
         $saldo_akhir = $saldo_awal + $delete->jumlah;
+        if ($delete->User->kk_access == '1') {
+            $saldo->tunai = $saldo->tunai + $delete->jumlah;
+        }
         $saldo->saldo = $saldo_akhir;
 
         $saldo->save();
@@ -248,7 +251,11 @@ class PengeluaranController extends Controller
 
     public function done(Request $request)
     {
-        Pengeluaran::whereIn('id',$request->ids)->update(['status'=>'7','tanggal_respon'=>Carbon::now()]);
+        if (Auth::user()->kk_access == 1) { //Jika user admin langsung klaim
+            Pengeluaran::whereIn('id',$request->ids)->update(['status'=>'7','tanggal_respon'=>Carbon::now()]);
+        } else if (Auth::user()->kk_access == 2) { //Jika user biasa tunggu klaim admin
+            Pengeluaran::whereIn('id',$request->ids)->update(['status'=>'4','tanggal_respon'=>Carbon::now()]);
+        }
         Pengajuan::find($request->session()->get('key'))->update(['status'=>'4']);
 
         return response()->json(true);
