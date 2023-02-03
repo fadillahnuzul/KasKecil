@@ -187,8 +187,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Saldo Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($pengajuan->jumlah ,2, ",", ".")}}</div>
+                                                Saldo Pengguna</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo->saldo ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>

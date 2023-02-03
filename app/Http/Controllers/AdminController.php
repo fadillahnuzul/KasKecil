@@ -642,6 +642,7 @@ class AdminController extends Controller
     {
         $idPengajuan = ($id)??$request->session()->get('key');
         $pengajuan = Pengajuan::find($idPengajuan);
+        $saldo = Saldo::find($pengajuan->user_id);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->orderBy('status','asc')->get();
         $dataBelumKlaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->whereNotIn('status',[3,6,7,8])->orderBy('status','asc')->get();
@@ -656,12 +657,13 @@ class AdminController extends Controller
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
         $company = Company::get();
-        return view ('admin/detail_pengajuan', compact('dataKas', 'pengajuan', 'totalDiklaim', 'totalPengeluaran','company'));
+        return view ('admin/detail_pengajuan', compact('dataKas', 'saldo', 'pengajuan', 'totalDiklaim', 'totalPengeluaran','company'));
     }
     
     public function kas_company(Request $request, $id) {
         $idPengajuan = $request->session()->get('key');
         $pengajuan = Pengajuan::find($idPengajuan);
+        $saldo = Saldo::find($pengajuan->user_id);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id)->orderBy('status','asc')->get();
         foreach($dataKas as $k) {
@@ -672,7 +674,7 @@ class AdminController extends Controller
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
         $company = Company::get();
-        return view ('admin/detail_pengajuan', compact('dataKas', 'pengajuan', 'totalDiklaim', 'totalPengeluaran','company'));
+        return view ('admin/detail_pengajuan', compact('dataKas', 'saldo','pengajuan', 'totalDiklaim', 'totalPengeluaran','company'));
     }
 
     public function edit_done($id)
