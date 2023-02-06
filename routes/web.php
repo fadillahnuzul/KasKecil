@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/acc/{id}', [AdminController::class, 'acc']);
     Route::put('/setujui/{id}', [AdminController::class, 'setujui']);
     Route::get('/tolak/{id}', [AdminController::class, 'tolak']);
-    Route::post('/done', [AdminController::class, 'done']);
+    Route::match(['GET', 'POST'],'/done', [AdminController::class, 'done']);
     Route::get('/kas_divisi/{laporan}/{id}', [AdminController::class, 'kas_divisi']);
     Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi']);
     Route::match(['GET', 'POST'], '/admin_laporan', [AdminController::class, 'laporan']);
