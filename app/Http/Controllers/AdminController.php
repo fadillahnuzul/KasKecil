@@ -500,21 +500,22 @@ class AdminController extends Controller
         $pengeluaran = Pengeluaran::with('User', 'pengajuan')->whereIn('id',$ids)->get();
         foreach ($pengeluaran as $pengeluaran) {
             $user = User::find($pengeluaran->user_id);
-            if ($user->kk_access==2) {
-                if ($pengeluaran->deskripsi != "PENGEMBALIAN SALDO PENGAJUAN") {
-                    $saldo = Saldo::find($user->id);
-                    $saldo->saldo = $saldo->saldo + $pengeluaran->jumlah;
-                    $saldo->save();
-                } elseif ($pengeluaran->deskripsi == "PENGEMBALIAN SALDO PENGAJUAN") {
-                    $saldo_admin = Saldo::findOrFail(Auth::user()->id);
-                    $saldo_admin->saldo = $saldo_admin->saldo + $pengeluaran->jumlah;
-                    if ($pengeluaran->pengajuan->sumber == 1) { //pengajuan tunai
-                        $saldo_admin->tunai = $saldo_admin->tunai + $pengeluaran->jumlah;
-                    } elseif ($pengeluaran->pengajuan->sumber == 2) { //pengajuan bank
-                        $saldo_admin->bank = $saldo_admin->bank + $pengeluaran->jumlah;
-                    }
-                    $saldo_admin->save();
+            if ($pengeluaran->deskripsi != "PENGEMBALIAN SALDO PENGAJUAN") {
+                $saldo = Saldo::find($user->id);
+                $saldo->saldo = $saldo->saldo + $pengeluaran->jumlah;
+                if ($pengeluaran->User->kk_access == 1) {
+                    $saldo->tunai = $saldo->tunai + $pengeluaran->jumlah;
                 }
+                $saldo->save();
+            } elseif ($pengeluaran->deskripsi == "PENGEMBALIAN SALDO PENGAJUAN") {
+                $saldo_admin = Saldo::findOrFail(Auth::user()->id);
+                $saldo_admin->saldo = $saldo_admin->saldo + $pengeluaran->jumlah;
+                if ($pengeluaran->pengajuan->sumber == 1) { //pengajuan tunai
+                    $saldo_admin->tunai = $saldo_admin->tunai + $pengeluaran->jumlah;
+                } elseif ($pengeluaran->pengajuan->sumber == 2) { //pengajuan bank
+                    $saldo_admin->bank = $saldo_admin->bank + $pengeluaran->jumlah;
+                }
+                $saldo_admin->save();
             }
             $pengeluaran2 = Pengeluaran::with('pengajuan')->where('pemasukan',$pengeluaran->pemasukan)->get();
             $count_pengeluaran = $pengeluaran2->filter(function($item, $key){
