@@ -670,7 +670,8 @@ class AdminController extends Controller
         $saldo = Saldo::find($pengajuan->user_id);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id)->orderBy('status','asc')->get();
-        foreach($dataKas as $k) {
+        $belumDiklaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$idPengajuan)->whereNotIn('status',[3,6,7,8])->where('pembebanan',$id)->get();
+        foreach($belumDiklaim as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
         $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->whereIn('status',[7,8])->where('pembebanan',$id)->get();

@@ -91,10 +91,12 @@ class PengeluaranController extends Controller
         $totalDiklaim = 0; $totalPengeluaran = 0;
         if ($id == 1) { //index
             $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
+            $belumDiklaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan',$idPengajuan)->whereNotIn('status',[3,6,7,8])->where('pembebanan',$id_comp)->get();
         } elseif ($id == 2) { //laporan
             $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->whereIn('status',[7,8])->where('pembebanan',$id_comp)->get();
+            $belumDiklaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->whereNotIn('status',[3,6,7,8])->where('pembebanan',$id_comp)->get();
         }
-        foreach($dataKas as $k) {
+        foreach($belumDiklaim as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
         $kasTotal = Pengeluaran::with('pengajuan', 'Status')->where('pemasukan','=',$idPengajuan)->whereIn('status', [7, 8])->where('pembebanan',$id_comp)->get();
