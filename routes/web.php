@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/simpan_kas', [PengeluaranController::class, 'save']);
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
     Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
-    Route::get('/kas_company/{id}/{id_comp}', [PengeluaranController::class, 'kas_company']);
+    Route::match(['GET', 'POST'], '/kas_company/{id}/{id_comp}', [PengeluaranController::class, 'kas_company']);
     Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
     Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
 

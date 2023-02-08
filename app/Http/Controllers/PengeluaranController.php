@@ -85,15 +85,20 @@ class PengeluaranController extends Controller
     public function kas_company(Request $request, $id, $id_comp) {
         $idPengajuan = $request->session()->get('key');
         session(['company' => $id_comp]);
-        $startDate = $request->session()->get('startDate');
-        $endDate = $request->session()->get('endDate');
+        $startDate = ($request->startDate)? $request->startDate  : $this->startDate; 
+        $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $pengajuan = Pengajuan::find($idPengajuan);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         if ($id == 1) { //index
             $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan',$idPengajuan)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
             $belumDiklaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan',$idPengajuan)->whereNotIn('status',[3,6,7,8])->where('pembebanan',$id_comp)->get();
         } elseif ($id == 2) { //laporan
-            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->whereIn('status',[7,8])->where('pembebanan',$id_comp)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->whereNotIn('status',[3,6])->where('pembebanan',$id_comp)->where('user_id',Auth::user()->id)
+            ->where(function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('tanggal', [$startDate, $endDate]);
+                }
+            })->get();
             $belumDiklaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->whereNotIn('status',[3,6,7,8])->where('pembebanan',$id_comp)->get();
         }
         foreach($belumDiklaim as $k) {

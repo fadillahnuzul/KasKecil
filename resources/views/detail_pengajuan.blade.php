@@ -316,7 +316,7 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
                         <div class="container">
                             <div class="row">
-                                <form action="/laporan_kas_keluar" method="POST">
+                                <form action="" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
