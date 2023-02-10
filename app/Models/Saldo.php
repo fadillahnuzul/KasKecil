@@ -25,4 +25,14 @@ class Saldo extends Model
     {
         return $this->hasMany(Pengeluaran::class);
     }
+
+    public function scopeNoUsernameUser($query)
+    {
+        return $query->where('id', '!=', 23);
+    }
+
+    public function scopeSearchByUserId($query, int|null $id)
+    {
+        return ($id) ? $query->where('id', $id) : $query;
+    }
 }
