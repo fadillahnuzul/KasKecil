@@ -207,7 +207,7 @@
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo ,2, ",", ".")}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -219,14 +219,14 @@
                         <!-- End Card Saldo -->
                         @if (Auth::user()->kk_access=='1')
                         <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->tunai ,2, ",", ".")}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -234,17 +234,17 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- End Card Tunai -->
                         <!-- Card Bank -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank ,2, ",", ".")}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -252,7 +252,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- End Card Bank -->
                         @endif
                         </div>

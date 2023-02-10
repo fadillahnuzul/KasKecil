@@ -168,30 +168,7 @@
                                 <div class="form-group">
                                     <label for="jumlah">Nominal :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" value="Rp. {{substr($pengajuan->jumlah,0,-3)}}" required />
-                                </div>
-                                @if ($pengajuan->User->access != 'admin')
-                                <div class="form-group">
-                                    <label for="mutasi">Sumber Dana :</label>
-                                    <select name="sumber" id="sumber" class="form-control" required>
-                                        <option value="{{$pengajuan->sumber}}">--</option>
-                                        @foreach ($sumber as $sumber)
-                                            <option value="{{$sumber->id}}">{{$sumber->sumber_dana}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @endif
-                                @if ($pengajuan->User->kk_access == 1)
-                                <div class="form-group">
-                                    <label for="tunai">Pengajuan Tunai :</label>
-                                    <small style="color:red;"> *Beri nilai 0 jika tidak ada</small>
-                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="tunai" name="tunai" value="Rp. {{substr($pengajuan->tunai,0,-3)}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="bank">Pengajuan Bank :</label>
-                                    <small style="color:red;"> *Beri nilai 0 jika tidak ada</small>
-                                    <input type="text" class="form-control" placeholder="Kosongi jika tidak ada" id="bank" name="bank" value="Rp. {{substr($pengajuan->bank,0,-3)}}">
-                                </div>
-                                @endif 
+                                </div> 
                                 @if ($edit == FALSE) 
                                 <button type="submit" class="btn btn-primary">Setujui</button>
                                 @endif

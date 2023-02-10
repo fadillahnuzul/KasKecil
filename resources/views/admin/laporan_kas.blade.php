@@ -182,8 +182,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo,2, ",", ".")}}</div>
+                                                Total Pengajuan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -286,7 +286,7 @@
                                 </div>
                         <!-- End Dropdown Company -->
                         <!-- Filter tanggal cetak -->
-                            <form action="/pengeluaran.export" method="POST">
+                            <!-- <form action="/pengeluaran.export" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
@@ -303,7 +303,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                </form>
+                                </form> -->
                                 <!-- End Filter tanggal cetak -->
                             </div>
                         </div>

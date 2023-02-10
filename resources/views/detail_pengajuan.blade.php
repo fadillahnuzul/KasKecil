@@ -196,7 +196,7 @@
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo->saldo, 2, ",", ".")}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo, 2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -242,45 +242,6 @@
                             </div>
                         </div>
                     @endif
-                        <!-- End Card Saldo -->
-                        @if (Auth::user()->kk_access=='1')
-                        <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo->tunai ,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Tunai -->
-                        <!-- Card Bank -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($saldo->bank)}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Bank -->
-                        @endif
                     </div>
 
                     <!-- DataTales Example -->
@@ -301,7 +262,7 @@
                                 </div>
                             </div>
                             <!-- End Dropdown Company -->
-                            @if ($saldo->saldo != 0)
+                            @if ($saldo != 0)
                                 <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split" style="margin-left:10px">
                                     <span class="text">Catat Kas</span>
                                 </a>
@@ -427,9 +388,6 @@
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
                                             <td class="font-weight-bold text-dark">
-                                                @if(Auth::user()->kk_access==1 && $row->status == 7)
-                                                <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
-                                                @endif
                                                 @if ($row->status != 7 && $row->status != 6 && $row->status != 8)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
                                                     Edit</a>
@@ -521,7 +479,7 @@
             </div>
         </div>
     </div>
-    @if ($saldo->saldo != 0 && $button_kas == TRUE)
+    @if ($saldo != 0 && $button_kas == TRUE)
     <!-- Kembalikan Saldo Modal -->
     <div class="modal fade" id="KembalianSaldoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

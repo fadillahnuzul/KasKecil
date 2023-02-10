@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\PengeluaranController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pengajuan;
@@ -64,11 +65,9 @@ class PengajuanController extends Controller
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
 
-        $saldo = Saldo::findOrFail(Auth::user()->id);
+        $saldo = (new PengeluaranController)->hitung_saldo();
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
-        // dd($admin);
-
         
         return view ('main', ['dataKas' => $data_pengajuan, 'admin' => $admin],['title'=>$title, 'Saldo'=>$saldo, 'laporan'=>$laporan]);
     }

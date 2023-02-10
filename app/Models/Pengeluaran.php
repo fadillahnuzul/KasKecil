@@ -25,11 +25,6 @@ class Pengeluaran extends Model
         return $this->belongsTo(Status::class, 'status', 'id');
     }
 
-    public function Kategori()
-    {
-        return $this->belongsTo(Kategori::class, 'kategori', 'id');
-    }
-
     public function Pembebanan()
     {
         return $this->belongsTo(Company::class, 'pembebanan', 'project_company_id');

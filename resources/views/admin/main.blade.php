@@ -183,7 +183,7 @@
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->saldo ,2, ",", ".")}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo ,2, ",", ".")}}</div>
                                             @endif
                                             @if ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
@@ -200,7 +200,7 @@
                         </div>
                         <!-- End Card Saldo -->
                 
-                        <!-- Card Tunai -->
+                        <!-- Card Total Pengajuan -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100">
                                 <div class="card-body">
@@ -208,24 +208,33 @@
                                         <div class="col mr-2">
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->tunai ,2, ",", ".")}}</div>
-                                            
+                                                Total Pengajuan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
                                                 Total Belum Diklaim</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        <!-- Dropdown User -->
+                                        <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/index_filter_keluar/1/1/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
                                         </div>
+                                        </div>
+                                        <!-- End Dropdown User -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Card Tunai -->
-                        <!-- Card Bank -->
+                        <!-- End Card Total Pengajuan -->
+                        <!-- Card Belum Diklaim -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100">
                                 <div class="card-body">
@@ -233,67 +242,13 @@
                                         <div class="col mr-2">
                                             @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo->bank ,2, ",", ".")}}</div>
+                                                Kas Keluar</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                             @elseif ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
                                                 Total Diklaim</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
                                             @endif
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Bank -->
-                        </div>
-
-                <!-- terpakai, sisa dashboard -->
-                <!-- Card Terpakai -->
-                @if ($laporan == FALSE)
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Total Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
-                                        </div>
-                                        <div>
-                                        <!-- Dropdown User -->
-                                        <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/home_admin">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div>
-                                        <!-- End Dropdown User -->
-                                        </div>
-                                        <div class="col-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Saldo -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                                Belum Diklaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col">
                                         <!-- Dropdown User -->
@@ -323,21 +278,19 @@
                                         </div>
                                         <!-- End Dropdown Company -->
                                         </div>
-                                        <div class="col-auto">
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Card Saldo -->
-                        <!-- Card Bank -->
+                        <!-- End Card Belum Diklaim -->
+                        <!-- Card Sisa Saldo -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-danger shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Diklaim</div>
+                                                Sisa Saldo</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
                                         </div>
                                         
@@ -375,8 +328,135 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End Card Bank -->
+                        <!-- End Card Sisa Saldo -->
                         </div>
+
+                <!-- terpakai, sisa dashboard -->
+                <!-- Card Terpakai -->
+                @if ($laporan == FALSE)
+                <!-- <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
+                                                Total Pengajuan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
+                                        </div>
+                                        <div> -->
+                                        <!-- Dropdown User -->
+                                        <!-- <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/home_admin">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
+                                        </div>
+                                        </div> -->
+                                        <!-- End Dropdown User -->
+                                        <!-- </div>
+                                        <div class="col-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- End Card Saldo -->
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
+                                                Belum Diklaim</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col"> -->
+                                        <!-- Dropdown User -->
+                                        <!-- <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/index_filter_keluar/1/1/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
+                                        </div>
+                                        </div> -->
+                                        <!-- End Dropdown User -->
+                                        <!-- Dropdown Company -->
+                                        <!-- <div class="dropdown" style="float:right; margin-top:5px;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih Company
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                                @foreach($companyList as $list)
+                                                <a class="dropdown-item" href="/index_filter_keluar/2/1/{{$list->project_company_id}}">{{$list->name}}</a>
+                                                @endforeach
+                                            </div>
+                                        </div> -->
+                                        <!-- End Dropdown Company -->
+                                        <!-- </div>
+                                        <div class="col-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- End Card Saldo -->
+                        <!-- Card Bank -->
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
+                                                Sisa Saldo</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
+                                        </div>
+                                        
+                                        <div class="col"> -->
+                                        <!-- Dropdown User -->
+                                        <!-- <div class="dropdown" style="float:right;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih User
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                        @foreach ($userList as $list)
+                                        <a class="dropdown-item" href="/index_filter_keluar/1/2/{{$list->id}}">{{$list->username}}</a>
+                                        @endforeach 
+                                        </div>
+                                        </div> -->
+                                        <!-- End Dropdown User -->
+                                        <!-- Dropdown Company -->
+                                        <!-- <div class="dropdown" style="float:right; margin-top:5px;">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pilih Company
+                                        </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                                @foreach($companyList as $list)
+                                                <a class="dropdown-item" href="/index_filter_keluar/2/2/{{$list->project_company_id}}">{{$list->name}}</a>
+                                                @endforeach
+                                            </div>
+                                        </div> -->
+                                        <!-- End Dropdown Company -->
+                                        <!-- </div>
+                                        <div class="col-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- End Card Bank -->
+                        <!-- </div> -->
                         @endif
                     
                     <!-- DataTales Example -->

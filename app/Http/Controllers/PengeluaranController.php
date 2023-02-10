@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
-use App\Models\Kategori;
 use App\Models\Pembebanan;
 use App\Models\Divisi;
 use App\Models\Saldo;
@@ -34,6 +33,19 @@ class PengeluaranController extends Controller
         session(['company' => $this->company]);
     }
 
+    public function hitung_saldo($id=null) {
+        $saldo_user = ($id) ? Saldo::find($id) : Saldo::find(Auth::user()->id);
+        $saldo = $saldo_user->saldo;
+        $data_kas = ($id) ? Pengeluaran::where('status', 4)->where('user_id', $id)->get() : Pengeluaran::where('status', 4)->where('user_id', Auth::user()->id)->get();
+        if (Auth::user()->kk_access==1) {
+            $data_kas = Pengeluaran::whereIn('status', [4,7])->where('user_id', Auth::user()->id)->get();
+        }
+        foreach ($data_kas as $kas) {
+            $saldo = $saldo - $kas->jumlah;
+        }
+        return $saldo;
+    }
+
     public function index(Request $request, $id)
     {
         $pengajuan = Pengajuan::find($id);
@@ -43,7 +55,7 @@ class PengeluaranController extends Controller
         $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->where('pemasukan', '=', $id)->orderBy('status','asc')->get();
         session(['key' => $id]);
         $total = $dataKas->sum('jumlah');
-        $saldo = Saldo::find(Auth::id());
+        $saldo = $this->hitung_saldo();
         $totalDiklaim = 0; $totalPengeluaran = 0;
         $kas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
         $kas_belum_klaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->where('pemasukan','=',$id)->where('status',4)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->get();
@@ -66,12 +78,12 @@ class PengeluaranController extends Controller
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
         $button_kas = FALSE;
         if(Auth::user()->kk_access==1) {
-            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->whereIn('status', [7, 8])->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->whereIn('status', [7, 8])->get();
         } else {
-            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Kategori', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->whereBetween('tanggal',[$startDate,$endDate])->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status','!=',6)->where('deskripsi','!=',"PENGEMBALIAN SALDO PENGAJUAN")->whereBetween('tanggal',[$startDate,$endDate])->get();
         }
         $title = "Laporan Pengeluaran Kas Kecil";
-        $saldo = Saldo::find(Auth::id());
+        $saldo = $this->hitung_saldo();
         $company = Company::get();
         
         return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company'));
@@ -109,7 +121,7 @@ class PengeluaranController extends Controller
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
         $company = Company::get();
-        $saldo = Saldo::find(Auth::id());
+        $saldo = $this->hitung_saldo();
         if ($id == 1) { //index
             $title = "Detail Pengajuan";
             $button_kas = TRUE; 
@@ -119,7 +131,7 @@ class PengeluaranController extends Controller
             $button_kas = FALSE; 
             if (Auth::user()->kk_access == 1) {
                 $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA','Pembebanan')->whereIn('status', [7,8])->where('pembebanan',$id_comp)->whereBetween('tanggal',[$startDate,$endDate])->orderBy('status','desc')->get();
-                $Saldo = Saldo::findOrFail(Auth::user()->id);
+                $Saldo = $this->hitung_saldo();
                 $totalKeluar = 0; $totalSetBKK = 0; $totalBelumSetBKK = 0;
                 foreach($dataKas as $value) {
                     $totalKeluar = $totalKeluar + $value->jumlah;
@@ -138,7 +150,6 @@ class PengeluaranController extends Controller
 
     public function create(Request $request)
     {
-        $kategori = Kategori::get();
         $Company = Company::get();
         if ($request->search_coa) {
             dd($request->search_coa);
@@ -146,7 +157,7 @@ class PengeluaranController extends Controller
         }
         $Coa = COA::where('status','!=',0)->get();
 
-        return view('form_kas', ['kategori' => $kategori, 'Company' => $Company, 'Coa' => $Coa]);
+        return view('form_kas', ['Company' => $Company, 'Coa' => $Coa]);
     }
 
     public function save(Request $request)
@@ -154,7 +165,6 @@ class PengeluaranController extends Controller
         $kas = new Pengeluaran;
         $kas->tanggal = $request->tanggal;
         $kas->deskripsi = $request->deskripsi;
-        $kas->kategori = $request->kategori;
         $kas->coa = $request->coa;
         $kas->pic = $request->pic;
         $kas->pembebanan = $request->company;
@@ -173,35 +183,33 @@ class PengeluaranController extends Controller
             $tunai =  (float) preg_replace("/[^0-9]/", "", $request->tunai);
             $bank =  (float) preg_replace("/[^0-9]/", "", $request->bank);
             $kas->jumlah = $tunai + $bank;
-            $saldo = Saldo::findOrFail(Auth::user()->id);
-            if ($kas->jumlah > $saldo->saldo) {
+            $saldo = $this->hitung_saldo();
+            if ($kas->jumlah > $saldo) {
                 Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
                 return back();
             } else {
-                $saldo_akhir = $saldo->saldo - $kas->jumlah;
-                $saldo->saldo = $saldo_akhir;
                 $kas->save();
                 #mengurangi saldo tunai dan bank
-                $lastInsertedId = $kas->id;
-                $pengeluaran = Pengeluaran::with('pengajuan')->find($lastInsertedId);
-                $saldo->tunai = $saldo->tunai - $tunai;
-                $saldo->bank = $saldo->bank - $bank;
-                $pengeluaran->pengajuan->tunai = $pengeluaran->pengajuan->tunai - $tunai;
-                $pengeluaran->pengajuan->bank = $pengeluaran->pengajuan->bank - $bank;
-                $pengeluaran->pengajuan->save();
-                $saldo->save();
+                // $lastInsertedId = $kas->id;
+                // $pengeluaran = Pengeluaran::with('pengajuan')->find($lastInsertedId);
+                // $saldo->tunai = $saldo->tunai - $tunai;
+                // $saldo->bank = $saldo->bank - $bank;
+                // $pengeluaran->pengajuan->tunai = $pengeluaran->pengajuan->tunai - $tunai;
+                // $pengeluaran->pengajuan->bank = $pengeluaran->pengajuan->bank - $bank;
+                // $pengeluaran->pengajuan->save();
+                // $saldo->save();
             }
         //Kas non admin
         } else {
             $kas->jumlah = preg_replace("/[^0-9]/", "", $request->kredit);
-            $saldo = Saldo::findOrFail(Auth::user()->id);
-            if ($kas->jumlah > $saldo->saldo) {
+            $saldo = $this->hitung_saldo();
+            if ($kas->jumlah > $saldo) {
                 Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
                 return back();
             } else {
-                $saldo_akhir = $saldo->saldo - $kas->jumlah;
-                $saldo->saldo = $saldo_akhir;
-                $saldo->save();
+                // $saldo_akhir = $saldo->saldo - $kas->jumlah;
+                // $saldo->saldo = $saldo_akhir;
+                // $saldo->save();
                 $kas->save();
             }
         }
@@ -210,7 +218,7 @@ class PengeluaranController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $kas = Pengeluaran::with('pengajuan', 'Kategori', 'Pembebanan')->findOrFail($id);
+        $kas = Pengeluaran::with('pengajuan', 'Pembebanan')->findOrFail($id);
         $Company = Company::get();
         $Coa = COA::where('status','!=',0)->get();
 
@@ -224,16 +232,15 @@ class PengeluaranController extends Controller
         $kas->tanggal = $request->tanggal;
         $kas->pic = $request->pic;
         $kas->deskripsi = $request->deskripsi;
-        $kas->kategori = $request->kategori;
         $kas->coa = $request->coa;
         $kas->pembebanan = $request->company;
         $kas->tujuan = $request->tujuan;
-        $saldo = Saldo::findOrFail(Auth::user()->id);
+        $saldo = $this->hitung_saldo();
         //mengembalikan saldo
-        $saldo->saldo = $saldo->saldo - $kas_input + $kas->jumlah;
+        // $saldo->saldo = $saldo->saldo - $kas_input + $kas->jumlah;
         //simpan data
         $kas->jumlah = preg_replace("/[^0-9]/", "", $request->jumlah);
-        $saldo->save();
+        // $saldo->save();
         $kas->save();
 
         return redirect('home');
@@ -241,18 +248,18 @@ class PengeluaranController extends Controller
 
     public function delete($id)
     {
-        $delete = Pengeluaran::with('Divisi','User')->findOrFail($id);
-        $saldo = Saldo::findOrFail(Auth::user()->id);
-        $saldo_awal = $saldo->saldo;
-        $saldo_akhir = $saldo_awal + $delete->jumlah;
-        if ($delete->User->kk_access == '1') {
-            $saldo->tunai = $saldo->tunai + $delete->jumlah;
-        }
-        $saldo->saldo = $saldo_akhir;
+        Pengeluaran::with('Divisi','User')->find($id)->update(['status'=>'6']);
+        // $saldo = $this->hitung_saldo();
+        // $saldo_awal = $saldo->saldo;
+        // $saldo_akhir = $saldo_awal + $delete->jumlah;
+        // if ($delete->User->kk_access == '1') {
+        //     $saldo->tunai = $saldo->tunai + $delete->jumlah;
+        // }
+        // $saldo->saldo = $saldo_akhir;
 
-        $saldo->save();
-        $delete->status = 6;
-        $delete->save();
+        // $saldo->save();
+        // $delete->status = 6;
+        // $delete->save();
         return back();
     }
 
@@ -281,12 +288,10 @@ class PengeluaranController extends Controller
         }
         $company = Company::get();
         $title = "Laporan Pengeluaran Kas Kecil";
-        $kategori = Kategori::with('pengeluaran')->get();
-        $saldo = Saldo::find(Auth::id());
+        $Saldo = $this->hitung_saldo();
 
         if (Auth::user()->kk_access == 1) {
             $startDate = $this->startDate; $endDate = $this->endDate;
-            $Saldo = Saldo::findOrFail(Auth::user()->id);
             $totalKeluar = 0; $totalSetBKK = 0; $totalBelumSetBKK = 0;
             foreach($dataKas as $value) {
                 $totalKeluar = $totalKeluar + $value->jumlah;
@@ -298,7 +303,7 @@ class PengeluaranController extends Controller
             }
             return view('/admin/laporan_kas', compact('title', 'startDate', 'endDate', 'company','dataKas','Saldo','totalKeluar','totalSetBKK','totalBelumSetBKK'));
         } elseif (Auth::user()->kk_access == 2) {
-            return view('detail_pengajuan', ['dataKas' => $dataKas], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'saldo' => $saldo, 'company'=>$company]);
+            return view('detail_pengajuan', ['dataKas' => $dataKas], ['title' => $title, 'button_kas' => $button_kas, 'startDate' => $this->startDate, 'endDate' => $this->endDate, 'saldo' => $Saldo, 'company'=>$company]);
         }
     }
 
