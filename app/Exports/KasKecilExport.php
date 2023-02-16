@@ -51,67 +51,29 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
         $endDate = $this->endDate;
         $company = $this->company;
         if (Auth::user()->kk_access == 1) {
-            if ($startDate and $endDate) {
-                if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 8)->whereBetween('tanggal_set_bkk', [$startDate, $endDate])
-                                        ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                    $Company = Company::find($company);
-                    $company = $Company->name;
-                } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 8)->whereBetween('tanggal_set_bkk', [$startDate, $endDate])
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                }
-                $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 4)->whereBetween('tanggal_set_bkk', [$startDate, $endDate])->get();
-            } else {
-                if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('status', 8)
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                    $Company = Company::find($company);
-                    $company = $Company->name;
-                } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 8)
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                }
-                $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('status', 4)->get();
-            }
-            $pengajuan = Pengajuan::with('User')->where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
+            $data_pengeluaran = Pengeluaran::with('User','pengajuan')->statusSetBKK()
+                ->BukanPengembalianSaldo()
+                ->searchByCompany($company)
+                ->SearchByDateRange($startDate, $endDate)->get();
+            $Company = ($company) ? Company::find($company) : null;
+            $company = ($Company) ? $Company->name : null; 
+            $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan')->statusProgress()->SearchByDateRange($startDate, $endDate)->get();
+            $pengajuan = Pengajuan::with('User')->whereNotIn('status',[1,3,6])->get();
             $data_pengajuan = $pengajuan->filter(function($item, $key){
                 return $item->User->kk_access != '1';
             });
         } elseif (Auth::user()->kk_access == 2){
-            if ($startDate and $endDate) {
-                if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status','!=',6)->whereBetween('tanggal', [$startDate, $endDate])
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                    $Company = Company::find($company);
-                    $company = $Company->name;
-                } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status','!=',6)->whereBetween('tanggal', [$startDate, $endDate])
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                }
-                $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->whereBetween('tanggal', [$startDate, $endDate])->get();
-            } else {
-                if ($company) {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('pembebanan',$company)->where('user_id', Auth::user()->id)->where('status','!=',6)
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                    $Company = Company::find($company);
-                    $company = $Company->name;
-                } else {
-                    $data_pengeluaran = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status','!=',6)
-                    ->where('deskripsi','!=','PENGEMBALIAN SALDO PENGAJUAN')->get();
-                }
-                $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan', 'Kategori')->where('user_id', Auth::user()->id)->where('status', 4)->get();
-            }
-            $data_pengajuan = Pengajuan::with('User')->where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->where('user_id',Auth::user()->id)->get();
+            $data_pengeluaran = Pengeluaran::with('User','pengajuan')->searchByUser(Auth::user()->id)
+                ->statusSetBKK()
+                ->BukanPengembalianSaldo()
+                ->searchByCompany($company)
+                ->SearchByDateRange($startDate, $endDate)->get();
+            $Company = ($company) ? Company::find($company) : null;
+            $company = $Company->name;
+            $pengajuan_klaim = Pengeluaran::with('User', 'pengajuan')->statusProgress()->SearchByDateRange($startDate, $endDate)->get();
+            $data_pengajuan = Pengajuan::with('User')->whereNotIn('status',[1,3,6])->where('user_id',Auth::user()->id)->get();
         }
-                // for ($i = 0; $i < count($data_pengeluaran); $i++) {
-        //     $data_pengeluaran[$i]->pengajuan = Pengajuan::select('kode')->where('id', $data_pengeluaran[$i]->pemasukan)->get();
-        //     $data_pengeluaran[$i]->coa = COA::select('code')->where('coa_id', $data_pengeluaran[$i]->coa)->get();
-        //     $data_pengeluaran[$i]->nama_coa = COA::select('name')->where('coa_id', $data_pengeluaran[$i]->coa)->get();
-        //     $data_pengeluaran[$i]->nama_pembebanan = Company::select('name')->where('project_company_id', $data_pengeluaran[$i]->pembebanan)->get();
-        //     $data_pengeluaran[$i]->divisi = Divisi::select('name')->where('id', $data_pengeluaran[$i]->User->level)->get();
-        //     $data_pengeluaran[$i]->user = $data_pengeluaran[$i]->User->username;
-        // }
+
         $total = 0;
         foreach ($data_pengeluaran as $kas) {
             $total = $total + $kas->jumlah;

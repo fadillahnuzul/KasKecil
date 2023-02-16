@@ -53,10 +53,20 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan Dana</span></a>
+            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/home">
@@ -79,6 +89,11 @@
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/pengajuan')}}">
@@ -180,21 +195,10 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
                                 </div>
-                                @if (Auth::user()->kk_access== 1)
-                                <div class="form-group">
-                                    <label for="tunai">Pengeluaran Tunai :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Tunai" id="tunai" name="tunai">
-                                </div>
-                                <div class="form-group">
-                                    <label for="bank">Pengeluaran Bank :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran Bentuk Saldo Bank" id="bank" name="bank">
-                                </div>
-                                @else
                                 <div class="form-group">
                                     <label for="kredit">Nominal :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
                                 </div>
-                                @endif
                                 <div class="form-group">
                                     <label for="coa">COA :</label>
                                     <select name="coa" id="coa" class="form-control" required>

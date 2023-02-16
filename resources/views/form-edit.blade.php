@@ -47,17 +47,27 @@
             <hr class="sidebar-divider my-0">
 
              <!-- Nav Item - Dashboard -->
-             @if (Auth::user()->role_id==1)
+             @if (Auth::user()->kk_access==1)
              <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan Dana</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
@@ -74,11 +84,16 @@
                     <span>Laporan Kas Keluar</span></a>
             </li>
              @endif
-             @if (Auth::user()->role_id!=1)
+             @if (Auth::user()->kk_access!=1)
              <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/pengajuan')}}">

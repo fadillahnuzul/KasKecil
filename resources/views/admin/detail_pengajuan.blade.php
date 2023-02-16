@@ -58,10 +58,20 @@
                     <span>Dashboard</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Buat Pengajuan</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/#">
                     <i class="fas fa-fw fa-list"></i>
@@ -274,7 +284,7 @@
                                         @foreach ($dataKas as $row)
                                         <tr>
                                         <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                         <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
@@ -289,7 +299,7 @@
                                         </td>
                                         <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">
                                         <!-- @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Klaim</a> 
@@ -305,6 +315,7 @@
                                         <?php $no++ ;?>
                                     </tbody>
                                 </table>
+                                <!-- <button id="button-set-bkk" type="button" disabled onclick="done()" class="btn btn-sm btn-success">Selesai</button> -->
                                 <button id="button-klaim" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
                                 <!-- <button class="btn btn-primary" id="save-btn">Klaim</button>
                                 <h5 style="margin-top:15px" id="totalDiklaim"></h5> -->

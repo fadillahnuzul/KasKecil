@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/project/{id}', [PengajuanController::class, 'project']);
 
     Route::get('/detail_pengajuan/{id}', [PengeluaranController::class, 'index']);
+    Route::get('/kas_keluar', [PengeluaranController::class, 'index']);
     Route::get('/hapus_kas_keluar/{id}', [PengeluaranController::class, 'delete']);
     Route::get('/edit_kas_keluar/{id}', [PengeluaranController::class, 'edit']);
     Route::put('/kas_update/{id}', [PengeluaranController::class, 'update']);
@@ -57,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi']);
     Route::match(['GET', 'POST'], '/admin_laporan', [AdminController::class, 'laporan']);
     Route::match(['GET', 'POST'], '/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar']);
+    Route::match(['GET', 'POST'], '/admin_kas_keluar', [AdminController::class, 'kas_keluar']);
     Route::get('/admin_kas_kategori/{id}', [AdminController::class, 'kategori']);
     Route::get('/edit_done/{id}', [AdminController::class, 'edit_done']);
     Route::get('/edit_admin/{id}', [AdminController::class, 'edit']);

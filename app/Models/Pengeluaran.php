@@ -56,6 +56,14 @@ class Pengeluaran extends Model
         return $query->whereIn('status', [4]);
     }
 
+    public function scopeStatusKlaimAndSetBKK($query) {
+        return $query->whereIn('status', [7,8]);
+    }
+
+    public function scopeStatusSetBKK($query) {
+        return $query->whereIn('status', [8]);
+    }
+
     public function scopeGetUserId($query)
     {
         return $query->select('user_id')->groupBy('user_id');
@@ -65,12 +73,17 @@ class Pengeluaran extends Model
     {
         $start = ($start) ? $start : Carbon::now()->firstOfYear()->format('Y-m-d');
         $end = ($end) ? $end : Carbon::now()->endOfYear()->format('Y-m-d');
-        return $query->where('tanggal', '>=', $start)->where('tanggal', '<=', $end);
+        return $query->whereBetween('tanggal', [$start,$end]);
     }
 
     public function scopeSearchByCompany($query, string|null $company)
     {
         return ($company) ? $query->where('pembebanan', $company) : $query;
+    }
+
+    public function scopeSearchByUser($query, string|null $id_user)
+    {
+        return ($id_user) ? $query->where('user_id', $id_user) : $query;
     }
 
     public function scopeSearchByUnit($query, string|null $unit)

@@ -181,7 +181,7 @@
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Divisi->nama_divisi}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah)}}</td>                           

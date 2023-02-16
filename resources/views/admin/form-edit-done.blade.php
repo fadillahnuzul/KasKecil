@@ -52,10 +52,20 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Buat Pengajuan</span></a>
+            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/#">

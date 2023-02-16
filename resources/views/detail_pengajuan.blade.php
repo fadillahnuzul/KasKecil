@@ -51,10 +51,20 @@
                     <span>Dashboard</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan Dana</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
@@ -75,6 +85,11 @@
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/pengajuan')}}">
@@ -254,12 +269,7 @@
                                 <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Pilih Company
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="/detail_pengajuan/{{$pengajuan->id}}">All</a>
-                                    @foreach ($company as $company)
-                                        <a class="dropdown-item" href="/kas_company/1/{{$company->project_company_id}}">{{$company->name}}</a>
-                                    @endforeach
-                                </div>
+                                
                             </div>
                             <!-- End Dropdown Company -->
                             @if ($saldo != 0)
@@ -309,7 +319,7 @@
                                 </div>
                         <!-- End Dropdown Company -->
                         <!-- Filter tanggal cetak -->
-                        <form action="/pengeluaran.export" method="POST">
+                        <!-- <form action="/pengeluaran.export" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
@@ -326,7 +336,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                </form>
+                                </form> -->
                                 <!-- End Filter tanggal cetak -->
                             </div>
                         </div>
@@ -342,10 +352,6 @@
                                             @endif
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
-                                            @if ($button_kas==FALSE)
-                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
-                                            <th class="font-weight-bold text-dark">Saldo Masuk</th>
-                                            @endif
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
@@ -362,14 +368,8 @@
                                             @if ($button_kas==TRUE)
                                             <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
                                             @endif
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
-                                            @if ($button_kas==FALSE)
-                                            <td class="font-weight-bold text-dark">{{$row->pengajuan->kode}}</td>
-                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
-                                                Rp. {{number_format($row->pengajuan->jumlah,2,",", ".")}}
-                                            @endif</td>
-                                            @endif
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
@@ -386,7 +386,10 @@
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                            <td class="font-weight-bold text-dark">
+                                            @if ($row->tanggal_respon)
+                                                {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
+                                            @endif</td>
                                             <td class="font-weight-bold text-dark">
                                                 @if ($row->status != 7 && $row->status != 6 && $row->status != 8)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
@@ -491,9 +494,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/pengembalian_saldo/{{$pengajuan->id}}" method="GET">
+                    <form action="/pengembalian_saldo" method="GET">
                         @csrf
-                        <input type="hidden" name="id" id="id" value="{{$pengajuan->id}}">
+                        <input type="hidden" name="id" id="id" value="">
                         <div class="form-group">
                             <label for="tanggal">Tanggal Pengembalian :</label>
                             <input type="date" class="form-control" placeholder="Input tanggal pengembalian sisa saldo" id="tanggal" name="tanggal" required>

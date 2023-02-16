@@ -53,10 +53,20 @@
                     <span>Dashboard</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan Dana</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
@@ -94,7 +104,7 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                 <div class="d-sm-flex align-items-center justify-content-between">
-                        <h1 class="h3 mb-2 text-gray-800">Laporan Kas Keluar</h1>
+                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
                 </div>
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -209,7 +219,7 @@
                                 </div>
                             </div>
                         </div>
-                
+                        @if ($laporan==TRUE)
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100">
@@ -245,13 +255,16 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         <!-- End Dropdown Divisi -->
+                        @if ($laporan == TRUE)
                             <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        @endif
                         <div class="container">
                             <div class="row">
                                 <form action="" method="POST">
@@ -278,10 +291,17 @@
                                         Pilih Company
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        @if ($laporan == TRUE)
                                         <a class="dropdown-item" href="/admin_laporan_kas_keluar">All</a>
                                         @foreach ($company as $company)
                                             <a class="dropdown-item" href="/kas_company/2/{{$company->project_company_id}}">{{$company->name}}</a>
                                         @endforeach
+                                        @elseif ($laporan == FALSE)
+                                        <a class="dropdown-item" href="/admin_kas_keluar">All</a>
+                                        @foreach ($company as $company)
+                                            <a class="dropdown-item" href="/kas_company/1/{{$company->project_company_id}}">{{$company->name}}</a>
+                                        @endforeach
+                                        @endif
                                     </div>
                                 </div>
                         <!-- End Dropdown Company -->
@@ -317,10 +337,10 @@
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
-                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Nota Tujuan</th>
                                             <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
@@ -332,10 +352,9 @@
                                         @foreach ($dataKas as $row)
                                         <tr>
                                         <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->pengajuan->kode}}</td>
                                         <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                         <td class="font-weight-bold text-dark">@if ($row->coa)
                                             {{$row->COA->code}} <br>
@@ -346,10 +365,17 @@
                                             {{$row->Pembebanan->name}}
                                             @endif
                                         </td>
+                                        <td class="font-weight-bold text-dark">{{$row->tujuan}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal_set_bkk}}</td>
+                                        <td class="font-weight-bold text-dark">
+                                        @if ($row->tanggal_respon)
+                                            {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
+                                        @endif</td>
+                                        <td class="font-weight-bold text-dark">
+                                        @if ($row->tanggal_set_bkk)
+                                            {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
+                                        @endif</td>
                                         <!-- <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
                                             <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
@@ -359,7 +385,11 @@
                                         @endforeach 
                                     </tbody>
                                 </table>
+                                @if ($laporan==FALSE)
+                                <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Selesai</button>
+                                @elseif ($laporan==TRUE)
                                 <button id="button-set-bkk" type="button" disabled onclick="setBKK()" class="btn btn-sm btn-success">Set BKK</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -501,6 +531,21 @@
         })
         $.ajax({
             url:"{{url('')}}/set_bkk_checkbox",
+            method:'post',
+            data:{ids:semua_id},
+            success:function(res){
+                table.ajax.reload(null,false)
+            }
+        })
+    }
+    function klaim() {
+        let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+        let semua_id = []
+        $.each(checkbox_terpilih, function(index,elm){
+            semua_id.push(checkbox_terpilih[index].value)
+        })
+        $.ajax({
+            url:"{{url('')}}/done",
             method:'post',
             data:{ids:semua_id},
             success:function(res){

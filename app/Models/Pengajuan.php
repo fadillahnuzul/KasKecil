@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Alfa6661\AutoNumber\AutoNumberTrait;
+use Carbon\Carbon;
 
 class Pengajuan extends Model
 {
@@ -68,5 +69,17 @@ class Pengajuan extends Model
     public function Project() 
     {
         return $this->belongsTo(Project::class, 'project', 'project_id');
+    }
+
+    public function scopeSearchByUser($query, string|null $id_user)
+    {
+        return ($id_user) ? $query->where('user_id', $id_user) : $query;
+    }
+
+    public function scopeSearchByDateRange($query, string|null $start = null, string|null $end = null)
+    {
+        $start = ($start) ? $start : Carbon::now()->firstOfYear()->format('Y-m-d');
+        $end = ($end) ? $end : Carbon::now()->endOfYear()->format('Y-m-d');
+        return $query->whereBetween('tanggal', [$start,$end]);
     }
 }

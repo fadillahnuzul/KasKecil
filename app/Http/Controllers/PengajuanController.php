@@ -26,8 +26,8 @@ class PengajuanController extends Controller
     public $endDate;
 
     public function __construct() {
-        $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $this->endDate = Carbon::now()->endOfMonth('Y-m-d');
+        $this->startDate = Carbon::now()->startOfMonth()->format('d-m-Y');
+        $this->endDate = Carbon::now()->endOfMonth('d-m-Y');
     }
 
     public function welcome() {
@@ -93,7 +93,7 @@ class PengajuanController extends Controller
             $masuk->diklaim = $diklaim;
             $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
         }
-        $saldo = Saldo::findOrFail(Auth::user()->id);
+        $saldo = (new PengeluaranController)->hitung_saldo();
         if (Auth::user()->kk_access == '1') {
             return view ('admin/main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
         } else {

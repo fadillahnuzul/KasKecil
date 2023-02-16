@@ -54,10 +54,20 @@
                     <span>Dashboard</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan Dana</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
@@ -222,9 +232,9 @@
                                             Pilih User
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                        <a class="dropdown-item" href="/home_admin">All</a>
                                         @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/index_filter_keluar/1/1/{{$list->id}}">{{$list->username}}</a>
+                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
                                         @endforeach 
                                         </div>
                                         </div>
@@ -333,7 +343,6 @@
 
                 <!-- terpakai, sisa dashboard -->
                 <!-- Card Terpakai -->
-                @if ($laporan == FALSE)
                 <!-- <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100">
@@ -457,7 +466,6 @@
                         </div> -->
                         <!-- End Card Bank -->
                         <!-- </div> -->
-                        @endif
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -474,7 +482,7 @@
                                 <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
                                     <a class="dropdown-item" href="/kas_divisi/2/{{$divisi->id}}">{{$divisi->name}}</a>
                                 @endforeach
-                            @else if ($laporan==FALSE)
+                            @elseif ($laporan==FALSE)
                                 <a class="dropdown-item" href="/home_admin">All</a>
                                 @foreach ($divisi as $divisi)
                                 <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
@@ -526,9 +534,9 @@
                                             <th class="font-weight-bold text-dark">Divisi</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Pengajuan</th>
-                                            <th class="font-weight-bold text-dark">Sumber Dana</th>
+                                            <!-- <th class="font-weight-bold text-dark">Sumber Dana</th>
                                             <th class="font-weight-bold text-dark">Belum Diklaim</th>
-                                            <th class="font-weight-bold text-dark">Total Diklaim</th>
+                                            <th class="font-weight-bold text-dark">Total Diklaim</th> -->
                                             <th class="font-weight-bold text-dark">Status</th>
                                             @elseif ($filter_keluar == TRUE)
                                             <th class="font-weight-bold text-dark">Tanggal</th>
@@ -551,12 +559,12 @@
                                         <tr>
                                             @if ($filter_keluar == FALSE)
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Divisi->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah ,2, ",", ".")}}</td>                           
-                                            <td class="font-weight-bold text-dark">@if ($row->sumber == NULL) 
+                                            <!-- <td class="font-weight-bold text-dark">@if ($row->sumber == NULL) 
                                                 -
                                                 @endif
                                                 @if ($row->sumber != NULL)
@@ -564,11 +572,11 @@
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td> -->
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <!-- filter kas keluar di dashboard admin -->
                                             @elseif ($filter_keluar == TRUE)
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Pengajuan->kode}}</td>
@@ -583,8 +591,8 @@
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal_set_bkk}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}</td>
                                             @endif
                                             <!-- filter kas keluar di dashboard admin -->
                                             <td class="font-weight-bold text-dark">
@@ -597,7 +605,7 @@
                                                 <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
                                                 Decline</a>
                                             @elseif ($filter_keluar==FALSE && ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5))
-                                                <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a> 
+                                                <!-- <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>  -->
                                             @endif
                                             @endif
                                             </td>

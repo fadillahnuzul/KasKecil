@@ -232,7 +232,7 @@
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                         <td class="font-weight-bold text-dark">@if ($row->pengajuan)
@@ -250,7 +250,7 @@
                                             @endif
                                         </td>
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->tanggal_respon}}</td>
+                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
                                         <!-- <td>
                                         <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                         @if ($row->status == 4)

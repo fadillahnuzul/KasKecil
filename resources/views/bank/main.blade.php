@@ -312,7 +312,7 @@
                                         <tr>
                                             <!-- <td>{{$row->id}}</td> -->
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Divisi->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>

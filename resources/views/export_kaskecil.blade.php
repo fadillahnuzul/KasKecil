@@ -44,7 +44,7 @@
             <?php $no=1;?>
             @foreach ($data_pengeluaran as $row)
                 <tr style="border-right: 2px solid; border-left:2px solid;">
-                <td>{{$row->tanggal}}</td>
+                <td>{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                 <td>{{$row->deskripsi}}</td>
                 <td>{{$row->pengajuan->kode}}</td>
                 <td>@if ($row->coa)

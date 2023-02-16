@@ -243,9 +243,8 @@ class BankController extends Controller
     {
         $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->get();
         $title = "Daftar Kas Keluar";
-        $kategori = Kategori::with('pengeluaran')->get();
 
-        return view ('/bank/laporan_kas', ['kategori' => $kategori, 'title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 
+        return view ('/bank/kas', ['title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 
         ['dataKas' => $data_pengeluaran]);
     }
 

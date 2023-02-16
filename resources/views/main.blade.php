@@ -53,10 +53,20 @@
                     <span>Dashboard</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin_kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar Admin</span></a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="/pengajuan">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Pengajuan Dana</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="/home">
                     <i class="fas fa-fw fa-list"></i>
@@ -78,6 +88,11 @@
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kas_keluar">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Kas Keluar</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/pengajuan')}}">
@@ -303,9 +318,6 @@
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Jumlah Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Status</th>
-                                            <th class="font-weight-bold text-dark">Belum Diklaim</th>
-                                            <th class="font-weight-bold text-dark">Diklaim</th>
-                                            <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -313,23 +325,10 @@
                                         @foreach ($dataKas as $row)
                                         <tr>
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->tanggal}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">
-                                            @if ($row->Status->id != 6)
-                                            <a onclick="set_modal_id({{$row->id}})" href="" target="_blank" data-toggle="modal" data-target="#PrintModal" class="btn btn-info btn-sm" data-id="{{ $row->id }}">Cetak</a>
-                                            @if ($row->Status->id != 1 AND $row->Status->id != 3 AND $row->Status->id != 5)
-                                                <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
-                                                <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-warning btn-sm">Buat Kas</a>
-                                            @elseif ($row->Status->id == 5)
-                                                <a href="/detail_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
-                                            @endif
-                                            @endif
-                                            </td>
                                         </tr>
                                         <?php $no++ ;?>
                                         @endforeach 
