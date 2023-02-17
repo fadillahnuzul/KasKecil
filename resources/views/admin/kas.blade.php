@@ -325,6 +325,9 @@
                                 </div>
                                 </form> -->
                                 <!-- End Filter tanggal cetak -->
+                                @if ($companySelected)
+                                    <p style="margin-left:10px">{{$companySelected->name}}</p>
+                                @endif
                             </div>
                         </div>
                         </div>
@@ -386,7 +389,7 @@
                                     </tbody>
                                 </table>
                                 @if ($laporan==FALSE)
-                                <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Selesai</button>
+                                <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
                                 @elseif ($laporan==TRUE)
                                 <button id="button-set-bkk" type="button" disabled onclick="setBKK()" class="btn btn-sm btn-success">Set BKK</button>
                                 @endif

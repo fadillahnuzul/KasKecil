@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pic">PIC :</label>
-                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic" required>
+                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
                                 </div> 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>

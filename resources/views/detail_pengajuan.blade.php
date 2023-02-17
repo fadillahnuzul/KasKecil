@@ -240,7 +240,7 @@
                         </div>
                 
                         <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -255,7 +255,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     @endif
                     </div>
 
@@ -266,19 +266,27 @@
                         <div class="row" style="margin-left:5px">
                             <!-- Dropdown Company -->
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Pilih Company
-                                </button>
-                                
-                            </div>
-                            <!-- End Dropdown Company -->
+                                    <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Pilih Company
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/kas_keluar">All</a>
+                                        @foreach ($company as $company)
+                                            <a class="dropdown-item" href="/kas_company/1/{{$company->project_company_id}}">{{$company->name}}</a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                        <!-- End Dropdown Company -->
                             @if ($saldo != 0)
                                 <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split" style="margin-left:10px">
                                     <span class="text">Catat Kas</span>
                                 </a>
-                                <a data-toggle="modal" data-target="#KembalianSaldoModal" class="btn btn-success btn-sm btn-icon-split" style="margin-left:10px">
+                                <!-- <a data-toggle="modal" data-target="#KembalianSaldoModal" class="btn btn-success btn-sm btn-icon-split" style="margin-left:10px">
                                     <span class="text">Pengembalian Saldo</span>
-                                </a>
+                                </a> -->
+                            @endif
+                            @if ($companySelected)
+                                <button type="button" class="btn btn-outline-primary" style="margin-left:10px" disabled>{{$companySelected->name}}</button>
                             @endif
                             </div>
                         @endif
@@ -338,6 +346,9 @@
                                 </div>
                                 </form> -->
                                 <!-- End Filter tanggal cetak -->
+                                @if ($companySelected)
+                                    <p style="margin-left:10px">{{$companySelected->name}}</p>
+                                @endif
                             </div>
                         </div>
                         @endif
@@ -501,21 +512,10 @@
                             <label for="tanggal">Tanggal Pengembalian :</label>
                             <input type="date" class="form-control" placeholder="Input tanggal pengembalian sisa saldo" id="tanggal" name="tanggal" required>
                         </div>
-                        @if(Auth::user()->kk_access == 1)
-                        <div class="form-group">
-                            <label for="jumlah">Jumlah Pengembalian Saldo Tunai</label>
-                            <input type="text" class="form-control" placeholder="Input jumlah pengembalian saldo tunai" id="tunai" name="tunai" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="jumlah">Jumlah Pengembalian Saldo Bank</label>
-                            <input type="text" class="form-control" placeholder="Input jumlah pengembalian saldo bank" id="bank" name="bank" required>
-                        </div>
-                        @elseif (Auth::user()->kk_access == 2)
                         <div class="form-group">
                             <label for="jumlah">Jumlah Pengembalian Saldo</label>
                             <input type="text" class="form-control" placeholder="Input jumlah pengembalian saldo" id="jumlah" name="jumlah" required>
                         </div>
-                        @endif
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>

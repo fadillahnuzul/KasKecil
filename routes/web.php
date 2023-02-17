@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hapus_admin/{pengajuan}/{id}', [AdminController::class, 'hapus']);
     Route::get('/klaim', [AdminController::class, 'klaim']);
     Route::get('/kas_company/{id}', [AdminController::class, 'kas_company']);
+    Route::get('/done_pengajuan/{id}', [AdminController::class, 'done_pengajuan']);
     // Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
     Route::post('/set_bkk_checkbox', [AdminController::class, 'set_bkk']);
 

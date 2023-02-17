@@ -250,7 +250,10 @@
                                             @endif
                                         </td>
                                         <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
+                                        <td class="font-weight-bold text-dark">
+                                            @endif ($row->tanggal_respon)
+                                            {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
+                                            @endif</td>
                                         <!-- <td>
                                         <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                         @if ($row->status == 4)

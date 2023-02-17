@@ -82,4 +82,19 @@ class Pengajuan extends Model
         $end = ($end) ? $end : Carbon::now()->endOfYear()->format('Y-m-d');
         return $query->whereBetween('tanggal', [$start,$end]);
     }
+
+    public function scopeNoUsernameUser($query)
+    {
+        return $query->where('id', '!=', 23);
+    }
+
+    public function scopeStatusProgressAndApproved($query) 
+    {
+        return $query->whereIn('status', [2,4]);
+    }
+
+    public function scopeIsDone($query)
+    {
+        return $query->where('status', 5);
+    }
 }

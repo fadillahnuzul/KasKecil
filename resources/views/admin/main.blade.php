@@ -542,7 +542,6 @@
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
-                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
@@ -579,7 +578,6 @@
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->Pengajuan->kode}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
@@ -591,14 +589,21 @@
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
-                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark">
+                                                @if ($row->tanggal_respon)
+                                                {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
+                                                @endif</td>
+                                            <td class="font-weight-bold text-dark">
+                                                @if ($row->tanggal_set_bkk)
+                                                {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
+                                                @endif</td>
                                             @endif
                                             <!-- filter kas keluar di dashboard admin -->
                                             <td class="font-weight-bold text-dark">
-                                            @if ($row->Status->id != 6)
+                                            @if ($row->Status->id != 6 && $row->Status->id != 5)
                                             <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                             <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
+                                            <a onclick="return confirm ('Apakah yakin untuk menyelesaikan pengajuan ini?')" href="/done_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Set Done</a>
                                             @if ($row->Status->id == 1 AND $row->User->kk_access == 2)
                                                 <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
                                                 Approve</a> 

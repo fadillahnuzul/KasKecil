@@ -228,7 +228,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pic">PIC :</label>
-                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic" value="{{$kas->pic}}" required>
+                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic" value="{{$kas->pic}}">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>

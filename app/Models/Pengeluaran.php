@@ -10,6 +10,7 @@ class Pengeluaran extends Model
 {
     use HasFactory;
     protected $table = 'pettycash_pengeluaran';
+    protected $fillable = ['status'];
 
     public function pengajuan()
     {
