@@ -262,7 +262,7 @@
                         @if ($companySelected)
                                 <button type="button" class="btn btn-outline-primary" style="margin-left:10px" disabled>{{$companySelected->name}}</button>
                         @endif
-                        <h5 style="float:right;">Kode Pengajuan : {{$pengajuan->kode}}</h5>
+                       
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

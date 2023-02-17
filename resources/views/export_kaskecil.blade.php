@@ -32,7 +32,6 @@
             <tr>
             <th style="border: 2px solid;"><strong>Tanggal</strong></th>
             <th style="border: 2px solid;"><strong>Keterangan</strong></th>
-            <th style="border: 2px solid;"><strong>Kode Pengajuan</strong></th>
             <th style="border: 2px solid;"><strong>No. COA</strong></th>
             <th style="border: 2px solid;"><strong>Nama COA</strong></th>
             <th style="border: 2px solid;"><strong>Pembebanan</strong></th>
@@ -46,7 +45,6 @@
                 <tr style="border-right: 2px solid; border-left:2px solid;">
                 <td>{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                 <td>{{$row->deskripsi}}</td>
-                <td>{{$row->pengajuan->kode}}</td>
                 <td>@if ($row->coa)
                     {{$row->COA->code}}
                     @endif

@@ -220,7 +220,6 @@
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
-                                            <th class="font-weight-bold text-dark">Kode Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
@@ -235,10 +234,6 @@
                                         <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                        <td class="font-weight-bold text-dark">@if ($row->pengajuan)
-                                            {{$row->pengajuan->kode}}
-                                            @endif
-                                        </td>
                                         <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
                                         <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
