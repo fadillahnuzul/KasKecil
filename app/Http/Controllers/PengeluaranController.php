@@ -104,6 +104,8 @@ class PengeluaranController extends Controller
         $companySelected = ($id_comp) ? Company::find($id_comp) : $this->companySelected;;
         $startDate = ($request->startDate)? $request->startDate  : $this->startDate; 
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
+        session(['startDate' => $startDate]);
+        session(['endDate' => $endDate]);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         if ($id == 1) { //index
             $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->searchByUser(Auth::user()->id)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
