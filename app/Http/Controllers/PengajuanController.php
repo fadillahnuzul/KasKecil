@@ -46,7 +46,7 @@ class PengajuanController extends Controller
         $laporan = FALSE;
         $title = "Kas Kecil";
         $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->get();
-        $saldo = (new PengeluaranController)->hitung_saldo();
+        $saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
         
         return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo, 'laporan'=>$laporan]);
     }
@@ -56,7 +56,7 @@ class PengajuanController extends Controller
         $company = $request->session()->get('company');
         $title = "Laporan Pengajuan Kas Kecil";
         $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->isDone()->where('company',$company)->get();
-        $saldo = (new PengeluaranController)->hitung_saldo();
+        $saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
         if (Auth::user()->kk_access == '1') {
             return view ('admin/main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
         } else {
