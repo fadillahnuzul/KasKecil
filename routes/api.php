@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/klaim', [AdminController::class, 'klaim']);
+Route::get('/send_data_kas', [AdminController::class, 'sendDataKas']);

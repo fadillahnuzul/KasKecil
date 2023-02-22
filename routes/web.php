@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detail_divisi/{id}', [AdminController::class, 'detail_divisi']);
     Route::match(['GET', 'POST'], '/admin_laporan', [AdminController::class, 'laporan']);
     Route::match(['GET', 'POST'], '/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar']);
+    Route::match(['GET', 'POST'], '/sendDataLaporan', [AdminController::class, 'sendDataLaporan']);
     Route::match(['GET', 'POST'], '/admin_kas_keluar', [AdminController::class, 'kas_keluar']);
     Route::get('/admin_kas_kategori/{id}', [AdminController::class, 'kategori']);
     Route::get('/edit_done/{id}', [AdminController::class, 'edit_done']);
@@ -71,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/done_pengajuan/{id}', [AdminController::class, 'done_pengajuan']);
     // Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
     Route::post('/set_bkk_checkbox', [AdminController::class, 'set_bkk']);
+
 
     //Filter tanggal
     Route::post('/filter_pengajuan/{id}', [PengajuanController::class, 'filter']);

@@ -360,7 +360,7 @@
                                         <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                        <td class="font-weight-bold text-dark">{{number_format($row->jumlah,2,",", ".")}}</td>
+                                        <td class="font-weight-bold text-dark">{{$row->jumlah}}</td>
                                         <td class="font-weight-bold text-dark">@if ($row->coa)
                                             {{$row->COA->code}} {{$row->COA->name}}
                                             @endif
@@ -494,14 +494,69 @@
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 
     <!-- table js -->
-    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script> 
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script> -->
+    
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <script>
+    //     $(function(){
+    //         callData()
+    //     })
+    //     function callData() {
+    //     $.ajax({
+    //         url: "{{url('api/send_data_kas')}}",
+    //         method: 'GET',
+    //         success: function(data){
+    //             $("#myTable tbody").html('')
+    //             data.foreach(function(item, index){
+    //                 $("#myTable tbody").append(
+    //                     `<tr>
+    //                     <td></td>
+    //                     <td>${tanggal}</td>
+    //                     <td>${item.deskripsi}</td>
+    //                     <td>${item.user_id}</td>
+    //                     <td>${item.jumlah}</td>
+    //                     <td>${item.coa_id}</td>
+    //                     <td>${item.pembebanan}</td>
+    //                     <td>${item.tujuan}</td>
+    //                     <td>${item.pic}</td>
+    //                     <td>${item.status}</td>
+    //                     <td>${item.tanggal_respon}</td>
+    //                     <td>${item.tanggal_set_bkk}</td>
+    //                     </tr>`
+    //                 )
+    //             })
+    //         },
+    //         error:function(err){
+    //             alert(err)
+    //         }
+    //     })
+    // }
     $(document).ready(function() {
     $('#myTable').DataTable( {
+        // processing: true,
+        // serverSide: true,
+        // ajax: '/api/send_data_kas',
+        // columns: [
+        //     { data: 'id'},
+        //     { data: 'tanggal' },
+        //     { data: 'deskripsi' },
+        //     { data: 'user.username' },
+        //     { data: 'jumlah' },
+        //     { data: 'coa.code'},
+        //     { data: 'pembebanan.name' },
+        //     { data: 'tujuan' },
+        //     { data: 'pic' },
+        //     { data: 'status.nama_status' },
+        //     { data: 'tanggal_respon' },
+        //     { data: 'tanggal_set_bkk' },
+        // ],
         dom: 'Bfrtip',
         buttons: [
             {
@@ -516,6 +571,14 @@
                 targets: [0],
                 ordering: false,
             },
+            {
+                targets: [1],
+                type: "date", 
+            },
+            // {
+            //     targets: [4],
+            //     render: $.fn.dataTable.render.number('.', ',', 2, '') 
+            // },
         ],
         stateSave: true,
         order: [[9, 'asc']],

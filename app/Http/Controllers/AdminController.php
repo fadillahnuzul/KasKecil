@@ -235,9 +235,10 @@ class AdminController extends Controller
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
         // $dataKas = DB::table('pettycash_pengeluaran')->select('coa',DB::raw('sum(jumlah) as total'))->groupBy('coa')->get();
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->whereIn('status', [7, 8])
-            ->whereBetween('tanggal', [$startDate, $endDate])
-            ->where('deskripsi', '!=', 'PENGEMBALIAN SALDO PENGAJUAN')->orderBy('status', 'asc')->get();
+        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->statusKlaimAndSetBKK()
+            ->searchByDateRange($startDate, $endDate)
+            ->bukanPengembalianSaldo()->orderBy('status', 'asc')->get();
+        $this->sendDataKas($startDate, $endDate);
         $Saldo = $this->hitung_pengajuan();
         $totalKeluar = 0;
         $totalSetBKK = 0;
@@ -252,6 +253,13 @@ class AdminController extends Controller
         }
         (new PengeluaranController)->set_tanggal($startDate, $endDate);
         return view('/admin/kas', compact('title', 'startDate', 'endDate', 'company', 'dataKas', 'Saldo', 'totalKeluar', 'totalSetBKK', 'totalBelumSetBKK', 'laporan','companySelected'));
+    }
+
+    public function sendDataKas($startDate=null, $endDate=null) {
+        $dataKas = Pengeluaran::with('User', 'Status', 'Coa', 'Pembebanan')->statusKlaimAndSetBKK()
+            ->searchByDateRange($startDate, $endDate)
+            ->bukanPengembalianSaldo()->orderBy('status', 'asc')->get();
+        return response()->json(['data'=>$dataKas]);
     }
 
     public function kas_keluar(Request $request)

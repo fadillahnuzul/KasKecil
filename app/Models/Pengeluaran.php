@@ -37,9 +37,9 @@ class Pengeluaran extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function COA()
+    public function Coa()
     {
-        return $this->belongsTo(COA::class, 'coa', 'coa_id');
+        return $this->belongsTo(Coa::class, 'coa', 'coa_id');
     }
 
     public function scopeBukanPengembalianSaldo($query)
