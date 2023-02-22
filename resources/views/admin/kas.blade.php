@@ -360,7 +360,7 @@
                                         <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                         <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->jumlah}}</td>
+                                        <td class="font-weight-bold text-dark">{{number_format($row->jumlah ,2, ",", ".")}}</td>
                                         <td class="font-weight-bold text-dark">@if ($row->coa)
                                             {{$row->COA->code}} {{$row->COA->name}}
                                             @endif
@@ -561,8 +561,18 @@
         buttons: [
             {
             extend: 'excel',
+            text: 'Cetak',
+            filename: 'Laporan_Kas_Kecil',
             exportOptions: {
-                columns: [1,2,4,5,6,7,8]
+                columns: [1,2,4,5,6,7,8,10,11],
+                format: {
+                body: function ( data, row, column, node ) {
+                    // Strip $ from salary column to make it numeric
+                    return column === 2 ?
+                        parseFloat(data.replace(/[^\d\,]/, '')) :
+                        data;
+                    }
+                },
                 }
             }
         ],
@@ -577,7 +587,11 @@
             },
             // {
             //     targets: [4],
-            //     render: $.fn.dataTable.render.number('.', ',', 2, '') 
+            //     render: (function (data, type, row) {
+            //     return type === 'export' ?
+            //         data.replace( /[$,.]/g, '' ) :
+            //         data;
+            //     }) 
             // },
         ],
         stateSave: true,
