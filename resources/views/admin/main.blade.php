@@ -469,7 +469,7 @@
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
+                        <div class="card-header pb-0">
                         <!-- Dropdown Divisi -->
                         <div class="dropdown" style="float:right;">
                             <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -502,11 +502,11 @@
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <label for="date" class="col-form-label">Mulai</label>
                                         <div class="col-sm">
                                         <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
                                         </div>
-                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <label for="date" class="col-form-label">Selesai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
                                         </div>
@@ -534,9 +534,6 @@
                                             <th class="font-weight-bold text-dark">Divisi</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Pengajuan</th>
-                                            <!-- <th class="font-weight-bold text-dark">Sumber Dana</th>
-                                            <th class="font-weight-bold text-dark">Belum Diklaim</th>
-                                            <th class="font-weight-bold text-dark">Total Diklaim</th> -->
                                             <th class="font-weight-bold text-dark">Status</th>
                                             @elseif ($filter_keluar == TRUE)
                                             <th class="font-weight-bold text-dark">Tanggal</th>

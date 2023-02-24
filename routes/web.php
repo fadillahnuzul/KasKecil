@@ -24,7 +24,7 @@ use App\Http\Controllers\BankController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [PengajuanController::class, 'index']);
     Route::get('/home', [PengajuanController::class, 'index']);
-    Route::get('/laporan', [PengajuanController::class, 'laporan']);
+    Route::match(['GET', 'POST'], '/laporan', [PengajuanController::class, 'laporan']);
     Route::post('/simpan_pengajuan', [PengajuanController::class, 'save']);
     Route::get('/home', [PengajuanController::class, 'index']);
     Route::get('/pengajuan', [PengajuanController::class, 'create']);
@@ -41,7 +41,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/simpan_kas', [PengeluaranController::class, 'save']);
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
     Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
-    Route::match(['GET', 'POST'], '/kas_company/{id}/{id_comp}', [PengeluaranController::class, 'kas_company']);
     Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
     Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
 
@@ -60,7 +59,6 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['GET', 'POST'], '/admin_laporan_kas_keluar', [AdminController::class, 'laporan_keluar']);
     Route::match(['GET', 'POST'], '/sendDataLaporan', [AdminController::class, 'sendDataLaporan']);
     Route::match(['GET', 'POST'], '/admin_kas_keluar', [AdminController::class, 'kas_keluar']);
-    Route::get('/admin_kas_kategori/{id}', [AdminController::class, 'kategori']);
     Route::get('/edit_done/{id}', [AdminController::class, 'edit_done']);
     Route::get('/edit_admin/{id}', [AdminController::class, 'edit']);
     Route::put('/simpan_done/{id}', [AdminController::class, 'simpan_done']);
@@ -72,12 +70,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/done_pengajuan/{id}', [AdminController::class, 'done_pengajuan']);
     // Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
     Route::post('/set_bkk_checkbox', [AdminController::class, 'set_bkk']);
-
-
-    //Filter tanggal
-    Route::post('/filter_pengajuan/{id}', [PengajuanController::class, 'filter']);
-    Route::post('/filter_pengeluaran', [PengeluaranController::class, 'filter']);
-
 
     Route::post('/input_sumber', [SumberController::class, 'save']);
     Route::post('/input_pembebanan', [PembebananController::class, 'save']);
@@ -105,8 +97,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authentic'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
-Route::get('/rekening', [RekeningController::class, 'index'])->middleware('auth');
 
 
 

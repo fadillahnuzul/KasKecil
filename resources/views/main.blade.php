@@ -207,12 +207,6 @@
                 <!-- Begin Page Content -->
                 
                 <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
-                    </div> -->
                     <!-- Card Saldo -->
                     <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -232,49 +226,11 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        @if (Auth::user()->kk_access=='1')
-                        <!-- Card Tunai -->
-                        <!-- <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Tunai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- End Card Tunai -->
-                        <!-- Card Bank -->
-                        <!-- <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Bank</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- End Card Bank -->
-                        @endif
                         </div>
                         
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
+                        <div class="card-header pb-1" >
                         @if ($laporan==FALSE)
                         <a href="{{url('/pengajuan')}}" class="btn btn-success btn-icon-split">
                             <span class="text">Buat Pengajuan</span>
@@ -284,15 +240,14 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
                         <div class="container">
                             <div class="row">
-                                <form action="/filter_pengajuan/2" method="POST">
+                                <form action="" method="POST">
                                 @csrf
-                                <div class="container-fluid">
                                     <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <label for="date" class="col-form-label">Mulai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                         </div>
-                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <label for="date" class="col-form-label">Selesai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
@@ -300,7 +255,6 @@
                                             <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                         </div>
                                     </div>
-                                </div>
                                 </form>
                             </div>
                         </div>

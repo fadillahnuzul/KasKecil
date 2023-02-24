@@ -261,7 +261,7 @@
                     </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
+                        <div class="card-header pb-0">
                         <!-- End Dropdown Divisi -->
                         <!-- @if ($laporan == TRUE) -->
                             <!-- <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
@@ -273,11 +273,11 @@
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm"></label>
+                                        <label for="date" class="col-form-label">Mulai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                         </div>
-                                        <label for="date" class="col-form-label col-sm"></label>
+                                        <label for="date" class="col-form-label">Selesai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
@@ -311,29 +311,9 @@
                                     </div>
                                 </div>
                                 </form>
-                        <!-- Filter tanggal cetak -->
-                            <!-- <form action="/pengeluaran.export" method="POST">
-                                @csrf
-                                <div class="container-fluid">
-                                    <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm"></label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                        </div>
-                                        <label for="date" class="col-form-label col-sm"></label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
-                                        </div>
-                                        <div class="col-sm">
-                                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm (show_alert())">Cetak</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                </form> -->
-                                <!-- End Filter tanggal cetak -->
-                                @if ($companySelected)
+                                <!-- @if ($companySelected)
                                     <p style="margin-left:10px">{{$companySelected->name}}</p>
-                                @endif
+                                @endif -->
                             </div>
                         </div>
                         </div>
@@ -504,63 +484,9 @@
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script> -->
-    
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <script>
-    //     $(function(){
-    //         callData()
-    //     })
-    //     function callData() {
-    //     $.ajax({
-    //         url: "{{url('api/send_data_kas')}}",
-    //         method: 'GET',
-    //         success: function(data){
-    //             $("#myTable tbody").html('')
-    //             data.foreach(function(item, index){
-    //                 $("#myTable tbody").append(
-    //                     `<tr>
-    //                     <td></td>
-    //                     <td>${tanggal}</td>
-    //                     <td>${item.deskripsi}</td>
-    //                     <td>${item.user_id}</td>
-    //                     <td>${item.jumlah}</td>
-    //                     <td>${item.coa_id}</td>
-    //                     <td>${item.pembebanan}</td>
-    //                     <td>${item.tujuan}</td>
-    //                     <td>${item.pic}</td>
-    //                     <td>${item.status}</td>
-    //                     <td>${item.tanggal_respon}</td>
-    //                     <td>${item.tanggal_set_bkk}</td>
-    //                     </tr>`
-    //                 )
-    //             })
-    //         },
-    //         error:function(err){
-    //             alert(err)
-    //         }
-    //     })
-    // }
     $(document).ready(function() {
     $('#myTable').DataTable( {
-        // processing: true,
-        // serverSide: true,
-        // ajax: '/api/send_data_kas',
-        // columns: [
-        //     { data: 'id'},
-        //     { data: 'tanggal' },
-        //     { data: 'deskripsi' },
-        //     { data: 'user.username' },
-        //     { data: 'jumlah' },
-        //     { data: 'coa.code'},
-        //     { data: 'pembebanan.name' },
-        //     { data: 'tujuan' },
-        //     { data: 'pic' },
-        //     { data: 'status.nama_status' },
-        //     { data: 'tanggal_respon' },
-        //     { data: 'tanggal_set_bkk' },
-        // ],
         dom: 'Bfrtip',
         buttons: [
             {

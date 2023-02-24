@@ -26,7 +26,7 @@ class PengajuanController extends Controller
     public $endDate;
 
     public function __construct() {
-        $this->startDate = Carbon::now()->startOfMonth()->format('d-m-Y');
+        $this->startDate = Carbon::now()->startOfMonth('d-m-Y');
         $this->endDate = Carbon::now()->endOfMonth('d-m-Y');
     }
 
@@ -53,14 +53,15 @@ class PengajuanController extends Controller
 
     public function laporan(Request $request){
         $laporan = TRUE;
-        $company = $request->session()->get('company');
         $title = "Laporan Pengajuan Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->isDone()->where('company',$company)->get();
-        $saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
+        $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
+        $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
+        $dataKas = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->isDone()->searchByDateRange($startDate, $endDate)->get();
+        $Saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
         if (Auth::user()->kk_access == '1') {
-            return view ('admin/main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo]);
+            return view ('admin/main', compact('dataKas','title', 'Saldo'));
         } else {
-            return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo,'laporan'=>$laporan, 'startDate' => $this->startDate, 'endDate' => $this->endDate]);
+            return view ('main', compact('dataKas','title', 'Saldo','laporan', 'startDate', 'endDate'));
         }
         
     }

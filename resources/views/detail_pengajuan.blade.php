@@ -129,9 +129,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <div class="d-sm-flex align-items-center justify-content-between">
+                    <div class="d-sm-flex align-items-center justify-content-between">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                </div>
+                    </div>
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -222,9 +222,9 @@
                                 </div>
                             </div>
                         </div>
-                         <!-- End Card Saldo -->
-                         @if ($button_kas==TRUE)
-                         <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- End Card Saldo -->
+                        @if ($button_kas==TRUE)
+                        <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -240,113 +240,72 @@
                                 </div>
                             </div>
                         </div>
-                
-                        <!-- Card Tunai -->
-                        <!-- <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Diklaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalDiklaim, 2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                    @endif
+                        @endif
                     </div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        @if ($button_kas == TRUE)
-                        <div class="row" style="margin-left:5px">
-                            @if ($saldo != 0)
-                                <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split">
-                                    <span class="text">Catat Kas</span>
-                                </a>
-                                <!-- <a data-toggle="modal" data-target="#KembalianSaldoModal" class="btn btn-success btn-sm btn-icon-split" style="margin-left:10px">
-                                    <span class="text">Pengembalian Saldo</span>
-                                </a> -->
-                            @endif
-                            </div>
-                        @endif
+
                             <!-- <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
-                        <div class="container">
+
                             <div class="row">
-                                <form action="" method="POST">
-                                @csrf
-                                <div class="container-fluid">
-                                    <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm"></label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                        </div>
-                                        <label for="date" class="col-form-label col-sm"></label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
-                                        </div>
-                                        <div class="col-sm">
-                                            <select name="status" id="status">
-                                            @if ($selectedStatus)
-                                                <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
-                                            @endif
-                                            @if ($button_kas==FALSE)
-                                            <option value="">All Status</option>
-                                            @endif
-                                                @foreach ($status as $status)
+                                <div class="col-md-2">
+                                    @if ($button_kas == TRUE)
+                                    @if ($saldo != 0)
+                                    <a href="{{url('/kas')}}" class="btn btn-warning btn-sm btn-icon-split">
+                                        <span class="text">Catat Kas</span>
+                                    </a>
+                                    <!-- <a data-toggle="modal" data-target="#KembalianSaldoModal" class="btn btn-success btn-sm btn-icon-split" style="margin-left:10px">
+                                    <span class="text">Pengembalian Saldo</span>
+                                </a> -->
+                                    @endif
+                                    @endif
+                                </div>
+                                <div class="col-md-10">
+                                    <form action="" method="POST">
+                                        <div class="row">
+                                            @csrf
+                                            <label for="date" class="col-form-label">Mulai</label>
+                                            <div class="col-md-2">
+                                                <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                            </div>
+                                            <label for="date" class="col-form-label">Selesai</label>
+                                            <div class="col-md-2">
+                                                <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <select name="status" id="status">
+                                                    @if ($selectedStatus)
+                                                    <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
+                                                    @endif
+                                                    @if ($button_kas==FALSE)
+                                                    <option value="">All Status</option>
+                                                    @endif
+                                                    @foreach ($status as $status)
                                                     <option value="{{$status->id}}">{{$status->nama_status}}</option>
-                                                @endforeach
-                                            </select>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select name="company" id="company">
+                                                    @if ($selectedCompany)
+                                                    <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
+                                                    @endif
+                                                    <option value="">All Company</option>
+                                                    @foreach ($company as $company)
+                                                    <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                            </div>
                                         </div>
-                                        <div class="col-sm">
-                                            <select name="company" id="company">
-                                            @if ($selectedCompany)
-                                                <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
-                                            @endif
-                                            <option value="">All Company</option>
-                                                @foreach ($company as $company)
-                                                <option value="{{$company->project_company_id}}">{{$company->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-sm">
-                                        <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
-                                        </div>
-                                    </div>
                                 </div>
-                                </form>
-                        <!-- Filter tanggal cetak -->
-                        <!-- <form action="/pengeluaran.export" method="POST">
-                                @csrf
-                                <div class="container-fluid">
-                                    <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm"></label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                        </div>
-                                        <label for="date" class="col-form-label col-sm"></label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
-                                        </div>
-                                        <div class="col-sm">
-                                            <button type="submit" class="btn btn-sm btn-success">Cetak</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                </form> -->
-                                <!-- End Filter tanggal cetak -->
-                                <!-- @if ($companySelected)
-                                    <p style="margin-left:10px">{{$companySelected->name}}</p>
-                                @endif -->
                             </div>
-                        </div>
+                            </form>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -372,7 +331,7 @@
                                         @foreach ($dataKas as $row)
                                         <tr>
                                             @if ($button_kas==TRUE)
-                                            <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
+                                            <td><input type="checkbox" class="cb-child" value="{{$row->id}}"></td>
                                             @endif
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
@@ -392,9 +351,10 @@
                                             <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">
-                                            @if ($row->tanggal_respon)
+                                                @if ($row->tanggal_respon)
                                                 {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
-                                            @endif</td>
+                                                @endif
+                                            </td>
                                             <td class="font-weight-bold text-dark">
                                                 @if ($row->status != 7 && $row->status != 6 && $row->status != 8)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
@@ -533,15 +493,16 @@
         jumlah.addEventListener('keyup', function(e) {
             jumlah.value = currencyIdrUser2(this.value, 'Rp ');
         });
+
         function currencyIdrUser2(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
             if (ribuan) {
-                separator = sisa ?'.':'';
+                separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
             }
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
@@ -553,15 +514,16 @@
         jumlah.addEventListener('keyup', function(e) {
             jumlah.value = currencyIdrUser(this.value, 'Rp ');
         });
+
         function currencyIdrUser(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
             if (ribuan) {
-                separator = sisa ?'.':'';
+                separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
             }
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
@@ -588,99 +550,102 @@
     <!-- table js -->
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>  
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     @if ($button_kas == FALSE)
     <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            {
-            extend: 'excel',
-            text: 'Cetak',
-            filename: 'Laporan_Kas_Kecil',
-            exportOptions: {
-                columns: [0,1,2,3,4,5,6,8],
-                format: {
-                body: function ( data, row, column, node ) {
-                    // Strip $ from salary column to make it numeric
-                    return column === 2 ?
-                        parseFloat(data.replace(/[^\d\,]/, '')) :
-                        data;
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    text: 'Cetak',
+                    filename: 'Laporan_Kas_Kecil',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                        format: {
+                            body: function(data, row, column, node) {
+                                // Strip $ from salary column to make it numeric
+                                return column === 2 ?
+                                    parseFloat(data.replace(/[^\d\,]/, '')) :
+                                    data;
+                            }
+                        },
                     }
-                },
-                }
-            }
-        ],
-        stateSave: true,
-        order: [[9, 'asc']],
-    });
-    } );
+                }],
+                stateSave: true,
+                order: [
+                    [9, 'asc']
+                ],
+            });
+        });
     </script>
-    @elseif ($button_kas == TRUE) 
+    @elseif ($button_kas == TRUE)
     <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            {
-            extend: 'excel',
-            text: 'Cetak',
-            filename: 'Laporan_Kas_Kecil',
-            exportOptions: {
-                columns: [0,1,2,3,4,5,6,8],
-                format: {
-                body: function ( data, row, column, node ) {
-                    // Strip $ from salary column to make it numeric
-                    return column === 3 ?
-                        parseFloat(data.replace(/[^\d\,]/, '')) :
-                        data;
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    text: 'Cetak',
+                    filename: 'Laporan_Kas_Kecil',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                        format: {
+                            body: function(data, row, column, node) {
+                                // Strip $ from salary column to make it numeric
+                                return column === 3 ?
+                                    parseFloat(data.replace(/[^\d\,]/, '')) :
+                                    data;
+                            }
+                        },
                     }
+                }],
+                stateSave: true,
+                order: [
+                    [8, 'asc']
+                ],
+            });
+        });
+
+        // checkbox selesaikan kas
+        $("#head-cb").on('click', function() {
+            var isChecked = $("#head-cb").prop('checked')
+            $(".cb-child").prop('checked', isChecked)
+            $("#button-set-bkk").prop('disabled', !isChecked)
+        })
+
+        $("#myTable tbody").on('click', '.cb-child', function() {
+            if ($(this).prop('checked') != true) {
+                $("#head-cb").prop('checked', false)
+            }
+
+            let semua_checkbox = $("#myTable tbody .cb-child:checked")
+            let button_bkk = (semua_checkbox.length > 0)
+            $("#button-set-bkk").prop('disabled', !button_bkk)
+        })
+
+        function done() {
+            let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+            let semua_id = []
+            $.each(checkbox_terpilih, function(index, elm) {
+                semua_id.push(checkbox_terpilih[index].value)
+            })
+            $.ajax({
+                url: "{{url('')}}/kas_selesai",
+                method: 'post',
+                data: {
+                    ids: semua_id
                 },
+                success: function(res) {
+                    table.ajax.reload(null, false)
                 }
-            }
-        ],
-        stateSave: true,
-        order: [[8, 'asc']],
-    });
-    } );
-    
-    // checkbox selesaikan kas
-    $("#head-cb").on('click', function(){
-        var isChecked = $("#head-cb").prop('checked')
-        $(".cb-child").prop('checked',isChecked)
-        $("#button-set-bkk").prop('disabled',!isChecked)
-    })
-
-    $("#myTable tbody").on('click','.cb-child',function(){
-        if($(this).prop('checked')!=true){
-            $("#head-cb").prop('checked',false)
+            })
         }
-
-        let semua_checkbox = $("#myTable tbody .cb-child:checked")
-        let button_bkk = (semua_checkbox.length > 0)
-        $("#button-set-bkk").prop('disabled',!button_bkk)
-    })
-
-    function done() {
-        let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
-        let semua_id = []
-        $.each(checkbox_terpilih, function(index,elm){
-            semua_id.push(checkbox_terpilih[index].value)
-        })
-        $.ajax({
-            url:"{{url('')}}/kas_selesai",
-            method:'post',
-            data:{ids:semua_id},
-            success:function(res){
-                table.ajax.reload(null,false)
-            }
-        })
-    }</script>
+    </script>
     @endif
 </body>
 
