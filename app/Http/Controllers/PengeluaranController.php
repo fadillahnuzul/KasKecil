@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
+use App\Models\Status;
 use App\Models\Pembebanan;
 use App\Models\Divisi;
 use App\Models\Saldo;
@@ -56,7 +57,18 @@ class PengeluaranController extends Controller
         $company = Company::get();
         $button_kas = TRUE;
         $title = "Kas Keluar";
-        $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->statusProgress()->searchByUser(Auth::user()->id)->orderBy('status','asc')->get();
+        $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
+        $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
+        $selectedStatus = ($request->status) ? Status::find($request->status) : Status::find(4);
+        $selectedCompany = ($request->company) ? Company::find($request->company) : null;
+        $status = Status::whereIn('id',[4,6,7,8])->get();
+        $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->searchByUser(Auth::user()->id)->orderBy('status','asc')
+                ->where(function ($query) use ($selectedStatus){
+                    ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();
+                })
+                ->searchByDateRange($startDate, $endDate)
+                ->searchByCompany($request->company)
+                ->get();
         session(['key' => $id]);
         $total = $dataKas->sum('jumlah');
         $saldo = $this->hitung_saldo(Auth::user()->id);
@@ -72,26 +84,37 @@ class PengeluaranController extends Controller
             $totalDiklaim = $totalDiklaim + $k->jumlah;
         }
 
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'saldo','totalDiklaim', 'totalPengeluaran','pengajuan','company','companySelected'));
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate','saldo','totalDiklaim', 'totalPengeluaran','pengajuan','company','companySelected', 'status', 'selectedStatus','selectedCompany'));
     }
 
     public function laporan(Request $request)
     {
         $companySelected = $this->companySelected;
         session(['company' => $this->company]);
-        $startDate = $request->startDate ? $request->startDate : $this->startDate;
-        $endDate = $request->endDate ? $request->endDate : $this->endDate;
+        $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
+        $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $button_kas = FALSE;
+        $selectedStatus = ($request->status) ? Status::find($request->status) : null;
+        $selectedCompany = ($request->company) ? Company::find($request->company) : null;
+        $status = Status::whereIn('id',[4,6,7,8])->get();
         if(Auth::user()->kk_access==1) {
-            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->statusKlaimAndSetBKK()->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->statusKlaimAndSetBKK()
+            ->searchByDateRange($startDate, $endDate)
+            ->searchByCompany($request->company)
+            ->searchByStatus($request->status)
+            ->get();
         } else {
-            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status','!=',6)->statusKlaimAndSetBKK()->bukanPengembalianSaldo($startDate,$endDate)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status','!=',6)->bukanPengembalianSaldo()
+            ->searchByDateRange($startDate, $endDate)
+            ->searchByCompany($request->company)
+            ->searchByStatus($request->status)
+            ->get();
         }
         $title = "Laporan Pengeluaran Kas Kecil";
         $saldo = $this->hitung_saldo(Auth::user()->id);
         $company = Company::get();
         
-        return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company','companySelected'));
+        return view('detail_pengajuan', compact('dataKas','title', 'button_kas', 'startDate', 'endDate', 'saldo','company','companySelected','status', 'selectedStatus','selectedCompany'));
     }
 
     public function set_tanggal($startDate, $endDate){
@@ -101,15 +124,15 @@ class PengeluaranController extends Controller
 
     public function kas_company(Request $request, $id, $id_comp) {
         session(['company' => $id_comp]);
-        $companySelected = ($id_comp) ? Company::find($id_comp) : $this->companySelected;;
+        $companySelected = ($id_comp) ? Company::find($id_comp) : $this->companySelected;
         $startDate = ($request->startDate)? $request->startDate  : $this->startDate; 
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         session(['startDate' => $startDate]);
         session(['endDate' => $endDate]);
         $totalDiklaim = 0; $totalPengeluaran = 0;
         if ($id == 1) { //index
-            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->searchByUser(Auth::user()->id)->where('status','!=',6)->where('pembebanan',$id_comp)->get();
-            $belumDiklaim = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->searchByUser(Auth::user()->id)->statusProgress()->where('pembebanan',$id_comp)->get();
+            $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->searchByUser(Auth::user()->id)->statusProgress()->where('pembebanan',$id_comp)->get();
+            $belumDiklaim = $dataKas;
         } elseif ($id == 2) { //laporan
             $dataKas = Pengeluaran::with('pengajuan', 'Status','Pembebanan','COA')->searchByUser(Auth::user()->id)->whereNotIn('status',[3,6])->where('pembebanan',$id_comp)->where('user_id',Auth::user()->id)
             ->where(function ($query) use ($startDate, $endDate) {

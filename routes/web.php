@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/project/{id}', [PengajuanController::class, 'project']);
 
     Route::get('/detail_pengajuan/{id}', [PengeluaranController::class, 'index']);
-    Route::get('/kas_keluar', [PengeluaranController::class, 'index']);
+    Route::match(['GET', 'POST'], '/kas_keluar', [PengeluaranController::class, 'index']);
     Route::get('/hapus_kas_keluar/{id}', [PengeluaranController::class, 'delete']);
     Route::get('/edit_kas_keluar/{id}', [PengeluaranController::class, 'edit']);
     Route::put('/kas_update/{id}', [PengeluaranController::class, 'update']);

@@ -82,6 +82,11 @@ class Pengeluaran extends Model
         return ($company) ? $query->where('pembebanan', $company) : $query;
     }
 
+    public function scopeSearchByStatus($query, string|null $status)
+    {
+        return ($status) ? $query->where('status', $status) : $query;
+    }
+
     public function scopeSearchByUser($query, string|null $id_user)
     {
         return ($id_user) ? $query->where('user_id', $id_user) : $query;

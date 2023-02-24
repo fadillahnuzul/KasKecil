@@ -263,10 +263,10 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         <!-- End Dropdown Divisi -->
-                        @if ($laporan == TRUE)
+                        <!-- @if ($laporan == TRUE) -->
                             <!-- <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
-                        @endif
+                        <!-- @endif -->
                         <div class="container">
                             <div class="row">
                                 <form action="" method="POST">
@@ -282,31 +282,35 @@
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
                                         <div class="col-sm">
+                                            <select name="status" id="status">
+                                            @if ($selectedStatus)
+                                                <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
+                                            @endif
+                                            @if ($laporan == TRUE)
+                                            <option value="">All Status</option>
+                                            @endif
+                                                @foreach ($status as $status)
+                                                    <option value="{{$status->id}}">{{$status->nama_status}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm">
+                                            <select name="company" id="company">
+                                            @if ($selectedCompany)
+                                                <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
+                                            @endif
+                                            <option value="">All Company</option>
+                                                @foreach ($company as $company)
+                                                <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm">
                                             <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                         </div>
                                     </div>
                                 </div>
                                 </form>
-                                <!-- Dropdown Company -->
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Pilih Company
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        @if ($laporan == TRUE)
-                                        <a class="dropdown-item" href="/admin_laporan_kas_keluar">All</a>
-                                        @foreach ($company as $company)
-                                            <a class="dropdown-item" href="/kas_company/2/{{$company->project_company_id}}">{{$company->name}}</a>
-                                        @endforeach
-                                        @elseif ($laporan == FALSE)
-                                        <a class="dropdown-item" href="/admin_kas_keluar">All</a>
-                                        @foreach ($company as $company)
-                                            <a class="dropdown-item" href="/kas_company/1/{{$company->project_company_id}}">{{$company->name}}</a>
-                                        @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                        <!-- End Dropdown Company -->
                         <!-- Filter tanggal cetak -->
                             <!-- <form action="/pengeluaran.export" method="POST">
                                 @csrf
