@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pencatatan Kas</title>
+    <title>Create BKK</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -132,7 +132,7 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                 <div class="d-sm-flex align-items-center justify-content-between">
-                        <h1 class="h3 mb-2 text-gray-800">Form Pencatatan Kas</h1>
+                        <h1 class="h3 mb-2 text-gray-800">Form Create BKK</h1>
                 </div>
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -169,34 +169,42 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-2 text-gray-800">Form Pencatatan Kas</h1>
-                    </div> -->
-                    
+                    <livewire:add-bkk></livewire:add-bkk>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                        <a  data-toggle="modal" data-target="#PembebananModal" class="btn btn-info btn-sm" style="float:right;">
-                            <span class="text">Input Pembebanan Baru</span>
-                        </a>
                         @include('sweetalert::alert')
                         </div>
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/simpan_kas" method="POST">
+                            <form action="/save_bkk" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="tanggal">Tanggal Pengeluaran :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
+                                    <label for="company">Company :</label>
+                                    <select name="company" id="company" class="form-control">
+                                        <option value="">--</option>
+                                        @foreach ($Company as $Company)
+                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
+                                    <label for="project">Project :</label>
+                                    <select name="project" id="project" class="form-control">
+                                        <option value="">--</option>
+                                        @foreach ($Project as $Project)
+                                            <option value="{{$Project->project_id}}">{{$Project->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="kredit">Nominal :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
+                                    <label for="rekening">Rekening :</label>
+                                    <select name="rekening" id="rekening" class="form-control">
+                                     <option value="">--</option>
+                                        @foreach ($Rekening as $Rekening)
+                                            <option value="{{$Rekening->bank_id}}">{{$Rekening->name}} {{$Rekening->rekening}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="coa">COA :</label>
@@ -208,71 +216,24 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="company">Company :</label>
-                                    <select name="company" id="company" class="form-control">
+                                    <label for="partner">Partner :</label>
+                                    <select name="partner" id="partner" class="form-control" required>
                                         <option value="">--</option>
-                                        @foreach ($Company as $Company)
-                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
+                                        @foreach ($Partner as $Partner)
+                                            <option value="{{$Partner->name}}">{{$Partner->name}} ({{$Partner->contact_person}})</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="tujuan">Dibayarkan kepada (Nota tujuan) :</label>
-                                    <input type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
+                                    <label for="tanggal">Tanggal BKK :</label>
+                                    <input type="date" class="form-control" placeholder="Tanggal BKK" id="tanggal" name="tanggal" required>
                                 </div>
-                                <div class="form-group">
-                                    <label for="pic">PIC :</label>
-                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
-                                </div> 
+                                <!-- <div class="form-group">
+                                    <label for="deskripsi">Keterangan :</label>
+                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
+                                </div> -->
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
-                            <script type="text/javascript">
-                                var jumlah_tunai = document.getElementById('tunai');
-                                    jumlah_tunai.addEventListener('keyup', function(e) {
-                                        jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
-                                    });
-
-                                var jumlah_bank = document.getElementById('bank');
-                                    jumlah_bank.addEventListener('keyup', function(e) {
-                                        jumlah_bank.value = currencyIdr(this.value, 'Rp ');
-                                    });
-
-                                function currencyIdr(angka, prefix) {
-                                    var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                                    split = number_string.split(','),
-                                    sisa = split[0].length % 3,
-                                    rupiah = split[0].substr(0, sisa),
-                                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-                                    if (ribuan) {
-                                        separator = sisa ?'.':'';
-                                        rupiah += separator + ribuan.join('.');
-                                    }
-                                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                                    return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-                                }
-                            </script>
-                            <script type="text/javascript">
-                            var jumlah = document.getElementById('kredit');
-                                jumlah.addEventListener('keyup', function(e) {
-                                jumlah.value = currencyIdrUser(this.value, 'Rp ');
-                            });
-
-                            function currencyIdrUser(angka, prefix) {
-                                var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                                split = number_string.split(','),
-                                sisa = split[0].length % 3,
-                                rupiah = split[0].substr(0, sisa),
-                                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-                                if (ribuan) {
-                                    separator = sisa ?'.':'';
-                                    rupiah += separator + ribuan.join('.');
-                                }
-                                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                                return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-                            }
-                            </script>
                             </div>
                         </div>
                     </div>
@@ -364,6 +325,26 @@
         $(document).ready(function(){
             $("#coa").select2({
                 placeholder: 'Masukkan kode atau nama COA',
+            });
+        });
+        $(document).ready(function(){
+            $("#company").select2({
+                placeholder: 'Masukkan nama company',
+            });
+        });
+        $(document).ready(function(){
+            $("#project").select2({
+                placeholder: 'Masukkan nama project',
+            });
+        });
+        $(document).ready(function(){
+            $("#rekening").select2({
+                placeholder: 'Masukkan nama bank atau nomor rekening',
+            });
+        });
+        $(document).ready(function(){
+            $("#partner").select2({
+                placeholder: 'Masukkan nama partner atau contact person',
             });
         });
     </script>

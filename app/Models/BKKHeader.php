@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rekening extends Model
+class BKKHeader extends Model
 {
     use HasFactory;
-
-    protected $table = 'bank';
+    protected $connection = 'mysql2';
+    protected $table = 'bkk_header';
+    public $timestamps = false;
 }

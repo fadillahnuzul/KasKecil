@@ -96,4 +96,9 @@ class Pengeluaran extends Model
     {
         return ($unit) ? $query->whereIn('pemasukan', Pengajuan::select('id')->where('divisi_id', $unit)) : $query;
     }
+
+    public function scopeSearchByCoa($query, string|null $coa)
+    {
+        return ($coa) ? $query->where('coa_id', $coa) : $query;
+    }
 }

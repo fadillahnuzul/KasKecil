@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PengajuanController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\SumberController;
 use App\Http\Controllers\PembebananController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\BKKController;
 
 
 /*
@@ -47,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
 //Halaman admin
     Route::match(['GET', 'POST'], '/home_admin', [AdminController::class, 'index']);
     Route::match(['GET', 'POST'], '/home_admin/{id}', [AdminController::class, 'index']);
-    Route::match(['GET', 'POST'], '/index_filter_keluar/{filter}/{klaim}/{id}', [AdminController::class, 'index_filter_keluar']); //1 = filter user, 2 = filter company
+    Route::match(['GET', 'POST'], '/index_filter_keluar/{filter}/{id}', [AdminController::class, 'index_filter_keluar']); //1 = filter user, 2 = filter company
     Route::match(['GET', 'POST'], '/index_filter_keluar', [AdminController::class, 'index_filter_keluar']);
     Route::get('/acc/{id}', [AdminController::class, 'acc']);
     Route::put('/setujui/{id}', [AdminController::class, 'setujui']);
@@ -91,7 +91,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/update_bank/{id}', [BankController::class, 'update']);
     Route::get('/bank_kas_divisi/{id}', [BankController::class, 'kas_divisi']);
 
-    // Route::get('/test', [PengeluaranController::class, 'coba_export']);
+    //BKK
+    Route::get('/create_bkk', [BKKController::class, 'create']);
+    Route::post('/save_bkk', [BKKController::class, 'save']);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

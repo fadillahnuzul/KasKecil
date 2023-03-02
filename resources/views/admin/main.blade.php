@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,14 +10,17 @@
     <meta name="author" content="">
 
     <title>{{$title}}</title>
+    <!-- css table -->
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.3.4/css/buttons.dataTables.min.css" rel="stylesheet">
+
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
-    
+
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 
@@ -103,9 +105,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <div class="d-sm-flex align-items-center justify-content-between">
+                    <div class="d-sm-flex align-items-center justify-content-between">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
-                </div>
+                    </div>
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -133,18 +135,14 @@
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -157,15 +155,12 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{asset('style/img/undraw_profile.svg')}}">
+                                <img class="img-profile rounded-circle" src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -180,12 +175,12 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                <!-- Page Heading -->
+                    <!-- Page Heading -->
 
-                <!-- Saldo, Tunai, Bank -->
-                <!-- Card Saldo -->
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <!-- Saldo, Tunai, Bank -->
+                    <!-- Card Saldo -->
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -209,7 +204,7 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                
+
                         <!-- Card Total Pengajuan -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100">
@@ -226,19 +221,6 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
-                                        <!-- Dropdown User -->
-                                        <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/home_admin">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div>
-                                        <!-- End Dropdown User -->
                                     </div>
                                 </div>
                             </div>
@@ -260,34 +242,6 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
                                             @endif
                                         </div>
-                                        <div class="col">
-                                        <!-- Dropdown User -->
-                                        <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/index_filter_keluar/1/1/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div>
-                                        <!-- End Dropdown User -->
-                                        <!-- Dropdown Company -->
-                                        <div class="dropdown" style="float:right; margin-top:5px;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih Company
-                                        </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                                @foreach($companyList as $list)
-                                                <a class="dropdown-item" href="/index_filter_keluar/2/1/{{$list->project_company_id}}">{{$list->name}}</a>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <!-- End Dropdown Company -->
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -303,35 +257,6 @@
                                                 Sisa Saldo</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
                                         </div>
-                                        
-                                        <div class="col">
-                                        <!-- Dropdown User -->
-                                        <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/index_filter_keluar/1/2/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div>
-                                        <!-- End Dropdown User -->
-                                        <!-- Dropdown Company -->
-                                        <div class="dropdown" style="float:right; margin-top:5px;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih Company
-                                        </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                                @foreach($companyList as $list)
-                                                <a class="dropdown-item" href="/index_filter_keluar/2/2/{{$list->project_company_id}}">{{$list->name}}</a>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <!-- End Dropdown Company -->
-                                        </div>
                                         <div class="col-auto">
                                         </div>
                                     </div>
@@ -339,192 +264,91 @@
                             </div>
                         </div>
                         <!-- End Card Sisa Saldo -->
-                        </div>
+                    </div>
 
-                <!-- terpakai, sisa dashboard -->
-                <!-- Card Terpakai -->
-                <!-- <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Total Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
-                                        </div>
-                                        <div> -->
-                                        <!-- Dropdown User -->
-                                        <!-- <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/home_admin">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/home_admin/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div> -->
-                                        <!-- End Dropdown User -->
-                                        <!-- </div>
-                                        <div class="col-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- End Card Saldo -->
-                        <!-- <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                                Belum Diklaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col"> -->
-                                        <!-- Dropdown User -->
-                                        <!-- <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/index_filter_keluar/1/1/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div> -->
-                                        <!-- End Dropdown User -->
-                                        <!-- Dropdown Company -->
-                                        <!-- <div class="dropdown" style="float:right; margin-top:5px;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih Company
-                                        </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                                @foreach($companyList as $list)
-                                                <a class="dropdown-item" href="/index_filter_keluar/2/1/{{$list->project_company_id}}">{{$list->name}}</a>
-                                                @endforeach
-                                            </div>
-                                        </div> -->
-                                        <!-- End Dropdown Company -->
-                                        <!-- </div>
-                                        <div class="col-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- End Card Saldo -->
-                        <!-- Card Bank -->
-                        <!-- <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-danger shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Sisa Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
-                                        </div>
-                                        
-                                        <div class="col"> -->
-                                        <!-- Dropdown User -->
-                                        <!-- <div class="dropdown" style="float:right;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih User
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                        @foreach ($userList as $list)
-                                        <a class="dropdown-item" href="/index_filter_keluar/1/2/{{$list->id}}">{{$list->username}}</a>
-                                        @endforeach 
-                                        </div>
-                                        </div> -->
-                                        <!-- End Dropdown User -->
-                                        <!-- Dropdown Company -->
-                                        <!-- <div class="dropdown" style="float:right; margin-top:5px;">
-                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pilih Company
-                                        </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/index_filter_keluar">All</a>
-                                                @foreach($companyList as $list)
-                                                <a class="dropdown-item" href="/index_filter_keluar/2/2/{{$list->project_company_id}}">{{$list->name}}</a>
-                                                @endforeach
-                                            </div>
-                                        </div> -->
-                                        <!-- End Dropdown Company -->
-                                        <!-- </div>
-                                        <div class="col-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- End Card Bank -->
-                        <!-- </div> -->
-                    
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">
-                        <!-- Dropdown Divisi -->
-                        <div class="dropdown" style="float:right;">
-                            <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Pilih Unit
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @if ($laporan==TRUE)
-                                <a class="dropdown-item" href="/admin_laporan">All</a>
-                                @foreach ($divisi as $divisi)
-                                <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
+                            <!-- Dropdown Divisi -->
+                            <div class="dropdown" style="float:right;">
+                                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pilih Unit
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @if ($laporan==TRUE)
+                                    <a class="dropdown-item" href="/admin_laporan">All</a>
+                                    @foreach ($divisi as $divisi)
+                                    <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
                                     <a class="dropdown-item" href="/kas_divisi/2/{{$divisi->id}}">{{$divisi->name}}</a>
-                                @endforeach
-                            @elseif ($laporan==FALSE)
-                                <a class="dropdown-item" href="/home_admin">All</a>
-                                @foreach ($divisi as $divisi)
-                                <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
+                                    @endforeach
+                                    @elseif ($laporan==FALSE)
+                                    <a class="dropdown-item" href="/home_admin">All</a>
+                                    @foreach ($divisi as $divisi)
+                                    <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
                                     <a class="dropdown-item" href="/kas_divisi/1/{{$divisi->id}}">{{$divisi->name}}</a>
-                                @endforeach
-                            @endif
-                            </div>
-                        </div>
-                        <!-- End Dropdown Divisi -->
-                        @if ($laporan == TRUE)
-                            <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
-                        @endif
-                        <div class="container">
-                            <div class="row">
-                                <form action="" method="POST">
-                                @csrf
-                                <div class="container-fluid">
-                                    <div class="form-group row">
-                                        <label for="date" class="col-form-label">Mulai</label>
-                                        <div class="col-sm">
-                                        <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
-                                        </div>
-                                        <label for="date" class="col-form-label">Selesai</label>
-                                        <div class="col-sm">
-                                            <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
-                                        </div>
-                                        <div class="col-sm">
-                                            <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
-                                        </div>
-                                    </div>
+                                    @endforeach
+                                    @endif
                                 </div>
-                                </form>
                             </div>
+                            <!-- End Dropdown Divisi -->
+                            <!-- Dropdown Company -->
+                            <div class="dropdown" style="float:right; margin-right:10px;">
+                                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pilih Company
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                    @foreach($companyList as $list)
+                                    <a class="dropdown-item" href="/index_filter_keluar/2/{{$list->project_company_id}}">{{$list->name}}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <!-- End Dropdown Company -->
+                            <!-- Dropdown User -->
+                            <div class="dropdown" style="float:right; margin-right:10px;">
+                                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pilih User
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                    @foreach ($userList as $list)
+                                    <a class="dropdown-item" href="/index_filter_keluar/1/{{$list->id}}">{{$list->username}}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <!-- End Dropdown User -->
+                            @if ($laporan == TRUE)
+                            <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                            @endif
+                            <div class="container">
+                                <div class="row">
+                                    <form action="" method="POST">
+                                        @csrf
+                                        <div class="container-fluid">
+                                            <div class="form-group row">
+                                                <label for="date" class="col-form-label">Mulai</label>
+                                                <div class="col-sm">
+                                                    <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
+                                                </div>
+                                                <label for="date" class="col-form-label">Selesai</label>
+                                                <div class="col-sm">
+                                                    <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
+                                                </div>
+                                                <div class="col-sm">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            @include('sweetalert::alert')
                         </div>
-                            
-                        @include('sweetalert::alert')
-                        </div>
-                        
+
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
+                                <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             @if ($filter_keluar == FALSE)
@@ -550,7 +374,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php $no=1;?>
+                                        <?php $no = 1; ?>
                                         @foreach ($dataKas as $row)
                                         <tr>
                                             @if ($filter_keluar == FALSE)
@@ -559,7 +383,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Divisi->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah ,2, ",", ".")}}</td>                           
+                                            <td class="font-weight-bold text-dark">{{number_format($row->jumlah ,2, ",", ".")}}</td>
                                             <!-- <td class="font-weight-bold text-dark">@if ($row->sumber == NULL) 
                                                 -
                                                 @endif
@@ -589,31 +413,33 @@
                                             <td class="font-weight-bold text-dark">
                                                 @if ($row->tanggal_respon)
                                                 {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
-                                                @endif</td>
+                                                @endif
+                                            </td>
                                             <td class="font-weight-bold text-dark">
                                                 @if ($row->tanggal_set_bkk)
                                                 {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
-                                                @endif</td>
+                                                @endif
+                                            </td>
                                             @endif
                                             <!-- filter kas keluar di dashboard admin -->
                                             <td class="font-weight-bold text-dark">
-                                            @if ($row->Status->id != 6 && $row->Status->id != 5)
-                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
-                                            <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
-                                            <a onclick="return confirm ('Apakah yakin untuk menyelesaikan pengajuan ini?')" href="/done_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Set Done</a>
-                                            @if ($row->Status->id == 1 AND $row->User->kk_access == 2)
+                                                @if ($row->Status->id != 6 && $row->Status->id != 5)
+                                                <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
+                                                <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
+                                                <a onclick="return confirm ('Apakah yakin untuk menyelesaikan pengajuan ini?')" href="/done_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Set Done</a>
+                                                @if ($row->Status->id == 1 AND $row->User->kk_access == 2)
                                                 <a href="/acc/{{$row->id}}" class="btn btn-success btn-sm">
-                                                Approve</a> 
+                                                    Approve</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menolak?')" href="/tolak/{{$row->id}}" class="btn btn-warning btn-sm">
-                                                Decline</a>
-                                            @elseif ($filter_keluar==FALSE && ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5))
+                                                    Decline</a>
+                                                @elseif ($filter_keluar==FALSE && ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5))
                                                 <!-- <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>  -->
-                                            @endif
-                                            @endif
+                                                @endif
+                                                @endif
                                             </td>
                                         </tr>
-                                        <?php $no++ ;?>
-                                        @endforeach 
+                                        <?php $no++; ?>
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 <!-- <button class="btn btn-primary" id="save-btn">Klaim</button>
@@ -649,8 +475,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -684,7 +509,41 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-    
+
+    <!-- Datatable -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    @if ($laporan == TRUE)
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    text: 'Cetak',
+                    filename: 'Laporan_Pengajuan_Kas_Kecil',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6],
+                    }
+                }],
+                stateSave: true,
+            });
+        });
+    </script>
+    @elseif ($laporan == FALSE)
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                stateSave: true,
+            });
+        });
+    </script>
+    @endif
 </body>
 
 </html>

@@ -11,6 +11,9 @@
     <meta name="author" content="">
 
     <title>{{$title}}</title>
+    <!-- css table -->
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.3.4/css/buttons.dataTables.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -236,8 +239,8 @@
                             <span class="text">Buat Pengajuan</span>
                         </a>
                         @else
-                        <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a>
+                        <!-- <a href="/pengajuan.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
                         <div class="container">
                             <div class="row">
                                 <form action="" method="POST">
@@ -264,7 +267,7 @@
                         
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th class="font-weight-bold text-dark">Kode</th>
@@ -281,7 +284,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">{{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                         </tr>
                                         <?php $no++ ;?>
@@ -388,6 +391,32 @@
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 
+    <!-- Datatable -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    @if ($laporan == TRUE)
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    text: 'Cetak',
+                    filename: 'Laporan_Pengajuan_Kas_Kecil',
+                    exportOptions: {
+                        columns: ':visible',
+                    }
+                }],
+                stateSave: true,
+            });
+        });
+    </script>
+    @endif
 </body>
 
 </html>
