@@ -398,7 +398,8 @@
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     @if ($laporan == TRUE)
     <script>
         $(document).ready(function() {
@@ -409,7 +410,15 @@
                     text: 'Cetak',
                     filename: 'Laporan_Pengajuan_Kas_Kecil',
                     exportOptions: {
-                        columns: ':visible',
+                        columns: [0,1,2,4,3],
+                        format: {
+                            body: function(data, row, column, node) {
+                                // Strip $ from salary column to make it numeric
+                                return column == 4 ?
+                                    parseFloat(data.replace(/[^\d\,]/g, '')) :
+                                    data;
+                            }
+                        },
                     }
                 }],
                 stateSave: true,

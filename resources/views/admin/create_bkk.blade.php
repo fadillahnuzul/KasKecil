@@ -24,7 +24,7 @@
     
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-
+    @livewireStyles
 </head>
 
 <body id="page-top">
@@ -170,74 +170,6 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <livewire:add-bkk></livewire:add-bkk>
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        @include('sweetalert::alert')
-                        </div>
-                        <div class="card-body" width="100%">
-                            <div class="table-responsive">
-                            <form action="/save_bkk" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="company">Company :</label>
-                                    <select name="company" id="company" class="form-control">
-                                        <option value="">--</option>
-                                        @foreach ($Company as $Company)
-                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="project">Project :</label>
-                                    <select name="project" id="project" class="form-control">
-                                        <option value="">--</option>
-                                        @foreach ($Project as $Project)
-                                            <option value="{{$Project->project_id}}">{{$Project->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="rekening">Rekening :</label>
-                                    <select name="rekening" id="rekening" class="form-control">
-                                     <option value="">--</option>
-                                        @foreach ($Rekening as $Rekening)
-                                            <option value="{{$Rekening->bank_id}}">{{$Rekening->name}} {{$Rekening->rekening}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="coa">COA :</label>
-                                    <select name="coa" id="coa" class="form-control" required>
-                                        <option value="">--</option>
-                                        @foreach ($Coa as $Coa)
-                                            <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="partner">Partner :</label>
-                                    <select name="partner" id="partner" class="form-control" required>
-                                        <option value="">--</option>
-                                        @foreach ($Partner as $Partner)
-                                            <option value="{{$Partner->name}}">{{$Partner->name}} ({{$Partner->contact_person}})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tanggal">Tanggal BKK :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal BKK" id="tanggal" name="tanggal" required>
-                                </div>
-                                <!-- <div class="form-group">
-                                    <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
-                                </div> -->
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
                 <!-- /.container-fluid -->
 
@@ -284,34 +216,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Done Modal -->
-    <div class="modal fade" id="PembebananModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Form Pembebanan</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                <form action="/input_pembebanan" method="POST">
-                    @csrf
-                        <div class="form-group">
-                            <label for="pembebanan">Input Pembebanan :</label>
-                            <input type="text" class="form-control" placeholder="Input nama pembebanan" id="pembebanan" name="pembebanan" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div> 
-                        </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -357,7 +261,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
+    @livewireScripts
 </body>
 
 </html>

@@ -554,23 +554,32 @@
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     @if ($button_kas == FALSE)
     <script>
+        var company = {!! json_encode($selectedCompany) !!};
+        if (company == null) {
+            company_name = 'PT ABDAEL NUSA'
+        } else {
+            company_name = company.name
+        }
         $(document).ready(function() {
             $('#myTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [{
-                    extend: 'excel',
+                    extend: 'excelHtml5',
                     text: 'Cetak',
+                    messageTop: company_name,
+                    title: 'Laporan Kas Keluar',
                     filename: 'Laporan_Kas_Kecil',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                        columns: [1, 3, 5, 6, 7, 8, 2],
                         format: {
                             body: function(data, row, column, node) {
                                 // Strip $ from salary column to make it numeric
-                                return column === 2 ?
-                                    parseFloat(data.replace(/[^\d\,]/, '')) :
+                                return column == 6 ?
+                                    parseFloat(data.replace(/[^\d\,]/g, '')) :
                                     data;
                             }
                         },
@@ -585,20 +594,28 @@
     </script>
     @elseif ($button_kas == TRUE)
     <script>
+        var company = {!! json_encode($selectedCompany) !!};
+        if (company == null) {
+            company_name = 'PT ABDAEL NUSA'
+        } else {
+            company_name = company.name
+        }
         $(document).ready(function() {
             $('#myTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [{
-                    extend: 'excel',
+                    extend: 'excelHtml5',
                     text: 'Cetak',
+                    messageTop: company_name,
+                    title: 'Laporan Kas Keluar',
                     filename: 'Laporan_Kas_Kecil',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                        columns: [1, 2, 4, 6, 7, 8, 3],
                         format: {
                             body: function(data, row, column, node) {
                                 // Strip $ from salary column to make it numeric
-                                return column === 3 ?
-                                    parseFloat(data.replace(/[^\d\,]/, '')) :
+                                return column == 6 ?
+                                    parseFloat(data.replace(/[^\d\,]/g, '')) :
                                     data;
                             }
                         },

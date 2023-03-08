@@ -204,7 +204,7 @@
                         
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/simpan_pengajuan" method="POST">
+                            <form id="formPengajuan" action="/simpan_pengajuan" method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <label for="tanggal">Tanggal Pengajuan :</label>
@@ -214,37 +214,11 @@
                                     <label for="deskripsi">Keterangan :</label>
                                     <input type="text" class="form-control" placeholder="Keterangan Pengajuan" id="deskripsi" name="deskripsi" required>
                                 </div>
-                                <!-- <div class="form-group">
-                                    <label for="company">Company :</label>
-                                    <select name="company" id="company" class="form-control" required>
-                                        @foreach ($Company as $Company)
-                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-	                                <label for="title">Project :</label>
-	                                <select name="project" id="project" class="form-control">
-                                        @foreach ($Project as $Project)
-                                            <option value="{{$Project->project_id}}">{{$Project->name}}</option>
-                                        @endforeach
-                                    </select>
-	                            </div> -->
-                                <!-- @if (Auth::user()->role_id == 1)
-                                <div class="form-group">
-                                    <label for="tunai">Pengajuan Tunai :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan Bentuk Tunai" id="tunai" name="tunai" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="bank">Pengajuan Bank :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Pengajuan Bentuk Saldo Bank" id="bank" name="bank" required>
-                                </div>
-                                @endif -->
                                 <div class="form-group">
                                     <label for="jumlah">Nominal :</label>
                                     <input type="text" class="form-control" placeholder="Nominal Pengajuan" name="jumlah" id="jumlah" required >
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             </div>
                         </div>
@@ -311,34 +285,26 @@
     <!-- Page level plugins -->
     <script src="{{asset('style/vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //Disabled form submit
+            $(function() {
+                $("#btnSubmit").click(function() {
+                    $('#formPengajuan').submit();
+                    $("#btnSubmit").attr("disabled", true);
+                });
+            });
+            // $('formKas').submit(function() {
+            //     $(this).children('input[type=submit]').prop('disabled', true);
+            // });
+            // $("#btnSubmit").attr("disabled", false);
+        });
+    </script>
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-    <!-- <script type="text/javascript">
-        var jumlah_tunai = document.getElementById('tunai');
-            jumlah_tunai.addEventListener('keyup', function(e) {
-                jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
-            });
-        var jumlah_bank = document.getElementById('bank');
-            jumlah_bank.addEventListener('keyup', function(e) {
-                jumlah_bank.value = currencyIdr(this.value, 'Rp ');
-            });
-
-        function currencyIdr(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ?'.':'';
-                rupiah += separator + ribuan.join('.');
-            }
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-            }
-    </script> -->
+    
     <script type="text/javascript">
         var jumlah = document.getElementById('jumlah');
             jumlah.addEventListener('keyup', function(e) {
@@ -360,30 +326,6 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
             }
     </script>
-
-    <!-- Dependent dropdown project
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('select[name="company"]').on('change', function() {
-            var stateID = $(this).val();
-            if(stateID) {
-                $.ajax({
-                    url: '/project/'+stateID,
-                    type: "GET",
-                    dataType: "json",
-                    success:function(data) {                      
-                        $('select[name="project"]').empty();
-                        $.each(data, function(key, value) {
-                        $('select[name="project"]').append('<option value="'+ key +'">'+ value +'</option>');
-                        });
-                    }
-                });
-            }else{
-                $('select[name="project"]').empty();
-            }
-        });
-    });
-</script> -->
 </body>
 
 </html>

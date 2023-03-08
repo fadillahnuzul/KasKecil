@@ -99,6 +99,6 @@ class Pengeluaran extends Model
 
     public function scopeSearchByCoa($query, string|null $coa)
     {
-        return ($coa) ? $query->where('coa_id', $coa) : $query;
+        return ($coa) ? $query->where('coa', $coa) : $query;
     }
 }
