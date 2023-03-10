@@ -10,7 +10,18 @@ class Pengeluaran extends Model
 {
     use HasFactory;
     protected $table = 'pettycash_pengeluaran';
-    protected $fillable = ['status'];
+    protected $fillable = [
+        'tanggal',
+        'deskripsi',
+        'jumlah',
+        'divisi_id',
+        'status',
+        'coa',
+        'pic',
+        'pembebanan',
+        'tujuan',
+        'user_id',
+    ];
 
     public function pengajuan()
     {
@@ -57,11 +68,13 @@ class Pengeluaran extends Model
         return $query->whereIn('status', [4]);
     }
 
-    public function scopeStatusKlaimAndSetBKK($query) {
-        return $query->whereIn('status', [7,8]);
+    public function scopeStatusKlaimAndSetBKK($query)
+    {
+        return $query->whereIn('status', [7, 8]);
     }
 
-    public function scopeStatusSetBKK($query) {
+    public function scopeStatusSetBKK($query)
+    {
         return $query->whereIn('status', [8]);
     }
 
@@ -74,7 +87,7 @@ class Pengeluaran extends Model
     {
         $start = ($start) ? $start : Carbon::now()->firstOfYear()->format('Y-m-d');
         $end = ($end) ? $end : Carbon::now()->endOfYear()->format('Y-m-d');
-        return $query->whereBetween('tanggal', [$start,$end]);
+        return $query->whereBetween('tanggal', [$start, $end]);
     }
 
     public function scopeSearchByCompany($query, string|null $company)
@@ -100,5 +113,10 @@ class Pengeluaran extends Model
     public function scopeSearchByCoa($query, string|null $coa)
     {
         return ($coa) ? $query->where('coa', $coa) : $query;
+    }
+
+    public function scopeNotDisabled($query)
+    {
+        return $query->where('status', '!=', 6);
     }
 }
