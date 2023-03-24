@@ -11,6 +11,7 @@ class Coa extends Model
 
     protected $table = 'coa';
     protected $primaryKey = 'coa_id';
+    protected $fillable = ['code','name'];
 
     public function pengajuan()
     {
@@ -20,6 +21,11 @@ class Coa extends Model
     public function pengeluaran()
     {
         return $this->hasMany(Pengeluaran::class, 'coa', 'coa_id');
+    }
+
+    public static function getCoa($id_coa)
+    {
+        return self::find($id_coa);
     }
 
 }

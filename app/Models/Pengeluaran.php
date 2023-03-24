@@ -22,6 +22,9 @@ class Pengeluaran extends Model
         'tujuan',
         'user_id',
     ];
+    protected $dates = [
+        'tanggal'
+    ];
 
     public function pengajuan()
     {
@@ -81,6 +84,11 @@ class Pengeluaran extends Model
     public function scopeGetUserId($query)
     {
         return $query->select('user_id')->groupBy('user_id');
+    }
+
+    public function scopeGetCoaId($query)
+    {
+        return $query->select('coa')->groupBy('coa');
     }
 
     public function scopeSearchByDateRange($query, string|null $start = null, string|null $end = null)
