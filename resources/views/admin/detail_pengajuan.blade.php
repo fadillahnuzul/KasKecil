@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +10,7 @@
     <meta name="author" content="">
 
     <title>Detail Pengeluaran</title>
-     <!-- Checkbox -->
+    <!-- Checkbox -->
     <!-- <link type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" /> -->
     <!-- Custom fonts for this template -->
@@ -19,9 +18,7 @@
     <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
 
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
@@ -108,9 +105,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <div class="d-sm-flex align-items-center justify-content-between">
+                    <div class="d-sm-flex align-items-center justify-content-between">
                         <h1 class="h3 mb-2 text-gray-800">Detail Pengeluaran</h1>
-                </div>
+                    </div>
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -137,18 +134,14 @@
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -161,15 +154,12 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{asset('style/img/undraw_profile.svg')}}">
+                                <img class="img-profile rounded-circle" src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -191,7 +181,7 @@
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div> -->
                     <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -224,7 +214,7 @@
                                 </div>
                             </div>
                         </div>
-                
+
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100">
@@ -254,19 +244,19 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item" href="/detail_divisi/{{$pengajuan->id}}">All</a>
                                     @foreach ($company as $company)
-                                        <a class="dropdown-item" href="/kas_company/{{$company->project_company_id}}">{{$company->name}}</a>
+                                    <a class="dropdown-item" href="/kas_company/{{$company->project_company_id}}">{{$company->name}}</a>
                                     @endforeach
                                 </div>
                             </div>
-                        <!-- End Dropdown Company -->
-                        @if ($companySelected)
-                                <button type="button" class="btn btn-outline-primary" style="margin-left:10px" disabled>{{$companySelected->name}}</button>
-                        @endif
-                       
+                            <!-- End Dropdown Company -->
+                            @if ($companySelected)
+                            <button type="button" class="btn btn-outline-primary" style="margin-left:10px" disabled>{{$companySelected->name}}</button>
+                            @endif
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th><input type="checkbox" id="head-cb"></th>
@@ -276,6 +266,7 @@
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
@@ -283,39 +274,43 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php $no=1;?>
+                                        <?php $no = 1; ?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                        <td><input type="checkbox"  class="cb-child" value="{{$row->id}}"></td>
-                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                        <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                        <td class="font-weight-bold text-dark">@if ($row->coa)
+                                            <td><input type="checkbox" class="cb-child" value="{{$row->id}}"></td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
+                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
                                                 {{$row->COA->name}}
-                                            @endif
+                                                @endif
                                             </td>
-                                        <td class="font-weight-bold text-dark">@if ($row->pembebanan)
+                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
-                                            @endif
-                                        </td>
-                                        <td class="font-weight-bold text-dark">{{$row->pic}}</td>
-                                        <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                        <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
-                                        <td class="font-weight-bold text-dark">
-                                        <!-- @if ($row->status == 4)
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark">@if ($row->project_id)
+                                                {{$row->Project->name}}
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark">{{$row->pic}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark">
+                                                <!-- @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Klaim</a> 
                                         @endif -->
-                                        @if ($row->status == 5)
-                                            <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>  
-                                        @endif 
-                                        <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
-                                        </td>
+                                                @if ($row->status == 5)
+                                                <a href="/edit_done/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
+                                                <a onclick="return confirm('Apakah yakin ingin membatalkan?')" href="/batal_done/{{$row->id}}" class="btn btn-warning btn-sm">Batal</a>
+                                                @endif
+                                                <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/2/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
+                                            </td>
                                         </tr>
-                                        @endforeach 
-                                        <?php $no++ ;?>
+                                        @endforeach
+                                        <?php $no++; ?>
                                     </tbody>
                                 </table>
                                 <!-- <button id="button-set-bkk" type="button" disabled onclick="done()" class="btn btn-sm btn-success">Selesai</button> -->
@@ -353,8 +348,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -373,8 +367,7 @@
     </div>
 
     <!-- Done Modal -->
-    <div class="modal fade" id="DoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="DoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -384,24 +377,26 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                <form action="/kas_selesai" method="POST">
-                    @csrf
-                    <input type="hidden" name="modal_id" id="modal_id">
+                    <form action="/kas_selesai" method="POST">
+                        @csrf
+                        <input type="hidden" name="modal_id" id="modal_id">
                         <div class="form-group">
                             <label for="tanggal">Tanggal Serah Nota :</label>
-                                <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal" name="tanggal" required>
+                            <input type="date" class="form-control" placeholder="Tanggal Penyerahan Nota" id="tanggal" name="tanggal" required>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                        </div> 
-                        </form>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <script>function set_modal_id(id) {
-        document.getElementById("modal_id").value = id;
-    } </script>
+    <script>
+        function set_modal_id(id) {
+            document.getElementById("modal_id").value = id;
+        }
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
@@ -425,46 +420,51 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable({
-        stateSave: true,
-        order: [[8, 'asc']],
-    });
-    });
-    
-    $("#head-cb").on('click', function(){
-        var isChecked = $("#head-cb").prop('checked')
-        $(".cb-child").prop('checked',isChecked)
-        $("#button-klaim").prop('disabled',!isChecked)
-    })
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                stateSave: true,
+                order: [
+                    [8, 'asc']
+                ],
+            });
+        });
 
-    $("#myTable tbody").on('click','.cb-child',function(){
-        if($(this).prop('checked')!=true){
-            $("#head-cb").prop('checked',false)
-        }
-
-        let semua_checkbox = $("#myTable tbody .cb-child:checked")
-        let button_bkk = (semua_checkbox.length > 0)
-        $("#button-klaim").prop('disabled',!button_bkk)
-    })
-
-    function klaim() {
-        let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
-        let semua_id = []
-        $.each(checkbox_terpilih, function(index,elm){
-            semua_id.push(checkbox_terpilih[index].value)
+        $("#head-cb").on('click', function() {
+            var isChecked = $("#head-cb").prop('checked')
+            $(".cb-child").prop('checked', isChecked)
+            $("#button-klaim").prop('disabled', !isChecked)
         })
-        $.ajax({
-            url:"{{url('')}}/done",
-            method:'post',
-            data:{ids:semua_id},
-            success:function(res){
-                table.ajax.reload(null,false)
+
+        $("#myTable tbody").on('click', '.cb-child', function() {
+            if ($(this).prop('checked') != true) {
+                $("#head-cb").prop('checked', false)
             }
-        })
-    }</script>
 
-   <!-- Checkbox
+            let semua_checkbox = $("#myTable tbody .cb-child:checked")
+            let button_bkk = (semua_checkbox.length > 0)
+            $("#button-klaim").prop('disabled', !button_bkk)
+        })
+
+        function klaim() {
+            let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+            let semua_id = []
+            $.each(checkbox_terpilih, function(index, elm) {
+                semua_id.push(checkbox_terpilih[index].value)
+            })
+            $.ajax({
+                url: "{{url('')}}/done",
+                method: 'post',
+                data: {
+                    ids: semua_id
+                },
+                success: function(res) {
+                    table.ajax.reload(null, false)
+                }
+            })
+        }
+    </script>
+
+    <!-- Checkbox
    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>     -->
     <!-- <script type="text/javascript">

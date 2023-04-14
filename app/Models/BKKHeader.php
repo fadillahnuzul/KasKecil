@@ -11,4 +11,16 @@ class BKKHeader extends Model
     protected $connection = 'mysql2';
     protected $table = 'bkk_header';
     public $timestamps = false;
+    protected $fillable = [
+        'bank_id',
+        'name',
+        'tanggal',
+        'partner',
+        'otorisasi',
+        'project_id',
+        'layer_cashflow_id',
+        'created_by',
+        'created_at',
+        'status',
+    ];
 }

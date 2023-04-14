@@ -12,8 +12,8 @@ class Project extends Model
     protected $table = 'project';
     protected $primaryKey = 'project_id';
 
-    public function pengajuan()
+    public function pengeluaran()
     {
-        return $this->hasMany(Pengajuan::class, 'project', 'project_id');
+        return $this->hasMany(Pengeluaran::class, 'project_id', 'project_id');
     }
 }

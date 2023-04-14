@@ -234,6 +234,7 @@ class AdminController extends Controller
             ->searchByCompany($request->company)
             ->searchByStatus($request->status)
             ->searchByUser($request->user)
+            ->searchByProject($request->project)
             ->get();
         $Saldo = $this->hitung_pengajuan();
         $totalKeluar = 0;
@@ -276,6 +277,7 @@ class AdminController extends Controller
             })
             ->searchByCompany($request->company)
             ->searchByUser($request->user)
+            ->searchByProject($request->project)
             ->get();
         $Saldo = $this->hitung_pengajuan();
         $totalKeluar = 0;

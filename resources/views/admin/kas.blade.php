@@ -262,30 +262,27 @@
                                     <form action="" method="POST">
                                         @csrf
                                         <div class="container-fluid">
-                                            <div class="form-group row">
+                                        <div class="form-group row">
                                                 <label for="date" class="col-form-label">Mulai</label>
-                                                <!-- <div class="col-sm"> -->
-                                                    <input type="date" style="margin-left:5px; margin-right:5px;" class="input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                                <!-- </div> -->
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <input type="date" class="datepicker form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                                </div>
                                                 <label for="date" class="col-form-label">Selesai</label>
-                                                <!-- <div class="col-sm"> -->
-                                                    <input type="date" class="input-sm" style="margin-left:5px; margin-right:5px;" id="endDate" value={{$endDate}} name="endDate">
-                                                <!-- </div> -->
-                                                <!-- <div class="col-sm"> -->
-                                                    <select name="status" id="status" style="margin-left:5px; margin-right:5px;">
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <input type="date" class="datepicker form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                                </div>
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="status" id="status">
                                                         @if ($selectedStatus)
                                                         <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
-                                                        @endif
-                                                        @if ($laporan == TRUE)
-                                                        <option value="">All Status</option>
                                                         @endif
                                                         @foreach ($status as $status)
                                                         <option value="{{$status->id}}">{{$status->nama_status}}</option>
                                                         @endforeach
                                                     </select>
-                                                <!-- </div> -->
-                                                <!-- <div class="col-sm"> -->
-                                                    <select name="company" id="company" style="margin-left:5px; margin-right:5px;">
+                                                </div>
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="company" id="company-dropdown">
                                                         @if ($selectedCompany)
                                                         <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
                                                         @endif
@@ -294,9 +291,14 @@
                                                         <option value="{{$company->project_company_id}}">{{$company->name}}</option>
                                                         @endforeach
                                                     </select>
-                                                <!-- </div>
-                                                <div class="col-sm"> -->
-                                                    <select name="user" id="user" style="margin-left:5px; margin-right:5px;">
+                                                </div>
+                                                <!-- <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="project" id="project-dropdown">
+                                                        <option value="">All Project</option>
+                                                    </select>
+                                                </div> -->
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="user" id="user">
                                                         @if ($selectedUser)
                                                         <option selected value="{{$selectedUser->id}}">{{$selectedUser->username}}</option>
                                                         @endif
@@ -305,10 +307,10 @@
                                                         <option value="{{$user->id}}">{{$user->username}}</option>
                                                         @endforeach
                                                     </select>
-                                                <!-- </div>
-                                                <div class="col-sm"> -->
+                                                </div>
+                                                <div class="form-group-row" style="margin-inline: 5px;">
                                                     <button style="margin-left:5px; margin-right:5px;" type="submit" class="btn btn-sm btn-primary">Tampil</button>
-                                                <!-- </div> -->
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -330,6 +332,7 @@
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">Nota Tujuan</th>
                                             <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
@@ -352,6 +355,10 @@
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark">@if ($row->project_id)
+                                                {{$row->Project->name}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->tujuan}}</td>
@@ -479,7 +486,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
+    
     <!-- table js -->
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -555,6 +562,8 @@
             $("#button-set-bkk").prop('disabled', !button_bkk)
         })
 
+        
+
         function setBKK() {
             let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
             let semua_id = []
@@ -591,7 +600,6 @@
             })
         }
     </script>
-
 </body>
 
 </html>

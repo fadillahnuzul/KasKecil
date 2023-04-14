@@ -20,12 +20,11 @@ class BKKController extends Controller
 
     public function store($bkk_collection)
     {
-        $bkk_array_id = [];
-        $bkk_collection = $bkk_collection->toArray();
+        $bkk_detail_array = [];
         foreach($bkk_collection as $bkk_data) {
-            $bkk_id = BKK::insertGetId($bkk_data);
-            array_push($bkk_array_id, $bkk_id);
+            $bkk_detail_data = BKK::create($bkk_data);
+            array_push($bkk_detail_array, $bkk_detail_data);
         }
-        return($bkk_array_id);
+        return($bkk_detail_array);
     }
 }

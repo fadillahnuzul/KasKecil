@@ -320,6 +320,7 @@
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">Nota Tujuan</th>
                                             <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
@@ -342,6 +343,10 @@
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark">@if ($row->project_id)
+                                                {{$row->Project->name}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->tujuan)

@@ -9,7 +9,8 @@ class BKKHeaderController extends Controller
 {
     public function store($bkk_header_data)
     {
-        $bkk_header_id = BKKHeader::insertGetId($bkk_header_data);
-        return($bkk_header_id);
+        $bkk_header = BKKHeader::create($bkk_header_data);
+        $bkk_header_data[0]["id"]=$bkk_header->id;
+        return $bkk_header_data;
     }
 }

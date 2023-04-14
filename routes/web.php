@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
     Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
     Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
+    //Dropdown Project
+    Route::post('fetch_project', [PengeluaranController::class, 'fetchProject']);
 
 //Halaman admin
     Route::match(['GET', 'POST'], '/home_admin', [AdminController::class, 'index']);

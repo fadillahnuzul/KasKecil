@@ -21,7 +21,7 @@
 
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-
+    @livewireStyles
 </head>
 
 <body id="page-top">
@@ -178,30 +178,8 @@
                         </div>
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                                <form id="formKas" action="/simpan_kas" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="tanggal">Tanggal Pengeluaran :</label>
-                                        <input type="date" class="form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="deskripsi">Keterangan :</label>
-                                        <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="kredit">Nominal :</label>
-                                        <input type="text" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="coa">COA :</label>
-                                        <select name="coa" id="coa" class="form-control" required>
-                                            <option value="">--</option>
-                                            @foreach ($Coa as $Coa)
-                                            <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
+                                <livewire:create-kas></livewire:create-kas>
+                                <!-- <div class="form-group">
                                         <label for="company">Company :</label>
                                         <select name="company" id="company" class="form-control">
                                             <option value="">--</option>
@@ -211,15 +189,12 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="tujuan">Dibayarkan kepada (Nota tujuan) :</label>
-                                        <input type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="pic">PIC :</label>
-                                        <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
-                                </form>
+                                        <label for="project">Project :</label>
+                                        <select name="project" id="project" class="form-control">
+                                            <option value="">--</option>
+                                            
+                                        </select>
+                                    </div> -->
                                 <script type="text/javascript">
                                     var jumlah_tunai = document.getElementById('tunai');
                                     jumlah_tunai.addEventListener('keyup', function(e) {
@@ -352,7 +327,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             $("#coa").select2({
@@ -366,12 +341,8 @@
                     $("#btnSubmit").attr("disabled", true);
                 });
             });
-            // $('formKas').submit(function() {
-            //     $(this).children('input[type=submit]').prop('disabled', true);
-            // });
-            // $("#btnSubmit").attr("disabled", false);
         });
-    </script>
+    </script> -->
     <!-- Custom scripts for all pages-->
     <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>
 
@@ -381,7 +352,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
+    @livewireScripts
 </body>
 
 </html>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CreateBKKRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class CreateBKKRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,18 @@ class CreateBKKRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'bkk_header' => 'required|array',
+            'bkk_detail' => 'required|array',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'status'=>"Error has occured",
+            'message'=>"Parameter Error",
+            'data' => $validator->errors(),
+        ], 422));
+        
     }
 }

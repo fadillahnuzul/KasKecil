@@ -2,7 +2,7 @@
     <!-- {{-- Nothing in the world is as soft and yielding as water. --}} -->
     <!-- Filter COA & Tanggal -->
     <div class="row">
-        <div class="col-sm">
+        <div class="form-group-row" style="margin-right: 5px;">
             <select wire:model="selectedCoaId">
                 <option value="">Ketik nama coa</option>
                 @foreach ($coaList as $itemCoa)
@@ -10,9 +10,27 @@
                 @endforeach
             </select>
         </div>
+        <div class="form-group-row" style="margin-right: 5px;">
+            <select wire:model="selectedCompany">
+                <option value="">Input company</option>
+                @foreach ($companyList as $item)
+                <option value="{{$item->project_company_id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group-row" style="margin-right: 5px;">
+            <select wire:model="selectedProject">
+                <option value="">Input project</option>
+                @foreach ($projectList as $item)
+                <option value="{{$item->project_id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>
         <div class="col-md-2" x-data="datepicker()">
-            <input wire:model="startDate"  class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker">
+            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker">
         </div>
         <label for="date" class="col-form-label">Selesai</label>
         <div class="col-md-2" x-data="datepicker2()">
@@ -29,16 +47,24 @@
                 <th scope="col" class="font-weight-bold text-dark">Tanggal</th>
                 <th scope="col" class="font-weight-bold text-dark">Keterangan</th>
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
+                <th scope="col" class="font-weight-bold text-dark">Pembebanan</th>
+                <th scope="col" class="font-weight-bold text-dark">Project</th>
                 <th scope="col" class="font-weight-bold text-dark">Kas Keluar</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($kas as $item)
             <tr>
-                <td><input type="checkbox" value="{{$item->id}}" wire:model="selectedKasId" wire:model="selected"></td>
+                <td><input type="checkbox" value="{{$item->id}}" wire:model="selectedKasId"></td>
                 <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($item->tanggal)->format('d-m-Y')}}</td>
                 <td class="font-weight-bold text-dark">{{$item->deskripsi}}</td>
                 <td class="font-weight-bold text-dark">{{$item->COA->code}} {{$item->COA->name}}</td>
+                <td class="font-weight-bold text-dark">{{$item->Pembebanan->name}}</td>
+                <td class="font-weight-bold text-dark">
+                    @if ($item->project_id)
+                    {{$item->Project->name}}
+                    @endif
+                </td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($item->jumlah,2,",", ".")}}</td>
             </tr>
             @endforeach
@@ -52,6 +78,11 @@
             {{ session('message_coa') }}
         </div>
         @endif
+        @if (session()->has('message_budget'))
+        <div class="alert alert-danger">
+            {{ session('message_budget') }}
+        </div>
+        @endif
     </div>
     <!-- End Tabel List Transaksi -->
 
@@ -59,7 +90,7 @@
     <table class="table">
         <thead>
             <tr>
-                <!-- <th></th> -->
+                <th></th>
                 <th scope="col" class="font-weight-bold text-dark">Tanggal</th>
                 <th scope="col" class="font-weight-bold text-dark">Keterangan</th>
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
@@ -73,10 +104,10 @@
             @foreach ($selectedKas as $item => $list_kas)
             @foreach ($list_kas as $row)
             <tr>
-                <!-- <td><button>Hapus</button></td> -->
+                <td><i class="fas fa-trash" wire:click="deleteKas({{$row['id']}})"></i></td>
                 <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($row['tanggal'])->format('d-m-Y')}}</td>
                 <td class="font-weight-bold text-dark">{{$row['deskripsi']}}</td>
-                <td class="font-weight-bold text-dark">{{App\Models\Coa::getCoa($row['coa'])->code}} {{App\Models\Coa::getCoa($row['coa'])->name}}</td>
+                <td class="font-weight-bold text-dark">{{App\Models\Coa::getCoa($item)->code}} {{App\Models\Coa::getCoa($item)->name}}</td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($row['jumlah'],2,",", ".")}}</td>
                 <td></td>
             </tr>
@@ -86,10 +117,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 @if($total['id'] == $list_kas[0]['id'])
                 <td class="font-weight-bold text-dark"><strong>Subtotal</strong></td>
                 <td class="font-weight-bold text-dark" style="text-align:right"><strong>Rp. {{number_format($total['total_kas'],2,",", ".")}}</strong></td>
-                @else 
+                @else
                 <td></td>
                 <td></td>
                 @endif
@@ -110,23 +142,7 @@
 
     <!-- Form Input -->
     <div class="row">
-        <div class="col-sm">
-            <select wire:model="selectedCompany">
-                <option value="">Input company</option>
-                @foreach ($companyList as $item)
-                <option value="{{$item->project_company_id}}">{{$item->name}}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-sm">
-            <select wire:model="selectedProject">
-                <option value="">Input project</option>
-                @foreach ($projectList as $item)
-                <option value="{{$item->project_id}}">{{$item->name}}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-sm">
+        <div class="form-group-row" style="margin-right: 5px;">
             <select wire:model="selectedRekening">
                 <option value="">Input rekening</option>
                 @foreach ($rekeningList as $item)
@@ -134,7 +150,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-sm">
+        <div class="form-group-row" style="margin-right: 5px;">
             <select wire:model="selectedPartner">
                 <option value="">Input partner</option>
                 @foreach ($partnerList as $item)
@@ -146,9 +162,9 @@
         <div class="col-sm">
             <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal">
         </div>
-    </div>
-    <div class="col-sm">
-        <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
+        <div class="col-sm">
+            <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
+        </div>
     </div>
     <div>
         @if (session()->has('message_save'))
@@ -163,6 +179,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    flatpickr(".datepicker",{mode:"single"});
+    flatpickr(".datepicker", {
+        mode: "single"
+    });
 </script>
 @endonce

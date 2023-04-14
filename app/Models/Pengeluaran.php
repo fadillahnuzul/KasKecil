@@ -21,6 +21,8 @@ class Pengeluaran extends Model
         'pembebanan',
         'tujuan',
         'user_id',
+        'in_budget',
+        'project_id',
     ];
     protected $dates = [
         'tanggal'
@@ -51,9 +53,14 @@ class Pengeluaran extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function Coa()
+    public function coa()
     {
         return $this->belongsTo(Coa::class, 'coa', 'coa_id');
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id', 'project_id');
     }
 
     public function scopeBukanPengembalianSaldo($query)
@@ -121,6 +128,11 @@ class Pengeluaran extends Model
     public function scopeSearchByCoa($query, string|null $coa)
     {
         return ($coa) ? $query->where('coa', $coa) : $query;
+    }
+
+    public function scopeSearchByProject($query, string|null $project)
+    {
+        return ($project) ? $query->where('project_id', $project) : $query;
     }
 
     public function scopeNotDisabled($query)

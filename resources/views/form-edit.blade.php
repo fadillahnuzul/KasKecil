@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,17 +13,15 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Custom fonts for this template -->
     <link href="{{asset('style/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{asset('style/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
-    
+
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-
+    @livewireStyles
 </head>
 
 <body id="page-top">
@@ -46,9 +43,9 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-             <!-- Nav Item - Dashboard -->
-             @if (Auth::user()->kk_access==1)
-             <li class="nav-item">
+            <!-- Nav Item - Dashboard -->
+            @if (Auth::user()->kk_access==1)
+            <li class="nav-item">
                 <a class="nav-link" href="/home_admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -83,9 +80,9 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
-             @endif
-             @if (Auth::user()->kk_access!=1)
-             <li class="nav-item">
+            @endif
+            @if (Auth::user()->kk_access!=1)
+            <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -131,9 +128,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <div class="d-sm-flex align-items-center justify-content-between">
+                    <div class="d-sm-flex align-items-center justify-content-between">
                         <h1 class="h3 mb-2 text-gray-800">Form Edit Kas</h1>
-                </div>
+                    </div>
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -146,15 +143,12 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->username}}</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{asset('style/img/undraw_profile.svg')}}">
+                                <img class="img-profile rounded-circle" src="{{asset('style/img/undraw_profile.svg')}}">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -173,86 +167,36 @@
                     <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800">Form Edit Kas</h1>
                     </div> -->
-                    
+
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                         </div>
-                    
+
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
-                            <form action="/kas_update/{{$kas->id}}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="form-group">
-                                    <label for="tanggal">Tanggal :</label>
-                                    <input type="date" class="form-control" placeholder="Tanggal Kas" id="tanggal" name="tanggal" value="{{$kas->tanggal}}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="deskripsi">Keterangan :</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Kas" id="deskripsi" name="deskripsi" value="{{$kas->deskripsi}}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="jumlah">Kas Keluar :</label>
-                                    <input type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" value="Rp. {{substr($kas->jumlah,0,-3)}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="coa">COA :</label>
-                                    <select name="coa" id="coa" class="form-control">
-                                        @if ($kas->coa)
-                                        <option value="{{$kas->coa}}">{{$kas->COA->name}}</option>
-                                        @else
-                                        <option value="">--</option>
-                                        @endif
-                                        @foreach ($Coa as $Coa)
-                                            <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="company">Company :</label>
-                                    <select name="company" id="company" class="form-control">
-                                        @if ($kas->pembebanan)
-                                        <option value="{{$kas->pembebanan}}">{{$kas->Pembebanan->name}}</option>
-                                        @else
-                                        <option value="">--</option>
-                                        @endif
-                                        @foreach ($Company as $Company)
-                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
-                                    <input type="text" class="form-control" placeholder="Keterangan Pengeluaran" id="tujuan" name="tujuan" value="{{$kas->tujuan}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pic">PIC :</label>
-                                    <input type="text" class="form-control" placeholder="PIC" id="pic" name="pic" value="{{$kas->pic}}">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Update</button>
-                            </form>
-                            <script type="text/javascript">
-                                var jumlah_keluar = document.getElementById('jumlah');
+                                <livewire:edit-kas :id_kas="$id_kas"></livewire:edit-kas>
+                                <!-- <script type="text/javascript">
+                                    var jumlah_keluar = document.getElementById('jumlah');
                                     jumlah_keluar.addEventListener('keyup', function(e) {
                                         jumlah_keluar.value = currencyIdr(this.value, 'Rp ');
                                     });
 
-                                function currencyIdr(angka, prefix) {
-                                    var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                                    split = number_string.split(','),
-                                    sisa = split[0].length % 3,
-                                    rupiah = split[0].substr(0, sisa),
-                                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                                    function currencyIdr(angka, prefix) {
+                                        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                            split = number_string.split(','),
+                                            sisa = split[0].length % 3,
+                                            rupiah = split[0].substr(0, sisa),
+                                            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-                                    if (ribuan) {
-                                        separator = sisa ?'.':'';
-                                        rupiah += separator + ribuan.join('.');
+                                        if (ribuan) {
+                                            separator = sisa ? '.' : '';
+                                            rupiah += separator + ribuan.join('.');
+                                        }
+                                        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                        return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
                                     }
-                                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                                    return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-                                }
-                            </script>
+                                </script> -->
                             </div>
                         </div>
                     </div>
@@ -285,8 +229,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -310,13 +253,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    <!-- <script>
         $(document).ready(function(){
             $("#coa").select2({
                 placeholder: 'Masukkan kode atau nama COA',
             });
         });
-    </script>
+    </script> -->
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
@@ -330,7 +273,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-
+    @livewireScripts
 </body>
 
 </html>

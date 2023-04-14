@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\ApiBkkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/klaim', [AdminController::class, 'klaim']);
 Route::get('/send_data_kas', [AdminController::class, 'sendDataKas']);
+Route::post('create-bkk', [ApiBkkController::class, 'store']);
