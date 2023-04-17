@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class BKK extends Model
 {
     use HasFactory;
-    protected $connection = 'mysql2';
     protected $table = 'bkk';
     public $timestamps = false;
     protected $fillable = [

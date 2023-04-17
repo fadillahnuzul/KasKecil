@@ -61,7 +61,7 @@ class AddBkk extends Component
         $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
             ->searchByDateRange($this->startDate, $this->endDate)
             ->searchByCompany($this->selectedCompany)
-            ->searchByProject($this->selectedProject)
+            // ->searchByProject($this->selectedProject)
             ->paginate(10);
 
         return view('livewire.add-bkk', ['kas' => $kas, 'projectList' => $projectList, 'rekeningList' => $rekeningList]);
