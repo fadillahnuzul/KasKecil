@@ -13,12 +13,12 @@ class CekBudgetService
 {
     public function getBudget($company_id, $coa_id, $date)
     {
-        // if (env("BUDGET_DUMMY_DATA") == true) {
-        //     return [[
-        //         "budgetbulan" => 999999999999,
-        //         "budgettahun" => 999999999999,
-        //     ]];
-        // }
+        if (env("BUDGET_DUMMY_DATA") == true) {
+            return [[
+                "budgetbulan" => 999999999999,
+                "budgettahun" => 999999999999,
+            ]];
+        }
 
         $client = new Client();
         $response = $client->request('POST', 'http://172.16.1.253:8075/cashbon/apibudget/getbudget', [
