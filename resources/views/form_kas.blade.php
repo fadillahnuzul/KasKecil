@@ -80,6 +80,11 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create_bkk">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Buat BKK</span></a>
+            </li>
             @endif
             @if (Auth::user()->kk_access=='2')
             <li class="nav-item">

@@ -11,26 +11,33 @@ use GuzzleHttp\Client;
  */
 class CekBudgetService
 {
-    public function getBudget($project_id, $coa_id, $date)
+    public function getBudget($company_id, $coa_id, $date)
     {
+        // if (env("BUDGET_DUMMY_DATA") == true) {
+        //     return [[
+        //         "budgetbulan" => 999999999999,
+        //         "budgettahun" => 999999999999,
+        //     ]];
+        // }
+
         $client = new Client();
         $response = $client->request('POST', 'http://172.16.1.253:8075/cashbon/apibudget/getbudget', [
             'form_params' => [
-                'project' => '13',
-                'coa' => '1391',
-                'date' => '2023-04-28',
+                'company' => $company_id,
+                'coa' => $coa_id,
+                'date' => $date,
             ]
         ]);
+
         $statusCode = $response->getStatusCode();
         $body = $response->getBody()->getContents();
-
         $data = json_decode($body, true);
         return $data['data'];
     }
 
     public function isInBudget($budgetCoaBulan, $budgetCoaTahun, $budgetBKK)
     {
-        if (($budgetCoaBulan > $budgetBKK) OR ($budgetCoaTahun > $budgetBKK)) {
+        if (($budgetCoaBulan > $budgetBKK) or ($budgetCoaTahun > $budgetBKK)) {
             return true;
         } else {
             return false;

@@ -83,6 +83,11 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create_bkk">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Buat BKK</span></a>
+            </li>
              @endif
              @if (Auth::user()->kk_access=='2')
              <li class="nav-item">
@@ -109,6 +114,11 @@
                 <a class="nav-link" href="/laporan_kas_keluar">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create_bkk">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Buat BKK</span></a>
             </li>
             @endif
 
@@ -169,6 +179,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    @include('sweetalert::alert')
                     <livewire:add-bkk></livewire:add-bkk>
                 </div>
                 <!-- /.container-fluid -->

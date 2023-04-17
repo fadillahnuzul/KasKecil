@@ -57,7 +57,11 @@
             <tr>
                 <td><input type="checkbox" value="{{$item->id}}" wire:model="selectedKasId"></td>
                 <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($item->tanggal)->format('d-m-Y')}}</td>
-                <td class="font-weight-bold text-dark">{{$item->deskripsi}}</td>
+                <td class="font-weight-bold text-dark">{{$item->deskripsi}}
+                    @if($item->in_budget==1)
+                    <span class="badge bg-danger text-white">Overbudget</span>
+                    @endif
+                </td>
                 <td class="font-weight-bold text-dark">{{$item->COA->code}} {{$item->COA->name}}</td>
                 <td class="font-weight-bold text-dark">{{$item->Pembebanan->name}}</td>
                 <td class="font-weight-bold text-dark">
@@ -71,6 +75,11 @@
         </tbody>
     </table>
     {{$kas->links()}}
+    @if (session()->has('message_overbudget'))
+    <div class="alert alert-danger">
+        {{ session('message_overbudget') }}
+    </div>
+    @endif
     <button style="float:right;" class="btn-sm btn-primary" wire:click="getSelectedKas">Add Transaction</button>
     <div>
         @if (session()->has('message_coa'))
@@ -100,13 +109,16 @@
         </thead>
         <tbody>
             @if ($selectedKas)
-            {{$no=0;}}
             @foreach ($selectedKas as $item => $list_kas)
             @foreach ($list_kas as $row)
             <tr>
                 <td><i class="fas fa-trash" wire:click="deleteKas({{$row['id']}})"></i></td>
                 <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($row['tanggal'])->format('d-m-Y')}}</td>
-                <td class="font-weight-bold text-dark">{{$row['deskripsi']}}</td>
+                <td class="font-weight-bold text-dark">{{$row['deskripsi']}}
+                    @if($row['in_budget']==1)
+                    <span class="badge bg-danger text-white">Overbudget</span>
+                    @endif
+                </td>
                 <td class="font-weight-bold text-dark">{{App\Models\Coa::getCoa($item)->code}} {{App\Models\Coa::getCoa($item)->name}}</td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($row['jumlah'],2,",", ".")}}</td>
                 <td></td>

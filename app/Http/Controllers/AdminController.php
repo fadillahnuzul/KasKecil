@@ -375,7 +375,7 @@ class AdminController extends Controller
     {
         Pengeluaran::with('User', 'pengajuan')->whereIn('id', $request->ids)->update(['status' => '7']);
 
-        return response()->json(true);
+        return response()->json(['message' => "Kas berhasil diklaim"]);
     }
 
 
@@ -530,7 +530,7 @@ class AdminController extends Controller
     {
         $pengeluaran = Pengeluaran::with('User')->whereIn('id', $request->ids)->update(['status' => '8', 'tanggal_set_bkk' => Carbon::now()]);
 
-        return response()->json(true);
+        return response()->json(['message' => "Kas Diset BKK"]);
     }
 
     public function done_pengajuan($id)

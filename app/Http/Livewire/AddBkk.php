@@ -70,6 +70,13 @@ class AddBkk extends Component
     public function getSelectedKas()
     {
         $this->selectedKas = Pengeluaran::with('coa')->whereIn('id', $this->selectedKasId)->get();
+        foreach($this->selectedKas as $item) {
+            if ($item->in_budget==1) {
+                $this->selectedKas = $this->selectedKas->where('in_budget','!=',1);
+                session()->flash('message_overbudget', 'Kas overbudget tidak ditambahkan');
+            }
+        }
+        
         $this->totalKas = $this->selectedKas->sum('jumlah');
         $this->selectedKas = $this->selectedKas->sortBy('coa')->groupBy('coa')->toBase();
         $statusCoa = $this->cekJumlahCoa();
@@ -83,7 +90,7 @@ class AddBkk extends Component
     {
         foreach ($this->selectedKas as $key => $value) {
             $budget = new CekBudgetService;
-            $budgetCOA = $budget->getBudget($this->selectedProject, $key, $this->tanggalBkk);
+            $budgetCOA = $budget->getBudget($this->selectedCompany, $key, $this->tanggalBkk);
             $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], collect($value)->sum('jumlah'));
             if ($isInBudget == false) {
                 session()->flash('message_budget', 'Overbudget COA');
@@ -164,8 +171,8 @@ class AddBkk extends Component
                 ]);
             });
             //save
-            list($bkk_header, $bkk_detail) = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
-            collect($bkk_detail)->map(function ($item) {
+            $bkk = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
+            collect($bkk["bkk_detail"])->map(function ($item) {
                 Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id]);
             });
             session()->flash('message_save', 'BKK berhasil dibuat');

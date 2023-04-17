@@ -82,6 +82,11 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan Kas Keluar</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create_bkk">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Buat BKK</span></a>
+            </li>
             @else
             <li class="nav-item">
                 <a class="nav-link" href="{{url('/home')}}">
@@ -335,7 +340,11 @@
                                             <td><input type="checkbox" class="cb-child" value="{{$row->id}}"></td>
                                             @endif
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}
+                                                @if($row->in_budget==1)
+                                                <span class="badge bg-danger text-white">Overbudget</span>
+                                                @endif
+                                            </td>
                                             <td class="font-weight-bold text-dark">{{number_format($row->jumlah,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} {{$row->COA->name}}
@@ -663,9 +672,11 @@
                     ids: semua_id
                 },
                 success: function(res) {
+                    alert(res.message)
                     table.ajax.reload(null, false)
                 }
             })
+            location.reload()
         }
     </script>
     @endif

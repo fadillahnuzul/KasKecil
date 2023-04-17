@@ -218,7 +218,7 @@ class PengeluaranController extends Controller
         }
         Pengajuan::find($request->session()->get('key'))->update(['status' => '4']);
 
-        return response()->json(true);
+        return response()->json(['message'=>"Kas berhasil diklaim"]);
     }
 
     // public function filter(Request $request)
