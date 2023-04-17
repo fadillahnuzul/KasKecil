@@ -134,7 +134,6 @@ class AddBkk extends Component
     {
         $statusCoa = $this->cekJumlahCoa();
         $budgetCOA = $this->cekBudget();
-
         if ($statusCoa && $budgetCOA) {
             //data bkk header
             $bkk_header_data = [
@@ -176,6 +175,8 @@ class AddBkk extends Component
                 Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id]);
             });
             session()->flash('message_save', 'BKK berhasil dibuat');
+        } else {
+            session()->flash('message_not_save', 'BKK gagal dibuat');
         }
         $this->render();
     }

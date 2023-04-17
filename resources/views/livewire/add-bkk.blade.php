@@ -3,7 +3,7 @@
     <!-- Filter COA & Tanggal -->
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedCoaId">
+            <select wire:model="selectedCoaId" required>
                 <option value="">Ketik nama coa</option>
                 @foreach ($coaList as $itemCoa)
                 <option value="{{$itemCoa->coa_id}}">{{$itemCoa->name}} ({{$itemCoa->code}})</option>
@@ -11,7 +11,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedCompany">
+            <select wire:model="selectedCompany" required>
                 <option value="">Input company</option>
                 @foreach ($companyList as $item)
                 <option value="{{$item->project_company_id}}">{{$item->name}}</option>
@@ -19,7 +19,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedProject">
+            <select wire:model="selectedProject" required>
                 <option value="">Input project</option>
                 @foreach ($projectList as $item)
                 <option value="{{$item->project_id}}">{{$item->name}}</option>
@@ -30,11 +30,11 @@
     <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>
         <div class="col-md-2" x-data="datepicker()">
-            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker">
+            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
         </div>
         <label for="date" class="col-form-label">Selesai</label>
         <div class="col-md-2" x-data="datepicker2()">
-            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker">
+            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
         </div>
     </div>
     <!-- Filter COA & Tanggal -->
@@ -155,7 +155,7 @@
     <!-- Form Input -->
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedRekening">
+            <select wire:model="selectedRekening" required>
                 <option value="">Input rekening</option>
                 @foreach ($rekeningList as $item)
                 <option value="{{$item->bank_id}}">{{$item->name}} {{$item->rekening}}</option>
@@ -163,7 +163,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedPartner">
+            <select wire:model="selectedPartner" required>
                 <option value="">Input partner</option>
                 @foreach ($partnerList as $item)
                 <option value="{{$item->name}}">{{$item->name}}</option>
@@ -172,7 +172,7 @@
         </div>
         <label for="date" class="col-form-label">Tanggal BKK</label>
         <div class="col-sm">
-            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal">
+            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required>
         </div>
         <div class="col-sm">
             <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
@@ -182,6 +182,11 @@
         @if (session()->has('message_save'))
         <div class="alert alert-success">
             {{ session('message_save') }}
+        </div>
+        @endif
+        @if (session()->has('message_not_save'))
+        <div class="alert alert-danger">
+            {{ session('message_not_save') }}
         </div>
         @endif
     </div>
