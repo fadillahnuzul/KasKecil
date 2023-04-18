@@ -275,6 +275,7 @@
                                             <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Barcode</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
@@ -303,6 +304,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->pic}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->id_bkk}}</td>
                                             <td class="font-weight-bold text-dark">
                                                 <!-- @if ($row->status == 4)
                                             <a onclick="return confirm('Apakah yakin ingin approve?')" href="/done/{{$row->id}}" class="btn btn-success btn-sm">Klaim</a> 
