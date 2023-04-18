@@ -47,7 +47,7 @@ class AddBkk extends Component
     public function mount()
     {
         $this->companyList = Company::get();
-        $this->coaList = Coa::where('status', '!=', 0)->get();
+        $this->coaList = Coa::where('status', '!=', 0)->orderBy('code')->get();
         $this->partnerList = Partner::get();
         $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
