@@ -6,7 +6,7 @@
             <select wire:model="selectedCoaId" required>
                 <option value="">Ketik nama coa</option>
                 @foreach ($coaList as $itemCoa)
-                <option value="{{$itemCoa->coa_id}}">{{$itemCoa->name}} ({{$itemCoa->code}})</option>
+                <option value="{{$itemCoa->coa_id}}">{{$itemCoa->code}} {{$itemCoa->name}}</option>
                 @endforeach
             </select>
         </div>
