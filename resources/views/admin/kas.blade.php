@@ -343,6 +343,7 @@
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Tanggal BKK</th>
+                                            <th class="font-weight-bold text-dark">Barcode</th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
                                     </thead>
@@ -384,6 +385,8 @@
                                                 {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
                                                 @endif
                                             </td>
+                                            
+                                            <td class="font-weight-bold text-dark">{{$row->id_bkk}}</td>
                                             <!-- <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
                                             <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>
