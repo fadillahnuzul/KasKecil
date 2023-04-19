@@ -28,7 +28,6 @@ class AddBkk extends Component
 
     public $startDate;
     public $endDate;
-    public $coaList;
     public $companyList;
     public $partnerList;
     public $selectedCompany;
@@ -43,11 +42,11 @@ class AddBkk extends Component
     public $selectedKas;
     public $totalKas;
     public $totalKasCoa;
+    public $searchCoa;
 
     public function mount()
     {
         $this->companyList = Company::get();
-        $this->coaList = Coa::where('status', '!=', 0)->orderBy('code')->get();
         $this->partnerList = Partner::get();
         $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
@@ -57,14 +56,15 @@ class AddBkk extends Component
     {
         $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
-
+        $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        ($coaList->first()->coa_id) ? $this->selectedCoaId = $coaList->first()->coa_id : null;
         $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
             ->searchByDateRange($this->startDate, $this->endDate)
             ->searchByCompany($this->selectedCompany)
             // ->searchByProject($this->selectedProject)
             ->paginate(10);
 
-        return view('livewire.add-bkk', ['kas' => $kas, 'projectList' => $projectList, 'rekeningList' => $rekeningList]);
+        return view('livewire.add-bkk', compact('kas','projectList','rekeningList','coaList'));
     }
 
     public function getSelectedKas()
@@ -172,7 +172,7 @@ class AddBkk extends Component
             //save
             $bkk = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
             collect($bkk["bkk_detail"])->map(function ($item) {
-                Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id]);
+                Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
             });
             session()->flash('message_save', 'BKK berhasil dibuat');
         } else {

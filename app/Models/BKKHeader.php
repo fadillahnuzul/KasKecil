@@ -22,4 +22,9 @@ class BKKHeader extends Model
         'created_at',
         'status',
     ];
+
+    public function bkk()
+    {
+        return $this->hasMany(BKK::class, 'bkk_header_id', 'id');
+    }
 }

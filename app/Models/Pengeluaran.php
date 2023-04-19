@@ -63,6 +63,16 @@ class Pengeluaran extends Model
         return $this->belongsTo(Project::class, 'project_id', 'project_id');
     }
 
+    public function bkkHeader()
+    {
+        return $this->belongsTo(BKKHeader::class, 'bkk_header_id', 'id');
+    }
+
+    public function bkk()
+    {
+        return $this->belongsTo(BKK::class, 'id_bkk', 'id');
+    }
+
     public function scopeBukanPengembalianSaldo($query)
     {
         return $query->where('deskripsi', '!=', "PENGEMBALIAN SALDO PENGAJUAN");

@@ -14,12 +14,18 @@
         </div>
         <div class="form-group">
             <label for="coa">COA :</label>
-            <select wire:model="selectedCoa" name="coa" id="coa" class="form-control" required>
-                <option value="">--</option>
-                @foreach ($coaList as $coa)
-                <option value="{{$coa->coa_id}}">{{$coa->code}} {{$coa->name}}</option>
-                @endforeach
-            </select>
+            <div class="row">
+                <div class="col-md-3">
+                    <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Cari COA">
+                </div>
+                <div class="col-md-9">
+                    <select wire:model="selectedCoa" name="coa" id="coa" class="form-control" required>
+                        @foreach ($coaList as $coa)
+                        <option value="{{$coa->coa_id}}">{{$coa->code}} {{$coa->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="company">Company :</label>
@@ -49,6 +55,17 @@
         </div>
         <button wire:click="getCompanyProject" class="btn btn-primary" id="btnSubmit">Submit</button>
     </div>
+    @once
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#coa").select2({
+                placeholder: 'Masukkan kode atau nama COA',
+            });
+        })
+    </script>
+    @endonce
     @once
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

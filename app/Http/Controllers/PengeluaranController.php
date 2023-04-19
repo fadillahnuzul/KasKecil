@@ -129,7 +129,7 @@ class PengeluaranController extends Controller
         $Company = Company::get();
         $Coa = Coa::where('status', '!=', 0)->get();
 
-        return view('form_kas', ['Company' => $Company, 'Coa' => $Coa]);
+        return view('form_kas', compact('Company', 'Coa'));
     }
 
     public function save($data)

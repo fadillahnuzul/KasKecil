@@ -27,4 +27,9 @@ class BKK extends Model
         'layer_cashflow_id',
         'using_budget',
     ];
+
+    public function bkkHeader()
+    {
+        return $this->belongsTo(BKKHeader::class, 'bkk_header_id', 'id');
+    }
 }

@@ -386,7 +386,7 @@
                                                 @endif
                                             </td>
                                             
-                                            <td class="font-weight-bold text-dark">{{$row->id_bkk}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->bkk_header_id}}</td>
                                             <!-- <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
                                             <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>

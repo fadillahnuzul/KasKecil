@@ -184,155 +184,140 @@
                         <div class="card-body" width="100%">
                             <div class="table-responsive">
                                 <livewire:create-kas></livewire:create-kas>
-                                <!-- <div class="form-group">
-                                        <label for="company">Company :</label>
-                                        <select name="company" id="company" class="form-control">
-                                            <option value="">--</option>
-                                            @foreach ($Company as $Company)
-                                            <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="project">Project :</label>
-                                        <select name="project" id="project" class="form-control">
-                                            <option value="">--</option>
-                                            
-                                        </select>
-                                    </div> -->
-                                <script type="text/javascript">
-                                    var jumlah_tunai = document.getElementById('tunai');
-                                    jumlah_tunai.addEventListener('keyup', function(e) {
-                                        jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
-                                    });
+                                    
+                                    <script type="text/javascript">
+                                        var jumlah_tunai = document.getElementById('tunai');
+                                        jumlah_tunai.addEventListener('keyup', function(e) {
+                                            jumlah_tunai.value = currencyIdr(this.value, 'Rp ');
+                                        });
 
-                                    var jumlah_bank = document.getElementById('bank');
-                                    jumlah_bank.addEventListener('keyup', function(e) {
-                                        jumlah_bank.value = currencyIdr(this.value, 'Rp ');
-                                    });
+                                        var jumlah_bank = document.getElementById('bank');
+                                        jumlah_bank.addEventListener('keyup', function(e) {
+                                            jumlah_bank.value = currencyIdr(this.value, 'Rp ');
+                                        });
 
-                                    function currencyIdr(angka, prefix) {
-                                        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                                            split = number_string.split(','),
-                                            sisa = split[0].length % 3,
-                                            rupiah = split[0].substr(0, sisa),
-                                            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                                        function currencyIdr(angka, prefix) {
+                                            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                                split = number_string.split(','),
+                                                sisa = split[0].length % 3,
+                                                rupiah = split[0].substr(0, sisa),
+                                                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-                                        if (ribuan) {
-                                            separator = sisa ? '.' : '';
-                                            rupiah += separator + ribuan.join('.');
+                                            if (ribuan) {
+                                                separator = sisa ? '.' : '';
+                                                rupiah += separator + ribuan.join('.');
+                                            }
+                                            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
                                         }
-                                        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                                        return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-                                    }
-                                </script>
-                                <script type="text/javascript">
-                                    var jumlah = document.getElementById('kredit');
-                                    jumlah.addEventListener('keyup', function(e) {
-                                        jumlah.value = currencyIdrUser(this.value, 'Rp ');
-                                    });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var jumlah = document.getElementById('kredit');
+                                        jumlah.addEventListener('keyup', function(e) {
+                                            jumlah.value = currencyIdrUser(this.value, 'Rp ');
+                                        });
 
-                                    function currencyIdrUser(angka, prefix) {
-                                        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                                            split = number_string.split(','),
-                                            sisa = split[0].length % 3,
-                                            rupiah = split[0].substr(0, sisa),
-                                            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                                        function currencyIdrUser(angka, prefix) {
+                                            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                                                split = number_string.split(','),
+                                                sisa = split[0].length % 3,
+                                                rupiah = split[0].substr(0, sisa),
+                                                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-                                        if (ribuan) {
-                                            separator = sisa ? '.' : '';
-                                            rupiah += separator + ribuan.join('.');
+                                            if (ribuan) {
+                                                separator = sisa ? '.' : '';
+                                                rupiah += separator + ribuan.join('.');
+                                            }
+                                            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                                            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
                                         }
-                                        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                                        return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
-                                    }
-                                </script>
+                                    </script>
+                                </div>
                             </div>
                         </div>
+
                     </div>
+                    <!-- /.container-fluid -->
 
                 </div>
-                <!-- /.container-fluid -->
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span>Copyright &copy; Abdael Nusa 2022</span>
+                        </div>
+                    </div>
+                </footer>
+                <!-- End of Footer -->
 
             </div>
-            <!-- End of Main Content -->
+            <!-- End of Content Wrapper -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Abdael Nusa 2022</span>
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="/logout">Logout</a>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
-
+            </div>
         </div>
-        <!-- End of Content Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/logout">Logout</a>
+        <!-- Done Modal -->
+        <div class="modal fade" id="PembebananModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Form Pembebanan</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/input_pembebanan" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="pembebanan">Input Pembebanan :</label>
+                                <input type="text" class="form-control" placeholder="Input nama pembebanan" id="pembebanan" name="pembebanan" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Done Modal -->
-    <div class="modal fade" id="PembebananModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Form Pembebanan</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/input_pembebanan" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="pembebanan">Input Pembebanan :</label>
-                            <input type="text" class="form-control" placeholder="Input nama pembebanan" id="pembebanan" name="pembebanan" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- Bootstrap core JavaScript-->
+        <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
+        <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             $("#coa").select2({
@@ -348,16 +333,16 @@
             });
         });
     </script> -->
-    <!-- Custom scripts for all pages-->
-    <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{asset('style/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+        <!-- Page level plugins -->
+        <script src="{{asset('style/vendor/datatables/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-    @livewireScripts
+        <!-- Page level custom scripts -->
+        <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+        @livewireScripts
 </body>
 
 </html>

@@ -12,14 +12,20 @@
         <label for="jumlah">Kas Keluar :</label>
         <input wire:model="jumlah" type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah">
     </div>
-    <div class="form-group"> 
+    <div class="form-group">
         <label for="coa">COA :</label>
-        <select wire:model="selectedCoa" name="coa" id="coa" class="form-control">
-            <option value="">--</option>
-            @foreach ($coaList as $Coa)
-            <option value="{{$Coa->coa_id}}">{{$Coa->code}} {{$Coa->name}}</option>
-            @endforeach
-        </select>
+        <div class="row">
+            <div class="col-md-3">
+                <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Cari COA">
+            </div>
+            <div class="col-md-9">
+                <select wire:model="selectedCoa" name="coa" id="coa" class="form-control" required>
+                    @foreach ($coaList as $coa)
+                    <option value="{{$coa->coa_id}}">{{$coa->code}} {{$coa->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
     </div>
     <div class="form-group">
         <label for="company">Company :</label>

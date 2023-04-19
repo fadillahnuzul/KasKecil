@@ -3,8 +3,8 @@
     <!-- Filter COA & Tanggal -->
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px;">
+            <input type="text" wire:model="searchCoa" name="" id="" placeholder="Cari COA">
             <select wire:model="selectedCoaId" required>
-                <option value="">Ketik nama coa</option>
                 @foreach ($coaList as $itemCoa)
                 <option value="{{$itemCoa->coa_id}}">{{$itemCoa->code}} {{$itemCoa->name}}</option>
                 @endforeach
@@ -142,6 +142,7 @@
             @endforeach
             @endif
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>

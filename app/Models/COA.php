@@ -28,4 +28,9 @@ class Coa extends Model
         return self::find($id_coa);
     }
 
+    public function scopeSearchCoa($query, string|null $search)
+    {
+        ($search) ? $query->where('name','like','%'.$search.'%')->orWhere('code','like','%'.$search.'%') : $query;
+    }
+
 }

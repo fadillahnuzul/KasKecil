@@ -12,7 +12,6 @@ use Livewire\Component;
 class CreateKas extends Component
 {
     public $companyList;
-    public $coaList;
     public $selectedCompany;
     public $selectedProject;
     public $selectedDate;
@@ -21,17 +20,19 @@ class CreateKas extends Component
     public $selectedCoa;
     public $pic;
     public $tujuan;
+    public $searchCoa;
 
     public function mount()
     {
         $this->companyList = Company::get();
-        $this->coaList = Coa::where('status', '!=', 0)->get();
     }
 
     public function render()
     {
         $projectList = Project::where('project_company_id',$this->selectedCompany)->get();
-        return view('livewire.create-kas', ['projectList'=>$projectList]);
+        $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
+        return view('livewire.create-kas', compact('projectList','coaList'));
     }
 
     public function getCompanyProject()

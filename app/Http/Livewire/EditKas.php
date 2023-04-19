@@ -14,7 +14,6 @@ class EditKas extends Component
 {
     public $id_kas;
     public $kas;
-    public $coaList;
     public $companyList;
     public $selectedCompany;
     public $selectedProject;
@@ -30,14 +29,15 @@ class EditKas extends Component
     {
         $this->kas = Pengeluaran::with('coa')->find($this->id_kas);
         $this->companyList = Company::get();
-        $this->coaList = Coa::where('status', '!=', 0)->get();
         $this->setValueAwal();
     }
     
     public function render()
     {
         $projectList = Project::where('project_company_id',$this->selectedCompany)->get();
-        return view('livewire.edit-kas',['projectList'=>$projectList]);
+        $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
+        return view('livewire.edit-kas',compact('projectList','coaList'));
     } 
 
     public function setValueAwal()
