@@ -10,11 +10,14 @@ use App\Models\Divisi;
 use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
 use App\Models\Sumber;
-use App\Models\Kategori;
 use App\Models\Saldo;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use App\Models\Company;
+use App\Models\Status;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BankController extends Controller
 {
@@ -22,161 +25,60 @@ class BankController extends Controller
     public $endDate;
 
     public function __construct() {
-        $this->startDate = Carbon::now()->startOfMonth();
-        $this->endDate = Carbon::now()->endOfMonth();
+        $this->startDate = Carbon::now()->startOfYear();
+        $this->endDate = Carbon::now()->endOfYear();
+    }
+
+    public function getSaldo()
+    {
+        $adminController = new AdminController;
+        $total_pengajuan = $adminController->hitung_pengajuan();
+        $total_pengeluaran = $adminController->hitung_belum_klaim();
+        $diklaim = $adminController->hitung_klaim();
+
+        return [$total_pengajuan, $total_pengeluaran, $diklaim];
     }
 
     public function index(Request $request){
-        $startDate = $this->startDate;
-        $endDate = $this->endDate;
+        $startDate = $request->startDate ? $request->startDate : $this->startDate;
+        $endDate = $request->endDate ? $request->endDate : $this->endDate;
         $laporan = FALSE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->get();
-        $dataKas = $dataKas->filter(function($item, $key){
-            return $item->User->kk_access == '1';
-        });
+        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->searchByDateRange($startDate, $endDate)->get();
         $divisi = Divisi::get();
         $title = "Bank Kas Kecil";
-       
-        // Perhitungan sisa dan total belanja
-        foreach ($dataKas as $masuk) {
-            $total = 0;
-            $diklaim = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
-            foreach ($data_pengeluaran as $keluar){
-                $total = $total + $keluar->jumlah;
-            }
-            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
-            foreach ($data_diklaim as $keluar){
-                $diklaim = $diklaim + $keluar->jumlah;
-            }
-            $masuk->total_belanja = $total;
-            $masuk->diklaim = $diklaim;
-            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
-        }
-
-        // Perhitungan sisa dan total belanja pada card
-        $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
-        $data_pengajuan = $pengajuan->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
-        $data_pengeluaran = $pengeluaran->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $total_pengajuan = 0;
-        foreach ($data_pengajuan as $masuk){
-            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
-        }
-        $total_pengeluaran = 0;
-        foreach ($data_pengeluaran as $keluar){
-            $total_pengeluaran = $total_pengeluaran + $keluar->jumlah;
-        }
-        $sisa = $total_pengajuan - $total_pengeluaran;
-
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim'));
     }
 
     public function laporan(Request $request){
-        $startDate = $this->startDate;
-        $endDate = $this->endDate;
+        $startDate = $request->startDate ? $request->startDate : $this->startDate;
+        $endDate = $request->endDate ? $request->endDate : $this->endDate;
         $laporan = TRUE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->get();
+        $dataKas = Pengajuan::with('Sumber','User','Status')->searchByDateRange($startDate, $endDate)->get();
         $divisi = Divisi::get();
         $title = "Daftar Pengajuan";
-       
-        // Perhitungan sisa dan total belanja
-        foreach ($dataKas as $masuk) {
-            $total = 0;
-            $diklaim = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
-            foreach ($data_pengeluaran as $keluar){
-                $total = $total + $keluar->jumlah;
-            }
-            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
-            foreach ($data_diklaim as $keluar){
-                $diklaim = $diklaim + $keluar->jumlah;
-            }
-            $masuk->total_belanja = $total;
-            $masuk->diklaim = $diklaim;
-            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
-        }
-
-        // Perhitungan sisa dan total belanja pada card
-        $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
-        $data_pengajuan = $pengajuan->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
-        $data_pengeluaran = $pengeluaran->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $total_pengajuan = 0;
-        foreach ($data_pengajuan as $masuk){
-            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
-        }
-        $total_pengeluaran = 0;
-        foreach ($data_pengeluaran as $keluar){
-            $total_pengeluaran = $total_pengeluaran + $keluar->jumlah;
-        }
-        $sisa = $total_pengajuan - $total_pengeluaran;
-
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim'));
     }
 
     public function kas_divisi(Request $request, $id){
-        $startDate = $this->startDate;
-        $endDate = $this->endDate;
+        $startDate = $request->startDate ? $request->startDate : $this->startDate;
+        $endDate = $request->endDate ? $request->endDate : $this->endDate;
         $laporan = TRUE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->where('divisi_id',$id)->get();
+        $dataKas = Pengajuan::with('Sumber','User','Status')->where('divisi_id',$id)->searchByDateRange($startDate, $endDate)->get();
         $divisi = Divisi::get();
         $title = "Daftar Pengajuan";
-       
-        // Perhitungan sisa dan total belanja
-        foreach ($dataKas as $masuk) {
-            $total = 0;
-            $diklaim = 0;
-            $data_pengeluaran = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status','!=',6)->get();
-            foreach ($data_pengeluaran as $keluar){
-                $total = $total + $keluar->jumlah;
-            }
-            $data_diklaim = Pengeluaran::with('pengajuan')->where('pemasukan','=',$masuk->id)->where('status',7)->get();
-            foreach ($data_diklaim as $keluar){
-                $diklaim = $diklaim + $keluar->jumlah;
-            }
-            $masuk->total_belanja = $total;
-            $masuk->diklaim = $diklaim;
-            $masuk->sisa = $masuk->jumlah - $masuk->total_belanja;
-        }
-
-        // Perhitungan sisa dan total belanja pada card
-        $pengajuan = Pengajuan::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
-        $data_pengajuan = $pengajuan->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $pengeluaran = Pengeluaran::where('status','!=',3)->where('status','!=',6)->where('status','!=',1)->get();
-        $data_pengeluaran = $pengeluaran->filter(function($item, $key){
-            return $item->User->kk_access != '1';
-        });
-        $total_pengajuan = 0;
-        foreach ($data_pengajuan as $masuk){
-            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
-        }
-        $total_pengeluaran = 0;
-        foreach ($data_pengeluaran as $keluar){
-            $total_pengeluaran = $total_pengeluaran + $keluar->jumlah;
-        }
-        $sisa = $total_pengajuan - $total_pengeluaran;
-
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','sisa'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim'));
     }
 
     public function acc(Request $request, $id)
@@ -239,13 +141,26 @@ class BankController extends Controller
         return redirect('home_bank');
     }
 
-    public function laporan_keluar()
+    public function laporan_keluar(Request $request)
     {
-        $data_pengeluaran = Pengeluaran::with('pengajuan', 'Status', 'kategori')->get();
+        $startDate = $request->startDate ? $request->startDate : Carbon::now()->startOfMonth('d-m-Y');;
+        $endDate = $request->endDate ? $request->endDate : Carbon::now()->endOfMonth('d-m-Y');;
+        $selectedStatus = ($request->status) ? Status::find($request->status) : null;
+        $selectedCompany = ($request->company) ? Company::find($request->company) : null;
+        $selectedUser = ($request->user) ? User::find($request->user) : null;
+        $company = Company::get();
+        $status = Status::whereIn('id', [4, 6, 7, 8])->get();
+        $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
+        $dataKas = Pengeluaran::with('pengajuan', 'Status')
+            ->searchByDateRange($startDate, $endDate)
+            ->searchByCompany($request->company)
+            ->searchByStatus($request->status)
+            ->searchByUser($request->user)
+            ->get();
         $title = "Daftar Kas Keluar";
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
 
-        return view ('/bank/kas', ['title' => $title, 'startDate'=>$this->startDate, 'endDate'=>$this->endDate], 
-        ['dataKas' => $data_pengeluaran]);
+        return view ('/bank/laporan_kas', compact('title','startDate','endDate','dataKas','company','status','userList','selectedStatus','selectedCompany','selectedUser','total_pengeluaran','diklaim'));
     }
 
     public function tolak(Request $request, $id)

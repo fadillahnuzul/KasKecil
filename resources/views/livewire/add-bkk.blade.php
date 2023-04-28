@@ -49,6 +49,7 @@
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
                 <th scope="col" class="font-weight-bold text-dark">Pembebanan</th>
                 <th scope="col" class="font-weight-bold text-dark">Project</th>
+                <th scope="col" class="font-weight-bold text-dark">Barcode</th>
                 <th scope="col" class="font-weight-bold text-dark">Kas Keluar</th>
             </tr>
         </thead>
@@ -69,6 +70,7 @@
                     {{$item->Project->name}}
                     @endif
                 </td>
+                <td class="font-weight-bold text-dark">{{$item->bkk_header_id}}</td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($item->jumlah,2,",", ".")}}</td>
             </tr>
             @endforeach

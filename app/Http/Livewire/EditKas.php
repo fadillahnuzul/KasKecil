@@ -14,6 +14,7 @@ class EditKas extends Component
 {
     public $id_kas;
     public $kas;
+    public $searchCoa;
     public $companyList;
     public $selectedCompany;
     public $selectedProject;

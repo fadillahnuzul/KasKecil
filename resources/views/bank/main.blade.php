@@ -34,59 +34,7 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Kas Kecil</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="/home_bank">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="/pengajuan">
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>Buat Pengajuan</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/home">
-                    <i class="fas fa-fw fa-list"></i>
-                    <span>Pengajuan Admin</span></a>
-            </li> -->
-            <li class="nav-item">
-                <a class="nav-link" href="/bank_laporan">
-                    <i class="fas fa-fw fa-book"></i>
-                    <span>Daftar Pengajuan</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/bank_laporan_kas_keluar">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Daftar Kas Keluar</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
+    @include('asset.sidebar')
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -202,7 +150,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Dipakai</div>
+                                                Total Belum Diklaim</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
@@ -220,8 +168,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Sisa</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa ,2, ",", ".")}}</div>
+                                                Total Diklaim</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($diklaim ,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -232,8 +180,6 @@
                         </div>
                         <!-- End Card Bank -->
                         </div>
-
-                <!-- terpakai, sisa dashboard -->
                     
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -257,19 +203,15 @@
                         @endif
                         <div class="container">
                             <div class="row">
-                                @if ($laporan == FALSE)
-                                <form action="/filter_pengajuan/1" method="POST">
-                                @elseif ($laporan == TRUE)
-                                <form action="/filter_pengajuan/2" method="POST">
-                                @endif
+                                <form action="" method="POST">
                                 @csrf
                                 <div class="container-fluid">
                                     <div class="form-group row">
-                                        <label for="date" class="col-form-label col-sm">Tanggal awal</label>
+                                        <label for="date" class="col-form-label col-sm">Mulai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                         </div>
-                                        <label for="date" class="col-form-label col-sm">Tanggal akhir</label>
+                                        <label for="date" class="col-form-label col-sm">Selesai</label>
                                         <div class="col-sm">
                                             <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                         </div>
@@ -297,9 +239,6 @@
                                             <th class="font-weight-bold text-dark">Divisi</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Pengajuan</th>
-                                            <th class="font-weight-bold text-dark">Sumber Dana</th>
-                                            <th class="font-weight-bold text-dark">Total Belanja</th>
-                                            <th class="font-weight-bold text-dark">Sisa</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             @if($laporan == FALSE)
                                             <th class="font-weight-bold text-dark">Aksi</th>
@@ -317,15 +256,6 @@
                                             <td class="font-weight-bold text-dark">{{$row->Divisi->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>                           
-                                            <td class="font-weight-bold text-dark">@if ($row->sumber == NULL) 
-                                                -
-                                                @endif
-                                                @if ($row->sumber != NULL)
-                                                    {{$row->Sumber->sumber_dana}}
-                                                @endif
-                                            </td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->sisa,2,",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             @if ($laporan == FALSE)
                                             <td class="font-weight-bold text-dark">

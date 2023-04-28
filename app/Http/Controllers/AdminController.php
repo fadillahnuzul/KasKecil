@@ -11,7 +11,6 @@ use App\Models\Divisi;
 use App\Models\Pengajuan;
 use App\Models\Pengeluaran;
 use App\Models\Sumber;
-use App\Models\Kategori;
 use App\Models\Saldo;
 use App\Models\Status;
 use App\Models\Company;
@@ -119,16 +118,12 @@ class AdminController extends Controller
     {
         $data_saldo = Pengajuan::statusProgressAndApproved()->noUsernameUser()->SearchByUser($id)->get();
         $admin = ($id) ? User::find($id) : User::find(Auth::user()->id);
-        $total_pengajuan = 0;
-        foreach ($data_saldo as $masuk) {
-            $total_pengajuan = $total_pengajuan + $masuk->jumlah;
-        }
+        $total_pengajuan = $data_saldo->sum('jumlah');
         if ($admin && $admin->kk_access == 1) {
             $data_pengajuan_user = Pengajuan::statusProgressAndApproved()->noUsernameUser()->where('user_id', '!=', $admin->id)->get();
-            foreach ($data_pengajuan_user as $kas) {
-                $total_pengajuan = $total_pengajuan - $kas->jumlah;
-            }
-        }
+            $pengajuan_user = $data_pengajuan_user->sum('jumlah');
+            $total_pengajuan = $total_pengajuan - $pengajuan_user;
+        } 
         return ($total_pengajuan);
     }
 

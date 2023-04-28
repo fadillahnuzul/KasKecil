@@ -82,9 +82,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/download.pdf', [PengajuanController::class, 'export_pdf'])->name('download.pdf');
 
     //Halaman Bank
-    Route::get('/home_bank', [BankController::class, 'index']);
-    Route::get('/bank_laporan', [BankController::class, 'laporan']);
-    Route::get('/bank_laporan_kas_keluar', [BankController::class, 'laporan_keluar']);
+    Route::match(['GET', 'POST'],'/home_bank', [BankController::class, 'index']);
+    Route::match(['GET', 'POST'],'/bank_laporan', [BankController::class, 'laporan']);
+    Route::match(['GET', 'POST'],'/bank_laporan_kas_keluar', [BankController::class, 'laporan_keluar']);
     Route::get('/hapus_bank/{id}', [BankController::class, 'hapus']);
     Route::get('/edit_bank/{id}', [BankController::class, 'edit']);
     Route::get('/acc_bank/{id}', [BankController::class, 'acc']);
