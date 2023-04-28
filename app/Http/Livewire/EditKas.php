@@ -37,7 +37,9 @@ class EditKas extends Component
     {
         $projectList = Project::where('project_company_id',$this->selectedCompany)->get();
         $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
-        ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
+        if(!$this->selectedCoa) {
+            ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
+        }
         return view('livewire.edit-kas',compact('projectList','coaList'));
     } 
 
