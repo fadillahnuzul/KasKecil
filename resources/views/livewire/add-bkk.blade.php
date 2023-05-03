@@ -2,24 +2,24 @@
     <!-- {{-- Nothing in the world is as soft and yielding as water. --}} -->
     <!-- Filter COA & Tanggal -->
     <div class="row">
-        <div class="form-group-row" style="margin-right: 5px;">
-            <input type="text" wire:model="searchCoa" name="" id="" placeholder="Cari COA">
-            <select wire:model="selectedCoaId" required>
+        <div class="form-group-row" style="margin-right: 5px; max-width:430px; color:black;">
+            <input type="text" wire:model="searchCoa" name="" id="" placeholder="Cari COA" class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedCoaId" required class="form-control form-control-sm" style="color:black;">
                 @foreach ($coaList as $itemCoa)
                 <option value="{{$itemCoa->coa_id}}">{{$itemCoa->code}} {{$itemCoa->name}}</option>
                 @endforeach
             </select>
         </div>
-        <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedCompany" required>
+        <div class="form-group-row" style="margin-right: 5px; max-width:400px; ">
+            <select wire:model="selectedCompany" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input company</option>
                 @foreach ($companyList as $item)
                 <option value="{{$item->project_company_id}}">{{$item->name}}</option>
                 @endforeach
             </select>
         </div>
-        <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedProject" required>
+        <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
+            <select wire:model="selectedProject" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input project</option>
                 @foreach ($projectList as $item)
                 <option value="{{$item->project_id}}">{{$item->name}}</option>
@@ -157,27 +157,32 @@
 
     <!-- Form Input -->
     <div class="row">
-        <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedRekening" required>
+        <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
+            <select wire:model="selectedRekening" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input rekening</option>
                 @foreach ($rekeningList as $item)
                 <option value="{{$item->bank_id}}">{{$item->name}} {{$item->rekening}}</option>
                 @endforeach
             </select>
         </div>
-        <div class="form-group-row" style="margin-right: 5px;">
-            <select wire:model="selectedPartner" required>
+        <div class="form-group-row" style="margin-right: 5px; max-width:250px;">
+            <select wire:model="selectedPartner" onchange="removeRequired()" id="selectedPartnerDropdownId" class="form-control form-control-sm" style="color:black;">
                 <option value="">Input partner</option>
                 @foreach ($partnerList as $item)
                 <option value="{{$item->name}}">{{$item->name}}</option>
                 @endforeach
             </select>
         </div>
-        <label for="date" class="col-form-label">Tanggal BKK</label>
-        <div class="col-sm">
-            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required>
+        <div class="form-group-row" style="margin-right: 5px; width:250px;">
+            <input type="text" wire:model="manualTypePartner" oninput="removeRequired()" id="manualTypePartnerTextId" class="form-control form-control-sm" placeholder="Ketik Partner, Pilih Atau Ketik" style="color:black;">
         </div>
-        <div class="col-sm">
+        <div class="form-group-row" style="color:black">
+            Tanggal BKK
+        </div>
+        <div class="col-sm form-group-row" style="margin-right: 5px">
+            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK">
+        </div>
+        <div class="col-sm form-group-row" style="margin-right: 5px">
             <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
         </div>
     </div>
@@ -202,5 +207,16 @@
     flatpickr(".datepicker", {
         mode: "single"
     });
+</script>
+<script>
+    function removeRequired() {
+        if (document.getElementById("selectedPartnerDropdownId").value != "" || document.getElementById("manualTypePartnerTextId").value != "") {
+            document.getElementById("selectedPartnerDropdownId").removeAttribute("required");
+            document.getElementById("manualTypePartnerTextId").removeAttribute("required");
+        } else {
+            document.getElementById("selectedPartnerDropdownId").setAttribute("required", true);
+            document.getElementById("manualTypePartnerTextId").setAttribute("required", true);
+        }
+    }
 </script>
 @endonce

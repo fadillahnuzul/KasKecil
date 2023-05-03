@@ -35,6 +35,7 @@ class AddBkk extends Component
     public $selectedRekening;
     public $selectedCoaId;
     public $selectedPartner;
+    public $manualTypePartner;
     public $tanggalBkk;
     public $selectedKasId = [];
     public $selectedAll = FALSE;
@@ -140,7 +141,7 @@ class AddBkk extends Component
                 'bank_id' => $this->selectedRekening,
                 'name' => null,
                 'tanggal' => $this->tanggalBkk,
-                'partner' => $this->selectedPartner,
+                'partner' => $this->manualTypePartner ?? $this->selectedPartner,
                 'otorisasi' => 0,
                 'project_id' => $this->selectedProject,
                 'layer_cashflow_id' => 0,
