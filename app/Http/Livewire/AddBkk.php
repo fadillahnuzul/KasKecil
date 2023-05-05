@@ -116,6 +116,7 @@ class AddBkk extends Component
         if ($this->selectedKas->count() <= 5) {
             return true;
         } else {
+            $this->selectedKas = $this->selectedKas->slice(0, 5);
             return false;
         }
     }
