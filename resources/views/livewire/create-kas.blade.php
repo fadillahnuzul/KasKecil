@@ -19,7 +19,7 @@
                     <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Cari COA">
                 </div>
                 <div class="col-md-9">
-                    <select wire:model="selectedCoa" name="coa" id="coa" class="form-control" required>
+                    <select wire:model="selectedCoa" id="selectedCoaFromInput" onchange="getCoa()" name="coa" id="coa" class="form-control" required>
                         @foreach ($coaList as $coa)
                         <option value="{{$coa->coa_id}}">{{$coa->code}} {{$coa->name}}</option>
                         @endforeach
@@ -73,5 +73,9 @@
         flatpickr(".datepicker", {
             mode: "single"
         });
+
+        function getCoa() {
+            Livewire.emit('getSelectedCoaInput', document.getElementById("selectedCoaFromInput").value)
+        }
     </script>
     @endonce

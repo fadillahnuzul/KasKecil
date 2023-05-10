@@ -44,6 +44,9 @@ class AddBkk extends Component
     public $totalKas;
     public $totalKasCoa;
     public $searchCoa;
+    public $selectedCoaExist;
+
+    protected $listeners = ['getSelectedCoa' => 'getCoa'];
 
     public function mount()
     {
@@ -58,14 +61,24 @@ class AddBkk extends Component
         $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
         $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
-        ($coaList->first()->coa_id) ? $this->selectedCoaId = $coaList->first()->coa_id : null;
+        if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
+            $this->selectedCoaId = $coaList->first()->coa_id;
+        }
         $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
             ->searchByDateRange($this->startDate, $this->endDate)
             ->searchByCompany($this->selectedCompany)
             // ->searchByProject($this->selectedProject)
             ->paginate(10);
-
+        $this->selectedCoaExist = false;
         return view('livewire.add-bkk', compact('kas','projectList','rekeningList','coaList'));
+    }
+
+    public function getCoa($coaId=null)
+    {
+        if ($coaId) {
+            $this->selectedCoaId = $coaId;
+            $this->selectedCoaExist = true;
+        } 
     }
 
     public function getSelectedKas()

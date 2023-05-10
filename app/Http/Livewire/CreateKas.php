@@ -21,6 +21,9 @@ class CreateKas extends Component
     public $pic;
     public $tujuan;
     public $searchCoa;
+    public $selectedCoaExist;
+
+    protected $listeners = ['getSelectedCoaInput' => 'getCoa'];
 
     public function mount()
     {
@@ -31,8 +34,18 @@ class CreateKas extends Component
     {
         $projectList = Project::where('project_company_id',$this->selectedCompany)->get();
         $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
-        ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
+        if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
+            $this->selectedCoa = $coaList->first()->coa_id;
+        }
         return view('livewire.create-kas', compact('projectList','coaList'));
+    }
+
+    public function getCoa($coaId=null)
+    {
+        if ($coaId) {
+            $this->selectedCoa = $coaId;
+            $this->selectedCoaExist = true;
+        } 
     }
 
     public function getCompanyProject()
