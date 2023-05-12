@@ -6,11 +6,11 @@
         </div>
         <div class="form-group">
             <label for="deskripsi">Keterangan :</label>
-            <input type="text" wire:model="deskripsi" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
+            <input type="text" autocomplete="on" wire:model="deskripsi" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
         </div>
         <div class="form-group">
             <label for="kredit">Nominal :</label>
-            <input type="text" wire:model="jumlah" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
+            <input type="text" autocomplete="on" wire:model="jumlah" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
         </div>
         <div class="form-group">
             <label for="coa">COA :</label>
@@ -47,11 +47,11 @@
         </div>
         <div class="form-group">
             <label for="tujuan">Dibayarkan kepada (Nota tujuan) :</label>
-            <input wire:model="tujuan" type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
+            <input wire:model="tujuan" autocomplete="on" type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
         </div>
         <div class="form-group">
             <label for="pic">PIC :</label>
-            <input wire:model="pic" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
+            <input wire:model="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
         </div>
         <button wire:click="getCompanyProject" class="btn btn-primary" id="btnSubmit">Submit</button>
     </div>

@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/welcome', [PengajuanController::class, 'welcome']);
     Route::post('/getCompany', [PengajuanController::class, 'getCompany']);
     Route::get('/project/{id}', [PengajuanController::class, 'project']);
+    Route::get('/pengembalian_saldo_pengajuan/{id}', [PengajuanController::class, 'pengembalian_saldo']);
 
     Route::get('/detail_pengajuan/{id}', [PengeluaranController::class, 'index']);
     Route::match(['GET', 'POST'], '/kas_keluar', [PengeluaranController::class, 'index']);
@@ -72,14 +73,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/done_pengajuan/{id}', [AdminController::class, 'done_pengajuan']);
     // Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
     Route::post('/set_bkk_checkbox', [AdminController::class, 'set_bkk']);
+    Route::get('/konfirm_kembali/{id}', [AdminController::class, 'konfirm_kembali']);
 
     Route::post('/input_sumber', [SumberController::class, 'save']);
     Route::post('/input_pembebanan', [PembebananController::class, 'save']);
 
     //Download
-    Route::get('/pengajuan.export', [PengajuanController::class, 'export'])->name('pengajuan.export');
     Route::match(['GET', 'POST'],'/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export');
-    Route::post('/download.pdf', [PengajuanController::class, 'export_pdf'])->name('download.pdf');
+    Route::get('/export_pengajuan/{id}', [PengajuanController::class, 'export_pdf']);
+
 
     //Halaman Bank
     Route::match(['GET', 'POST'],'/home_bank', [BankController::class, 'index']);

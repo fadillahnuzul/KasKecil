@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,16 +14,22 @@
 </head>
 
 <body>
-<center><h2>Pengajuan Kas</h2></center>
-<br>
-<p style="float:right;">{{$data->today}}</p>
-<p>Kode Pengajuan : {{$data->kode}}</p>
-<br>
-<p>Sehubungan dengan adanya surat ini, dibuatlah pengajuan dengan rincian sebagai berikut :</p>
+    <!-- <img style="float:right;" class="img-fluid w-50" src="/assets/img/logo.jpg" alt=""> -->
+    <center><h2>Pengajuan Dana Kas Kecil</h2></center>
+    <hr>
+    <p style="float:right;">{{$data->today}}</p>
+    <p>Kode Pengajuan : {{$data->kode}}</p>
+    <br>
+    <p>Sehubungan dengan adanya surat ini, dibuatlah pengajuan dengan rincian sebagai berikut :</p>
     <div class="card-body">
-        <div class="table-responsive" >
-            <table class="table table-bordered"  cellspacing="0">
+        <div class="table-responsive">
+            <table class="table table-bordered" cellspacing="0">
                 <tbody>
+                    <tr>
+                        <td>PIC</td>
+                        <td></td>
+                        <td> : {{$data->User->username}}</td>
+                    </tr>
                     <tr>
                         <td>Divisi</td>
                         <td></td>
@@ -33,7 +38,7 @@
                     <tr>
                         <td>Tanggal Pengajuan</td>
                         <td></td>
-                        <td> : {{$data->tanggal}}</td>
+                        <td> : {{Carbon\Carbon::parse($data->tanggal)->isoFormat('dddd, D MMMM Y')}}</td>
                     </tr>
                     <tr>
                         <td>Nominal Pengajuan</td>
@@ -51,33 +56,6 @@
         <p>Demikian surat pengajuan ini kami sampaikan, atas perhatian dan kerjasamanya kami ucapkan terima kasih.</p>
         <br>
         <br>
-        <div class="table-responsive" >
-            <table class="table table-bordered" width="100%" cellspacing="0" style="text-align:center;">
-                <tbody>
-                    <tr height="80px";>
-                        <td>Tertanda
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            {{$data->pengaju}}
-                        </td>
-                        <td>Menyetujui
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            {{$data->penerima}}
-                        </td>
-                    </tr>
-                
-                    <tr height="80px";>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 </body>
 

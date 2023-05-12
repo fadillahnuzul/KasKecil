@@ -116,14 +116,19 @@ class AdminController extends Controller
 
     public function hitung_pengajuan($id = null, $startDate = null, $endDate = null, $unit = null)
     {
-        $data_saldo = Pengajuan::statusProgressAndApproved()->noUsernameUser()->SearchByUser($id)->get();
+        $data_saldo = Pengajuan::where(function ($query) {
+                                    $query->statusProgressAndApproved()->orWhere('status', 9);
+                                })->noUsernameUser()->SearchByUser($id)->get();
         $admin = ($id) ? User::find($id) : User::find(Auth::user()->id);
         $total_pengajuan = $data_saldo->sum('jumlah');
         if ($admin && $admin->kk_access == 1) {
-            $data_pengajuan_user = Pengajuan::statusProgressAndApproved()->noUsernameUser()->where('user_id', '!=', $admin->id)->get();
+            $data_pengajuan_user = Pengajuan::where(function ($query) {
+                $query->statusProgressAndApproved()->orWhere('status', 9);
+            })->noUsernameUser()->where('user_id', '!=', $admin->id)->get();
             $pengajuan_user = $data_pengajuan_user->sum('jumlah');
             $total_pengajuan = $total_pengajuan - $pengajuan_user;
-        } 
+        }
+        
         return ($total_pengajuan);
     }
 
@@ -532,6 +537,12 @@ class AdminController extends Controller
     {
         Pengajuan::find($id)->update(['status' => '5']);
 
+        return back();
+    }
+
+    public function konfirm_kembali($id)
+    {
+        $pengajuan = Pengajuan::find($id)->update(['status' => 10]);
         return back();
     }
 }

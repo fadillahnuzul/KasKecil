@@ -361,7 +361,8 @@
                                             @endif
                                             <!-- filter kas keluar di dashboard admin -->
                                             <td class="font-weight-bold text-dark">
-                                                @if ($row->Status->id != 6 && $row->Status->id != 5)
+                                                <a href="export_pengajuan/{{$row->id}}" class="btn btn-success btn-sm">Print</a>
+                                                @if ($row->Status->id==4 OR $row->Status->id==2)
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_admin/1/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                                 <a href="/edit_admin/{{$row->id}}" class="btn btn-info btn-sm">Edit</a>
                                                 <a onclick="return confirm ('Apakah yakin untuk menyelesaikan pengajuan ini?')" href="/done_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Set Done</a>
@@ -373,6 +374,8 @@
                                                 @elseif ($filter_keluar==FALSE && ($row->Status->id == 2 OR $row->Status->id == 4 OR $row->Status->id == 5))
                                                 <!-- <a href="/detail_divisi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>  -->
                                                 @endif
+                                                @elseif ($row->Status->id==9)
+                                                <a onclick="return confirm ('Apakah yakin pengajuan ini sudah dikembalikan?')" href="/konfirm_kembali/{{$row->id}}" class="btn btn-success btn-sm">Konfirmasi Pengembalian</a>
                                                 @endif
                                             </td>
                                         </tr>

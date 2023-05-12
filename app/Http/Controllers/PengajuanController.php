@@ -57,7 +57,7 @@ class PengajuanController extends Controller
         $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         session(['startDate' => $startDate]); session(['endDate' => $endDate]);
-        $dataKas = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->isDone()->searchByDateRange($startDate, $endDate)->get();
+        $dataKas = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->searchByDateRange($startDate, $endDate)->get();
         $Saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
         if (Auth::user()->kk_access == '1') {
             return view ('admin/main', compact('dataKas','title', 'Saldo'));
@@ -109,6 +109,12 @@ class PengajuanController extends Controller
         $data_pengajuan = [];
         $data_pengajuan = Pengajuan::with('Status')->findOrFail($id);
         return view ('detail_pengajuan', ['dataKas' => $data_pengajuan]);
+    }
+
+    public function pengembalian_saldo($id)
+    {
+        $pengajuan = Pengajuan::find($id)->update(['status'=>9]);
+        return redirect('home');
     }
 
     // public function filter(Request $request, $id) {
@@ -185,25 +191,23 @@ class PengajuanController extends Controller
     //     return (new PengajuanExport($data_pengajuan))->download("Pengajuan_Kas_Kecil" . ".xlsx");
     // }
 
-    // public function export_pdf(Request $request) {
-    //     $data = Pengajuan::with('Divisi')->findOrFail($request->modal_id);
-    //     $data->pengaju = $request->pengaju;
-    //     $data->penerima = $request->penerima;
-    //     $data->today = Carbon::now()->isoFormat('dddd, D MMMM Y');
+    public function export_pdf($id) {
+        $data = Pengajuan::with('Divisi','User')->findOrFail($id);
+        $data->today = Carbon::now()->isoFormat('dddd, D MMMM Y');
 
-    //     $html = view('printpdf',['data'=>$data]);
+        $html = view('printpdf',['data'=>$data]);
 
-    //     // instantiate and use the dompdf class
-    //     $dompdf = new Dompdf();
-    //     $dompdf->loadHtml($html);
-    //     // (Optional) Setup the paper size and orientation
-    //     $dompdf->setPaper('A4', 'portrait');
-    //     $options = $dompdf->getOptions();
-    //     $options->setDefaultFont('Times New Roman');
-    //     $dompdf->setOptions($options);
-    //     // Render the HTML as PDF
-    //     $dompdf->render();
-    //     // Output the generated PDF to Browser
-    //     $dompdf->stream('Pengajuan Kas Kecil');
-    // }
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A5', 'landscape');
+        $options = $dompdf->getOptions();
+        $options->setDefaultFont('Times New Roman');
+        $dompdf->setOptions($options);
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $dompdf->stream('Pengajuan Kas Kecil_'.$data->User->username.'_'.Carbon::now()->isoFormat('D-M-Y'));
+    }
 }
