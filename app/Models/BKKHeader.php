@@ -9,6 +9,7 @@ class BKKHeader extends Model
 {
     use HasFactory;
     protected $table = 'bkk_header';
+    protected $connection = 'mysql2';
     public $timestamps = false;
     protected $fillable = [
         'bank_id',
