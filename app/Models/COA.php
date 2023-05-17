@@ -11,7 +11,7 @@ class Coa extends Model
 
     protected $table = 'coa';
     protected $primaryKey = 'coa_id';
-    protected $fillable = ['code','name'];
+    protected $fillable = ['code','name','status_budget'];
 
     public function pengajuan()
     {

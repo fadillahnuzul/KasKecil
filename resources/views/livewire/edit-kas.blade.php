@@ -53,6 +53,21 @@
         <label for="pic">PIC :</label>
         <input wire:model="pic" value="{{$kas->pic}}" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
     </div>
+    @if (session()->has('message_kas'))
+    <div class="alert alert-danger">
+        {{ session('message_kas') }}
+    </div>
+    @endif
+    @if (session()->has('tidak_ada_budget'))
+    <div class="alert alert-danger">
+        {{ session('tidak_ada_budget') }}
+    </div>
+    @endif
+    @if (session()->has('budget_kurang'))
+    <div class="alert alert-danger">
+        {{ session('budget_kurang') }}
+    </div>
+    @endif
     <button wire:click="updateKas" class="btn btn-primary">Update</button>
 </div>
 @once

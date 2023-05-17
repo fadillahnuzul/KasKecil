@@ -16,7 +16,7 @@
             <label for="coa">COA :</label>
             <div class="row">
                 <div class="col-md-3">
-                    <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Cari COA">
+                    <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Pilih COA">
                 </div>
                 <div class="col-md-9">
                     <select wire:model="selectedCoa" id="selectedCoaFromInput" onchange="getCoa()" name="coa" id="coa" class="form-control" required>
@@ -53,6 +53,21 @@
             <label for="pic">PIC :</label>
             <input wire:model="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
         </div>
+        @if (session()->has('message_kas'))
+        <div class="alert alert-danger">
+            {{ session('message_kas') }}
+        </div>
+        @endif
+        @if (session()->has('tidak_ada_budget'))
+        <div class="alert alert-danger">
+            {{ session('tidak_ada_budget') }}
+        </div>
+        @endif
+        @if (session()->has('budget_kurang'))
+        <div class="alert alert-danger">
+            {{ session('budget_kurang') }}
+        </div>
+        @endif
         <button wire:click="getCompanyProject" class="btn btn-primary" id="btnSubmit">Submit</button>
     </div>
     @once

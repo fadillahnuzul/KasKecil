@@ -64,12 +64,21 @@ class AddBkk extends Component
         if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
-        $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+        if (Auth::user()->kk_access==1) {
+            $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
             ->searchByDateRange($this->startDate, $this->endDate)
             ->searchByCompany($this->selectedCompany)
             // ->searchByProject($this->selectedProject)
             ->paginate(10);
-        $this->selectedCoaExist = false;
+        } elseif(Auth::user()->kk_access==2) {
+            $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->where('user_id',Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+            ->searchByDateRange($this->startDate, $this->endDate)
+            ->searchByCompany($this->selectedCompany)
+            // ->searchByProject($this->selectedProject)
+            ->paginate(10);
+        }
+        
+        // $this->selectedCoaExist = false;
         return view('livewire.add-bkk', compact('kas','projectList','rekeningList','coaList'));
     }
 
@@ -105,9 +114,11 @@ class AddBkk extends Component
         foreach ($this->selectedKas as $key => $value) {
             $budget = new CekBudgetService;
             $budgetCOA = $budget->getBudget($this->selectedCompany, $key, $this->tanggalBkk);
-            $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], collect($value)->sum('jumlah'));
-            if ($isInBudget == false) {
-                session()->flash('message_budget', 'Overbudget COA');
+            if ($budgetCOA) {
+                $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], collect($value)->sum('jumlah'));
+            } else {
+                session()->flash('message_budget', 'Gagal membuat BKK! overbudget atau tidak ada budget untuk COA yang dipilih');
+                $isInBudget=false;
             }
         }
 

@@ -18,6 +18,7 @@ use App\Exports\KasKecilExport;
 use Alert;
 use Carbon\Carbon;
 use App\Services\CekBudgetService;
+use Illuminate\Support\Facades\DB;
 
 class PengeluaranController extends Controller
 {
@@ -77,7 +78,7 @@ class PengeluaranController extends Controller
         $saldo = $this->hitung_saldo(Auth::user()->id);
         $totalPengeluaran = 0;
         $kas_belum_klaim = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan', 'COA')->statusProgress()->bukanPengembalianSaldo()
-                            ->searchByProject($request->project)->searchByCompany($request->company)->searchByUser(Auth::user()->id)->get();
+            ->searchByProject($request->project)->searchByCompany($request->company)->searchByUser(Auth::user()->id)->get();
         foreach ($kas_belum_klaim as $k) {
             $totalPengeluaran = $totalPengeluaran + $k->jumlah;
         }
@@ -126,80 +127,52 @@ class PengeluaranController extends Controller
 
     public function create(Request $request)
     {
-        $Company = Company::get();
-        $Coa = Coa::where('status', '!=', 0)->get();
-
-        return view('form_kas', compact('Company', 'Coa'));
+        return view('form_kas');
     }
 
     public function save($data)
     {
-        // $kas = new Pengeluaran;
-        $jumlah_kas = preg_replace("/[^0-9]/", "", $data[0]['jumlah']);
-        $saldo = $this->hitung_saldo(Auth::user()->id);
-        if ($jumlah_kas > $saldo) {
-            Alert::error('Input kas gagal', 'Maaf, saldo tidak cukup');
-            return back();
-        } else {
-            $kas = Pengeluaran::updateOrCreate([
-                'tanggal' => $data[0]['date'],
-                'deskripsi' => $data[0]['deskripsi'],
-                'jumlah' => $jumlah_kas,
-                'divisi_id' => Auth::user()->level,
-                'status' => '4',
-                'coa' => $data[0]['coa'],
-                'pic' => $data[0]['pic'],
-                'pembebanan' => $data[0]['company'],
-                'project_id' => $data[0]['project'],
-                'tujuan' => $data[0]['tujuan'],
-                'user_id' => Auth::user()->id,
-            ]);
+        $kas = Pengeluaran::updateOrCreate([
+            'tanggal' => $data[0]['date'],
+            'deskripsi' => $data[0]['deskripsi'],
+            'jumlah' => $data[0]['jumlah'],
+            'divisi_id' => Auth::user()->level,
+            'status' => '4',
+            'coa' => $data[0]['coa'],
+            'pic' => $data[0]['pic'],
+            'pembebanan' => $data[0]['company'],
+            'project_id' => $data[0]['project'],
+            'tujuan' => $data[0]['tujuan'],
+            'user_id' => Auth::user()->id,
+            'in_budget' => $data[0]['in_budget'],
+        ]);
 
-            //Cek budget
-            $cekBudget = new CekBudgetService;
-            $budgetCOA = $cekBudget->getBudget($kas->pembebanan, $kas->coa, $kas->tanggal);
-            $isInBudget = $cekBudget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $kas->jumlah);
-            ($isInBudget == false) ? $kas->update(['in_budget' => '1']) : $kas;
-        }
         return redirect('kas_keluar');
     }
 
     public function edit(Request $request, $id)
     {
-        $kas = Pengeluaran::with('pengajuan', 'Pembebanan')->findOrFail($id);
-        $Company = Company::get();
-        $Coa = Coa::where('status', '!=', 0)->get();
         $id_kas = $id;
 
-        return view('form-edit', compact('kas', 'Company', 'Coa', 'id_kas'));
+        return view('form-edit', compact('id_kas'));
     }
 
     public function update($data, $id)
     {
-        $saldo = $this->hitung_saldo(Auth::user()->id);
-        if ($data[0]['jumlah'] > $saldo) {
-            Alert::error('Update kas gagal', 'Maaf, saldo tidak cukup');
-            return back();
-        } else {
-            $kas = Pengeluaran::find($id)->update([
-                'tanggal' => $data[0]['date'],
-                'deskripsi' => $data[0]['deskripsi'],
-                'jumlah' => $data[0]['jumlah'],
-                'divisi_id' => Auth::user()->level,
-                'status' => '4',
-                'coa' => $data[0]['coa'],
-                'pic' => $data[0]['pic'],
-                'pembebanan' => $data[0]['company'],
-                'project_id' => $data[0]['project'],
-                'tujuan' => $data[0]['tujuan'],
-            ]);
-        }
-        //cek budget
-        $cekBudget = new CekBudgetService;
-        $budgetCOA = $cekBudget->getBudget($data[0]['company'], $data[0]['coa'], $data[0]['date']);
-        $isInBudget = $cekBudget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $data[0]['jumlah']);
-        ($isInBudget == false) ? Pengeluaran::find($id)->update(['in_budget' => '1']) : null;
-
+        $kas = Pengeluaran::find($id)->update([
+            'tanggal' => $data[0]['date'],
+            'deskripsi' => $data[0]['deskripsi'],
+            'jumlah' => $data[0]['jumlah'],
+            'divisi_id' => Auth::user()->level,
+            'status' => '4',
+            'coa' => $data[0]['coa'],
+            'pic' => $data[0]['pic'],
+            'pembebanan' => $data[0]['company'],
+            'project_id' => $data[0]['project'],
+            'tujuan' => $data[0]['tujuan'],
+            'in_budget' => $data[0]['in_budget'],
+        ]);
+        
         return redirect('kas_keluar');
     }
 
@@ -218,7 +191,7 @@ class PengeluaranController extends Controller
         }
         Pengajuan::find($request->session()->get('key'))->update(['status' => '4']);
 
-        return response()->json(['message'=>"Kas berhasil diklaim"]);
+        return response()->json(['message' => "Kas berhasil diklaim"]);
     }
 
     // public function filter(Request $request)
