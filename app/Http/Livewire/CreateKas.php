@@ -37,7 +37,10 @@ class CreateKas extends Component
     {
         $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
         // $coaList = DB::table('coa')->select('coa.*')->join('budget', 'coa.coa_id', '=', 'budget.kode_coa')->get();
-        $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        // $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        $coaList = Coa::join('budget', function($q){
+            $q->on('budget.kode_coa','=', 'coa.coa_id');
+        })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
         if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
             $this->selectedCoa = $coaList->first()->coa_id;
         }

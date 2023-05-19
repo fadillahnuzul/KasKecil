@@ -23,6 +23,11 @@ class Coa extends Model
         return $this->hasMany(Pengeluaran::class, 'coa', 'coa_id');
     }
 
+    public function budgets()
+    {
+        return $this->hasMany(Coa::class, 'kode_coa', 'coa_id');
+    }
+
     public static function getCoa($id_coa)
     {
         return self::find($id_coa);
@@ -32,5 +37,4 @@ class Coa extends Model
     {
         ($search) ? $query->where('name','like','%'.$search.'%')->orWhere('code','like','%'.$search.'%') : $query;
     }
-
 }

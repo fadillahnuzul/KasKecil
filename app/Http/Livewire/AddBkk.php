@@ -60,7 +60,9 @@ class AddBkk extends Component
     {
         $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
-        $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        $coaList = Coa::join('budget', function($q){
+            $q->on('budget.kode_coa','=', 'coa.coa_id');
+        })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
         if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }

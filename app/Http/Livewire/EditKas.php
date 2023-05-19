@@ -39,7 +39,10 @@ class EditKas extends Component
     public function render()
     {
         $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
-        $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        // $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
+        $coaList = Coa::join('budget', function($q){
+            $q->on('budget.kode_coa','=', 'coa.coa_id');
+        })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
         if (!$this->selectedCoa) {
             ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
         }
