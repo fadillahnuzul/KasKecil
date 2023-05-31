@@ -76,12 +76,7 @@ class PengeluaranController extends Controller
         session(['key' => $id]);
         $total = $dataKas->sum('jumlah');
         $saldo = $this->hitung_saldo(Auth::user()->id);
-        $totalPengeluaran = 0;
-        $kas_belum_klaim = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan', 'COA')->statusProgress()->bukanPengembalianSaldo()
-            ->searchByProject($request->project)->searchByCompany($request->company)->searchByUser(Auth::user()->id)->get();
-        foreach ($kas_belum_klaim as $k) {
-            $totalPengeluaran = $totalPengeluaran + $k->jumlah;
-        }
+        $totalPengeluaran = (new AdminController)->hitung_belum_klaim(Auth::user()->id);
         session(['key' => $id]);
 
         return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));

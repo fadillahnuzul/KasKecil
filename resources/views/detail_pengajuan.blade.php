@@ -255,7 +255,7 @@
                                                 {{$row->COA->code}} {{$row->COA->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
+                                            <td class="font-weight-bold text-dark">@if($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
                                                 @endif
                                             </td>

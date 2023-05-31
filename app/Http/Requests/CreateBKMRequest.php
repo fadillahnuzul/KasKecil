@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateBKKRequest extends FormRequest
+class CreateBKMRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,11 @@ class CreateBKKRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'bkk_header' => 'required|array',
-            'bkk_detail' => 'required|array|max:5',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'bkk_detail.max' => 'Maksimal 5 BKK Detail',
+            'bkm_header' => 'required|array',
+            'bkm_detail' => 'required|array',
         ];
     }
 

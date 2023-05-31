@@ -119,8 +119,11 @@ class AddBkk extends Component
             if ($budgetCOA) {
                 $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], collect($value)->sum('jumlah'));
             } else {
-                session()->flash('message_budget', 'Gagal membuat BKK! overbudget atau tidak ada budget untuk COA yang dipilih');
                 $isInBudget=false;
+            }
+            
+            if(!$isInBudget) {
+                session()->flash('message_budget', 'Gagal membuat BKK! overbudget atau tidak ada budget untuk COA yang dipilih');
             }
         }
 
