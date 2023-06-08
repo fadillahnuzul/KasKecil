@@ -40,7 +40,11 @@ class CheckBudgetCron extends Command
 
             //Checkbudget
             $budgetCOA = $budget->getBudget($item->company, $item->coa, $item->date);
-            $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $kasCoa->sum('jumlah'));
+            if ($budgetCOA) {
+                $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $kasCoa->sum('jumlah'));
+            } else {
+                $isInBudget=false;
+            }
             ($isInBudget) ? $item->update(['in_budget' => '0']) : $item;
         }
 

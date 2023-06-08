@@ -69,6 +69,9 @@
     </div>
     @endif
     <button wire:click="updateKas" class="btn btn-primary">Update</button>
+    <div wire:loading wire:target="updateKas">
+        Update Kas...
+    </div>
 </div>
 @once
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

@@ -184,6 +184,9 @@
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
             <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
+            <div wire:loading wire:target="createBKK">
+                Processing BKK...
+            </div>
         </div>
     </div>
     <div>
