@@ -110,9 +110,9 @@ class Pengeluaran extends Model
 
     public function scopeSearchByDateRange($query, string|null $start = null, string|null $end = null)
     {
-        $start = ($start) ? $start : Carbon::now()->firstOfYear()->format('Y-m-d');
-        $end = ($end) ? $end : Carbon::now()->endOfYear()->format('Y-m-d');
-        return $query->whereBetween('tanggal', [$start, $end]);
+        // $start = ($start) ? $start : Carbon::now()->firstOfYear()->format('Y-m-d');
+        // $end = ($end) ? $end : Carbon::now()->endOfYear()->format('Y-m-d');
+        return ($start or $end) ? $query->whereBetween('tanggal', [$start, $end]) : $query;
     }
 
     public function scopeSearchByCompany($query, string|null $company)

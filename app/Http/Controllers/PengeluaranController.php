@@ -64,6 +64,7 @@ class PengeluaranController extends Controller
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $selectedStatus = ($request->status) ? Status::find($request->status) : Status::find(4);
         $selectedCompany = ($request->company) ? Company::find($request->company) : null;
+        $project_company_id = ($selectedCompany) ? $selectedCompany->project_company_id : null;
         $status = Status::whereIn('id', [4, 6, 7, 8])->get();
         $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->searchByUser(Auth::user()->id)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {
@@ -74,9 +75,8 @@ class PengeluaranController extends Controller
             ->searchByProject($request->project)
             ->get();
         session(['key' => $id]);
-        $total = $dataKas->sum('jumlah');
         $saldo = $this->hitung_saldo(Auth::user()->id);
-        $totalPengeluaran = (new AdminController)->hitung_belum_klaim(Auth::user()->id);
+        $totalPengeluaran = (new AdminController)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $project_company_id);
         session(['key' => $id]);
 
         return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
