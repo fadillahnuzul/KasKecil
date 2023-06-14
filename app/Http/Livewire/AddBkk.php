@@ -96,9 +96,14 @@ class AddBkk extends Component
     {
         $this->selectedKas = Pengeluaran::with('coa')->whereIn('id', $this->selectedKasId)->get();
         foreach($this->selectedKas as $item) {
-            if ($item->in_budget==1) {
-                $this->selectedKas = $this->selectedKas->where('in_budget','!=',1);
-                session()->flash('message_overbudget', 'Kas overbudget tidak ditambahkan');
+            $coa = Coa::find($item->coa);
+            if (($coa->status_budget=='budget' && $item->in_budget==1)) {
+                session()->flash('message_overbudget', 'COA overbudget. Ajukan penambahan budget.');
+                $this->selectedKas = $this->selectedKas->filter(function($kas) use ($item){
+                    if ($kas->id != $item->getKey()){
+                        return $kas;
+                    };
+                });
             }
         }
         
@@ -161,11 +166,21 @@ class AddBkk extends Component
         });
     }
 
+    public function statusBudgetCoa()
+    {
+        $coa = Coa::find($this->selectedCoa);
+        if ((!$this->isInBudget)&&($coa->status_budget=='budget')) {
+            session()->flash('budget_kurang', 'Input kas gagal, budget pada COA ini tidak cukup. Ajukan penambahan budget.');
+            return false;
+        }
+        return true;
+    }
+
     public function createBKK()
     {
-        $statusCoa = $this->cekJumlahCoa();
-        $budgetCOA = $this->cekBudget();
-        if ($statusCoa && $budgetCOA) {
+        // $statusCoa = $this->cekJumlahCoa();
+        // $budgetCOA = $this->cekBudget();
+        // if ($statusCoa && $budgetCOA) {
             //data bkk header
             $bkk_header_data = [
                 'bank_id' => $this->selectedRekening,
@@ -205,10 +220,14 @@ class AddBkk extends Component
             collect($bkk["bkk_detail"])->map(function ($item) {
                 Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
             });
-            session()->flash('message_save', 'BKK berhasil dibuat');
-        } else {
-            session()->flash('message_not_save', 'BKK gagal dibuat');
-        }
+            if ($bkk) {
+                session()->flash('message_save', 'BKK berhasil dibuat');
+            } else {
+                session()->flash('message_not_save', 'BKK gagal dibuat');
+            }
+        // } else {
+            // session()->flash('message_not_save', 'BKK gagal dibuat');
+        // }
         $this->render();
     }
 }

@@ -66,7 +66,7 @@ class EditKas extends Component
         $cekBudget = new CekBudgetService;
         $budgetCOA = $cekBudget->getBudget($this->selectedCompany, $this->selectedCoa, $this->selectedDate);
         if (!$budgetCOA[0]['budgetbulan'] && !$budgetCOA[0]['budgettahun']) {
-            session()->flash('tidak_ada_budget', 'Input kas gagal, tidak ada budget pada COA ini');
+            // session()->flash('tidak_ada_budget', 'Input kas gagal, tidak ada budget pada COA ini');
             return false;
         }
         $this->isInBudget = $cekBudget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $this->jumlah);
@@ -83,22 +83,11 @@ class EditKas extends Component
         return true;
     }
 
-    public function statusBudgetCoa()
-    {
-        $coa = Coa::find($this->selectedCoa);
-        if ((!$this->isInBudget) && ($coa->status_budget == 'budget')) {
-            session()->flash('budget_kurang', 'Input kas gagal, budget pada COA ini tidak cukup. Ajukan penambahan budget.');
-            return false;
-        }
-        return true;
-    }
-
     public function updateKas()
     {
         $budget = $this->cekBudgetEditKas();
         $inSaldo = $this->cekSaldo();
-        $inBudget = ($budget && !$this->isInBudget) ? 1 : null;
-        $statusBudget = $this->statusBudgetCoa();
+        $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
         $data_kas = array([
             'date' => $this->selectedDate,
             'deskripsi' => $this->deskripsi,
@@ -110,7 +99,7 @@ class EditKas extends Component
             'tujuan' => $this->tujuan,
             'in_budget' => $inBudget,
         ]);
-        if ($budget && $inSaldo && $statusBudget) {
+        if ($inSaldo) {
             (new PengeluaranController)->update($data_kas, $this->id_kas);
         }
     }
