@@ -145,9 +145,10 @@ class AdminController extends Controller
                 ->searchByUnit($unit)
                 ->notDisabled()
                 ->searchByUser($id)
-                ->where(function ($query) use ($user) {
-                    ($user->kk_access == 1) ? $query->statusProgressAndKlaim() : $query->statusProgress();
-                })
+                ->statusProgress()
+                // ->where(function ($query) use ($user) {
+                //     ($user->kk_access == 1) ? $query->statusProgressAndKlaim() : $query->statusProgress();
+                // })
                 ->get();
             if (count($data_pengeluaran) > 0) {
                 $data_pengeluaran->map(function ($item) use (&$data_pengeluaran_user) {
@@ -163,9 +164,11 @@ class AdminController extends Controller
                     ->searchByUnit($unit)
                     ->notDisabled()
                     ->searchByUser($user->user->id)
-                    ->where(function ($query) use ($user) {
-                        ($user->user->kk_access == 1) ? $query->statusProgressAndKlaim() : $query->statusProgress();
-                    })->get();
+                    ->statusProgress()
+                    // ->where(function ($query) use ($user) {
+                    //     ($user->user->kk_access == 1) ? $query->statusProgressAndKlaim() : $query->statusProgress();
+                    // })
+                    ->get();
                 if (count($data_pengeluaran) > 0) {
                     $data_pengeluaran->map(function ($item) use (&$data_pengeluaran_user) {
                         $data_pengeluaran_user->push($item);
