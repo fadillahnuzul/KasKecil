@@ -41,9 +41,11 @@ class CreateKas extends Component
         $coaList = Coa::join('budget', function($q){
             $q->on('budget.kode_coa','=', 'coa.coa_id');
         })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
-        if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
+        if (!$this->selectedCoaExist && $coaList->first() && $this->searchCoa) {
             $this->selectedCoa = $coaList->first()->coa_id;
         }
+
+        $this->selectedCoaExist = false;
         return view('livewire.create-kas', compact('projectList', 'coaList'));
     }
 
@@ -77,7 +79,7 @@ class CreateKas extends Component
         return true;
     }
 
-    public function getCompanyProject()
+    public function createPettyCash()
     {
         $this->jumlah = preg_replace("/[^0-9]/", "", $this->jumlah);
         $budget = $this->cekBudgetCreateKas();

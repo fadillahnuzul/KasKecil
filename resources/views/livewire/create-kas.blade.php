@@ -68,7 +68,7 @@
             {{ session('budget_kurang') }}
         </div>
         @endif
-        <button wire:click="getCompanyProject" class="btn btn-primary" id="btnSubmit">Submit</button>
+        <button wire:click="createPettyCash" class="btn btn-primary" id="btnSubmit">Submit</button>
         <div wire:loading wire:target="getCompanyProject">
             Create Kas...
         </div>

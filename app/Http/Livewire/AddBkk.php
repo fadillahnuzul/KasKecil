@@ -63,7 +63,7 @@ class AddBkk extends Component
         $coaList = Coa::join('budget', function($q){
             $q->on('budget.kode_coa','=', 'coa.coa_id');
         })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
-        if (!$this->selectedCoaExist && $this->searchCoa && $coaList) {
+        if (!$this->selectedCoaExist && $coaList->first() && $this->searchCoa) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
         if (Auth::user()->kk_access==1) {
@@ -80,7 +80,7 @@ class AddBkk extends Component
             ->paginate(10);
         }
         
-        // $this->selectedCoaExist = false;
+        $this->selectedCoaExist = false;
         return view('livewire.add-bkk', compact('kas','projectList','rekeningList','coaList'));
     }
 
