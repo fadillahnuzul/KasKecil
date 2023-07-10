@@ -10,7 +10,7 @@ class Divisi extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'user_div';
+    protected $table = 'user_level';
 
     /**
      * The attributes that are mass assignable.
