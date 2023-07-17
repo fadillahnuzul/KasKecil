@@ -2,15 +2,15 @@
         <!-- {{-- Care about people's approval and you will be their prisoner. --}} -->
         <div class="form-group">
             <label for="tanggal">Tanggal Pengeluaran :</label>
-            <input type="date" wire:model="selectedDate" class="datepicker form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
+            <input type="date" wire:model.defer="selectedDate" class="datepicker form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
         </div>
         <div class="form-group">
             <label for="deskripsi">Keterangan :</label>
-            <input type="text" autocomplete="on" wire:model="deskripsi" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
+            <input type="text" autocomplete="on" wire:model.defer="deskripsi" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
         </div>
         <div class="form-group">
             <label for="kredit">Nominal :</label>
-            <input type="text" autocomplete="on" wire:model="jumlah" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
+            <input type="text" autocomplete="on" wire:model.defer="jumlah" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
         </div>
         <div class="form-group">
             <label for="coa">COA :</label>
@@ -38,7 +38,7 @@
         </div>
         <div class="form-group">
             <label for="project">Project :</label>
-            <select wire:model="selectedProject" class="form-control">
+            <select wire:model.defer="selectedProject" class="form-control">
                 <option value="">--</option>
                 @foreach ($projectList as $project)
                 <option value="{{$project->project_id}}">{{$project->name}}</option>
@@ -47,11 +47,11 @@
         </div>
         <div class="form-group">
             <label for="tujuan">Dibayarkan kepada (Nota tujuan) :</label>
-            <input wire:model="tujuan" autocomplete="on" type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
+            <input wire:model.defer="tujuan" autocomplete="on" type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
         </div>
         <div class="form-group">
             <label for="pic">PIC :</label>
-            <input wire:model="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
+            <input wire:model.defer="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
         </div>
         @if (session()->has('message_kas'))
         <div class="alert alert-danger">

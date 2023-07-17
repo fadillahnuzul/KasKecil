@@ -27,7 +27,9 @@ class EditKas extends Component
     public $pic;
     public $tujuan;
     public $isInBudget;
+    public $selectedCoaExist;
 
+    protected $listeners = ['getSelectedCoaEdit' => 'getCoaEdit'];
 
     public function mount()
     {
@@ -43,10 +45,19 @@ class EditKas extends Component
         $coaList = Coa::join('budget', function($q){
             $q->on('budget.kode_coa','=', 'coa.coa_id');
         })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
-        if (!$this->selectedCoa) {
-            ($coaList->first()->coa_id) ? $this->selectedCoa = $coaList->first()->coa_id : null;
+        if (!$this->selectedCoaExist && $coaList->first() && $this->searchCoa) {
+            $this->selectedCoa = $coaList->first()->coa_id;
         }
+
         return view('livewire.edit-kas', compact('projectList', 'coaList'));
+    }
+
+    public function getCoaEdit($coaId = null)
+    {
+        if ($coaId) {
+            $this->selectedCoa = $coaId;
+            $this->selectedCoaExist = true;
+        }
     }
 
     public function setValueAwal()

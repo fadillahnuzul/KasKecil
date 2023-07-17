@@ -63,7 +63,7 @@ class AddBkk extends Component
         $coaList = Coa::join('budget', function($q){
             $q->on('budget.kode_coa','=', 'coa.coa_id');
         })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
-        if (!$this->selectedCoaExist && $coaList->first() && $this->searchCoa) {
+        if (!$this->selectedCoaExist && $coaList->first() && !$this->selectedCoaId) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
         if (Auth::user()->kk_access==1) {
@@ -94,6 +94,7 @@ class AddBkk extends Component
 
     public function getSelectedKas()
     {
+        // $this->selectedCoaExist = false;
         $this->selectedKas = Pengeluaran::with('coa')->whereIn('id', $this->selectedKasId)->get();
         foreach($this->selectedKas as $item) {
             $coa = Coa::find($item->coa);

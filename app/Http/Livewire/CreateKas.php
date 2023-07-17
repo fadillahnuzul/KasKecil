@@ -45,7 +45,7 @@ class CreateKas extends Component
             $this->selectedCoa = $coaList->first()->coa_id;
         }
 
-        $this->selectedCoaExist = false;
+        // $this->selectedCoaExist = false;
         return view('livewire.create-kas', compact('projectList', 'coaList'));
     }
 
