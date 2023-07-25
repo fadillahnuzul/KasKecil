@@ -4,7 +4,7 @@
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px; max-width:430px; color:black;">
             <input type="text" autocomplete="search-coa" wire:model="searchCoa" placeholder="Cari COA" class="form-control form-control-sm" style="color:black;">
-            <select wire:model="selectedCoaId" id="selectedCoaFromInput" required onchange="getCoa()" class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedCoaId" id="selectedCoaFromInput" required onclick="getCoa()" class="form-control form-control-sm" style="color:black;">
                 @foreach ($coaList as $itemCoa)
                 <option value="{{$itemCoa->coa_id}}">{{$itemCoa->code}} {{$itemCoa->name}}</option>
                 @endforeach
