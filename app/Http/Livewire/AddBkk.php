@@ -110,10 +110,10 @@ class AddBkk extends Component
         
         $this->totalKas = $this->selectedKas->sum('jumlah');
         $this->selectedKas = $this->selectedKas->sortBy('coa')->groupBy('coa')->toBase();
-        $statusCoa = $this->cekJumlahCoa();
-        if ($statusCoa == false) {
-            session()->flash('message_coa', 'Gagal menambahkan transaksi, COA yang dipilih lebih dari 5');
-        }
+        // $statusCoa = $this->cekJumlahCoa();
+        // if ($statusCoa == false) {
+        //     session()->flash('message_coa', 'Gagal menambahkan transaksi, COA yang dipilih lebih dari 5');
+        // }
         $this->hitungKasCOA();
     }
 

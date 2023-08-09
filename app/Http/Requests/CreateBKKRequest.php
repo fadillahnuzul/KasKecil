@@ -27,14 +27,7 @@ class CreateBKKRequest extends FormRequest
     {
         return [
             'bkk_header' => 'required|array',
-            'bkk_detail' => 'required|array|max:5',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'bkk_detail.max' => 'Maksimal 5 BKK Detail',
+            'bkk_detail' => 'required|array',
         ];
     }
 
