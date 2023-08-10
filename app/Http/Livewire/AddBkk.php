@@ -96,17 +96,17 @@ class AddBkk extends Component
     {
         // $this->selectedCoaExist = false;
         $this->selectedKas = Pengeluaran::with('coa')->whereIn('id', $this->selectedKasId)->get();
-        foreach($this->selectedKas as $item) {
-            $coa = Coa::find($item->coa);
-            if (($coa->status_budget=='budget' && $item->in_budget==1)) {
-                session()->flash('message_overbudget', 'COA overbudget. Ajukan penambahan budget.');
-                $this->selectedKas = $this->selectedKas->filter(function($kas) use ($item){
-                    if ($kas->id != $item->getKey()){
-                        return $kas;
-                    };
-                });
-            }
-        }
+        // foreach($this->selectedKas as $item) {
+        //     $coa = Coa::find($item->coa);
+        //     if (($coa->status_budget=='budget' && $item->in_budget==1)) {
+        //         session()->flash('message_overbudget', 'COA overbudget. Ajukan penambahan budget.');
+        //         $this->selectedKas = $this->selectedKas->filter(function($kas) use ($item){
+        //             if ($kas->id != $item->getKey()){
+        //                 return $kas;
+        //             };
+        //         });
+        //     }
+        // }
         
         $this->totalKas = $this->selectedKas->sum('jumlah');
         $this->selectedKas = $this->selectedKas->sortBy('coa')->groupBy('coa')->toBase();
