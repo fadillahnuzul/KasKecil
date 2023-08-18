@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\ApiBkkController;
+use App\Http\Controllers\Api\ApiBkkSpkController;
 use App\Http\Controllers\Api\ApiBkmController;
 
 /*
@@ -23,4 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/klaim', [AdminController::class, 'klaim']);
 Route::get('/send_data_kas', [AdminController::class, 'sendDataKas']);
 Route::post('create-bkk', [ApiBkkController::class, 'store']);
+Route::post('create-bkk-spk', [ApiBkkSpkController::class, 'store']);
 Route::post('create-bkm', [ApiBkmController::class, 'store']);
