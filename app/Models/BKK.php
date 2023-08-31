@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BKK extends Model
 {
@@ -45,5 +46,9 @@ class BKK extends Model
     public function bkkHeader()
     {
         return $this->belongsTo(BKKHeader::class, 'bkk_header_id', 'id');
+    }
+
+    public function coa() : BelongsTo {
+        return $this->setConnection('mysql')->belongsTo(Coa::class, 'coa_id','coa_id');
     }
 }

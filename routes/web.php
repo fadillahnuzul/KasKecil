@@ -9,6 +9,7 @@ use App\Http\Controllers\SumberController;
 use App\Http\Controllers\PembebananController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\BKKController;
+use App\Http\Controllers\BKKHeaderController;
 
 
 /*
@@ -96,8 +97,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bank_kas_divisi/{id}', [BankController::class, 'kas_divisi']);
 
     //BKK
+    Route::post('/print_bkk', [BKKController::class, 'print']);
+    Route::match(['GET', 'POST'], '/list_bkk', [BKKHeaderController::class, 'index']);
     Route::get('/create_bkk', [BKKController::class, 'create']);
     Route::post('/save_bkk', [BKKController::class, 'save']);
+    Route::get('/bkk_detail/{id}',[BKKController::class, 'index']);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

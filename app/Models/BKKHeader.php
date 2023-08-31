@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BKKHeader extends Model
 {
@@ -39,5 +40,18 @@ class BKKHeader extends Model
     public function bkk()
     {
         return $this->hasMany(BKK::class, 'bkk_header_id', 'id');
+    }
+
+    public function project() : BelongsTo {
+        return $this->setConnection('mysql')->belongsTo(Project::class, 'project_id','project_id');
+    }
+
+    public function bank() : BelongsTo {
+        return $this->setConnection('mysql')->belongsTo(Rekening::class, 'bank_id', 'bank_id');
+    }
+
+    public function scopeSearchByCompany($query, string|null $company)
+    {
+        return ($company) ? $query->whereRelation('project', 'project_company_id', $company) : $query;
     }
 }

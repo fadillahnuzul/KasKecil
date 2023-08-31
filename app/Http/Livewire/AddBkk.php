@@ -45,6 +45,7 @@ class AddBkk extends Component
     public $totalKasCoa;
     public $searchCoa;
     public $selectedCoaExist;
+    public $bkk;
 
     protected $listeners = ['getSelectedCoa' => 'getCoa'];
 
@@ -217,11 +218,12 @@ class AddBkk extends Component
                 ]);
             });
             //save
-            $bkk = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
-            collect($bkk["bkk_detail"])->map(function ($item) {
-                Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
-            });
-            if ($bkk) {
+            $this->bkk = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
+            
+            if ($this->bkk) {
+                collect($this->bkk["bkk_detail"])->map(function ($item) {
+                    Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
+                });
                 session()->flash('message_save', 'BKK berhasil dibuat');
             } else {
                 session()->flash('message_not_save', 'BKK gagal dibuat');
@@ -230,5 +232,9 @@ class AddBkk extends Component
             // session()->flash('message_not_save', 'BKK gagal dibuat');
         // }
         $this->render();
+    }
+
+    public function printBkk() : void {
+        (new BKKController)->print($this->bkk['bkk_detail'],$this->bkk['bkk_header'],$this->selectedProject);
     }
 }

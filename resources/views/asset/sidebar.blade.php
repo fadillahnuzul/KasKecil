@@ -42,6 +42,11 @@
             <i class="fas fa-fw fa-book"></i>
             <span>Buat BKK</span></a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/list_bkk">
+            <i class="fas fa-fw fa-book"></i>
+            <span>List BKK</span></a>
+    </li>
     @elseif (Auth::user()->kk_access=='2')
     <li class="nav-item">
         <a class="nav-link" href="{{url('/home')}}">

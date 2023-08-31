@@ -7,8 +7,6 @@
     "require": {
         "php": "^8.0.2",
         "alfa6661/laravel-autonumber": "^1.2",
-        "barryvdh/laravel-dompdf": "^2.0",
-        "dompdf/dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.5",
         "joshhanley/livewire-autocomplete": "^0.1.9",
         "laravel/framework": "^9.19",

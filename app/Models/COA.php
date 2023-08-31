@@ -28,6 +28,11 @@ class Coa extends Model
         return $this->hasMany(Coa::class, 'kode_coa', 'coa_id');
     }
 
+    public function bkkDetail()
+    {
+        return $this->setConnection('mysql2')->hasMany(BKK::class, 'coa_id', 'coa_id');
+    }
+
     public static function getCoa($id_coa)
     {
         return self::find($id_coa);
