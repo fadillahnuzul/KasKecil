@@ -3,6 +3,7 @@
 	// require_once ('../public/vendor/fpdf/fpdf.php');
 	// require_once ('../public/vendor/fpdf/code128.php');
 	require_once ('../public/vendor/Barcode.php');
+	
 	// $this->load->library('barcode');
 	
 	if(!function_exists("Terbilang")) {
