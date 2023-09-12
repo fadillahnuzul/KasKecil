@@ -160,6 +160,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <ul class="pagination p1">
+                                    {{$dataBkk->links()}}
+                                </ul>
                             </div>
                         </div>
                     </div>

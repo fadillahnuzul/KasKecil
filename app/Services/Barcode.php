@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use FPDF;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 /**
  * Class Barcode
  * @package App\Services
  */
-class Barcode extends FPDF
+class Barcode extends Fpdf
 {
     protected $T128;                                         // Tableau des codes 128
     protected $ABCset = "";                                  // jeu des caractères éligibles au C128

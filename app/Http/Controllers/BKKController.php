@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\BKK;
 use App\Models\BKKHeader;
+use App\Models\Project;
+use App\Services\PrintBkk;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use App\Services\TerbilangNominal;
 
 class BKKController extends Controller
 {
@@ -34,14 +37,12 @@ class BKKController extends Controller
         return($bkk_detail_array);
     }
 
-    public function print(Request $request)
+    public function print($id)
     {
-        // dd($request);
-        $detail_bkk = [$request->detail_bkk];
-        $bkk_header = [$request->bkk_header]; 
-        $project_company = [$request->project_company];
-        $tipe = $request->tipe;
-
-        return view('v_bkk_mandiri_print', compact('detail_bkk', 'bkk_header', 'project_company', 'tipe'));
+        $bkkHeader = BKKHeader::find($id);
+        $bkkDetail = BKK::where('bkk_header_id', $id)->get();
+        $project = Project::find($bkkHeader->project_id);
+        $tipe = "spi";
+        $terbilang = (new PrintBkk)->printBkk($project, $bkkHeader, $bkkDetail, $tipe);
     }
 }

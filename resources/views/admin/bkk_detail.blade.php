@@ -95,13 +95,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-2" style="align-text:left; background-color:white;">
-                            <form action="/print_bkk" method="post">
-                                @csrf
-                                <input type="hidden" name="detail_bkk" value="{{$bkkDetail}}">
-                                <input type="hidden" name="bkk_header" value="{{$bkkHeader}}">
-                                <input type="hidden" name="project_company" value="{{$bkkHeader->project_id}}">
-                                <button type="submit" style="float: right;" class="btn btn-success btn-sm">Print <i class="fas fa-print fa-sm"></i></button>
-                            </form>
+                                <a href="/print_bkk/{{$bkkHeader->id}}" style="float: right;" class="btn btn-success btn-sm">Print <i class="fas fa-print fa-sm"></i></a>
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-6">

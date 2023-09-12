@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1.0",
         "alfa6661/laravel-autonumber": "^1.2",
         "codedge/laravel-fpdf": "^1.12",
         "guzzlehttp/guzzle": "^7.5",
@@ -16,7 +16,8 @@
         "livewire/livewire": "^2.11",
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.25",
-        "realrashid/sweet-alert": "^5.1"
+        "realrashid/sweet-alert": "^5.1",
+        "uwaiscode/laravelterbilang": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

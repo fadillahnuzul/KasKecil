@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "357168261561011724a67c4370441ae3",
+    "content-hash": "303346d4b8f8f657ed64179fdc19a869",
     "packages": [
         {
             "name": "alfa6661/laravel-autonumber",
@@ -6199,6 +6199,47 @@
             "time": "2023-01-03T09:29:04+00:00"
         },
         {
+            "name": "uwaiscode/laravelterbilang",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uwaiscode/Laravel-Terbilang.git",
+                "reference": "a92277a7159c5e85fcb57a906d8e1a2c67be5e4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uwaiscode/Laravel-Terbilang/zipball/a92277a7159c5e85fcb57a906d8e1a2c67be5e4b",
+                "reference": "a92277a7159c5e85fcb57a906d8e1a2c67be5e4b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uwaiscode\\Laravelterbilang\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Uwais Code",
+                    "email": "uwaiscode@gmail.com"
+                }
+            ],
+            "description": "Cara sederhana untuk merubah nilai angka menjadi tulisan",
+            "support": {
+                "issues": "https://github.com/uwaiscode/Laravel-Terbilang/issues",
+                "source": "https://github.com/uwaiscode/Laravel-Terbilang/tree/master"
+            },
+            "time": "2022-04-15T02:53:45+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.5.0",
             "source": {
@@ -9182,7 +9223,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0.2"
+        "php": "^8.1.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

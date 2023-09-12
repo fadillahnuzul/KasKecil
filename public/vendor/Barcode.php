@@ -1,7 +1,8 @@
 <?php 
 // if(! defined('BASEPATH')) exit('Akses langsung tidak diperbolehkan');
 // require_once (APPPATH.'/libraries/fpdf/fpdf.php');
-require_once ('../public/vendor/fpdf/fpdf.php');
+// require_once ('../public/vendor/fpdf/fpdf.php');
+use FPDF;
 
 class Barcode extends FPDF {
 	// SET SUPER GLOBAL

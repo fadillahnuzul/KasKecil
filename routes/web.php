@@ -97,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bank_kas_divisi/{id}', [BankController::class, 'kas_divisi']);
 
     //BKK
-    Route::post('/print_bkk', [BKKController::class, 'print']);
+    Route::get('/print_bkk/{id}', [BKKController::class, 'print']);
     Route::match(['GET', 'POST'], '/list_bkk', [BKKHeaderController::class, 'index']);
     Route::get('/create_bkk', [BKKController::class, 'create']);
     Route::post('/save_bkk', [BKKController::class, 'save']);
