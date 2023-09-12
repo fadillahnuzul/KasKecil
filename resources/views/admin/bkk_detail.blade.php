@@ -95,7 +95,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-2" style="align-text:left; background-color:white;">
-                                <a href="/print_bkk/{{$bkkHeader->id}}" style="float: right;" class="btn btn-success btn-sm">Print <i class="fas fa-print fa-sm"></i></a>
+                            <a href="/print_bkk/{{$bkkHeader->id}}" style="float: right;" class="btn btn-success btn-sm" target="_blank">Print <i class="fas fa-print fa-sm"></i></a>
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-6">

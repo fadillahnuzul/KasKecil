@@ -12,15 +12,22 @@ use App\Services\Barcode;
 class PrintBkk extends Fpdf
 {
     public $pdf;
-    public function __construct() {
-        $this->pdf = new FPDF('L','mm','A5');
+
+    public function __construct()
+    {
+        $this->pdf = new FPDF('L', 'mm', 'A5');
     }
 
     public function printBkk($project, $bkk_header, $detail_bkk, $tipe)
     {
-        $this->pdf->AddPage('L', 'A5'); 
+        // ob_start();
+        $this->pdf->AddPage('L', 'A5');
         $this->setHeader($project, $bkk_header, $detail_bkk, $tipe);
-        $this->pdf->Output();
+        
+        // return response($this->pdf->Output('D','dor2.pdf'), 200)
+        //     ->header('Content-Type', 'application/pdf');
+        $this->pdf->Output('I', 'BKK.pdf');
+        // ob_end_flush();
     }
 
     public function setHeader($project, $bkk_header, $detail_bkk, $tipe): void
@@ -40,12 +47,12 @@ class PrintBkk extends Fpdf
         $this->pdf->Cell(55, 7, ' ', 'LTRB', 0, 'C', 0);
 
         $this->pdf->SetY($y);
-        if (isset($project->cop_header)) {
-            if ($project->cop_header != '') {
-                $b = '../teknik/master/master_company/cop_header/' . $project->cop_header;
-                $this->pdf->Image($b, 10, $y + 2, 30, 10);
-            }
-        }
+        // if (isset($project->cop_header)) {
+        //     if ($project->cop_header != '') {
+        //         $b = '../teknik/master/master_company/cop_header/' . $project->cop_header;
+        //         $this->pdf->Image($b, 10, $y + 2, 30, 10);
+        //     }
+        // }
         $this->pdf->Ln(2);
 
         $this->pdf->SetFont('times', 'B', 15);
@@ -94,7 +101,6 @@ class PrintBkk extends Fpdf
         $this->pdf->Cell(5, 5, ': ', 0, 0, 'L');
         $this->pdf->SetTextColor(0, 0, 0);
         $this->pdf->Cell(55, 5, $bkk_header->bank_name . ' - ' . $bkk_header->rekening, 0, 0, 'L');
-
     }
 
     public function setFooter(): void
