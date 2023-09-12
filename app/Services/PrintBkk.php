@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Services\Barcode;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class PrintBkk
@@ -18,9 +19,12 @@ class PrintBkk extends Fpdf
 
     public function printBkk($project, $bkk_header, $detail_bkk, $tipe)
     {
-        $this->pdf->AddPage('L', 'A5'); 
+        $this->pdf->AddPage(); 
         $this->setHeader($project, $bkk_header, $detail_bkk, $tipe);
-        $this->pdf->Output();
+        return Response::make($this->pdf->Output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="example.pdf"', 
+        ]);
     }
 
     public function setHeader($project, $bkk_header, $detail_bkk, $tipe): void
@@ -31,7 +35,7 @@ class PrintBkk extends Fpdf
         $x = $this->pdf->getX();
         $this->pdf->SetY($y);
         // $this->SetDrawColor(255,0,0);
-        $this->pdf->SetFont('times', 'B', 16);
+        $this->pdf->SetFont('Times', 'B', 16);
         $this->pdf->SetDrawColor(187, 53, 197);
         $this->pdf->Cell(45, 14, ' ', 'LTRB', 0, 'C', 0);
         $this->pdf->Cell(100, 14, ' ', 'LTRB', 0, 'C', 0);
@@ -48,16 +52,16 @@ class PrintBkk extends Fpdf
         }
         $this->pdf->Ln(2);
 
-        $this->pdf->SetFont('times', 'B', 15);
+        $this->pdf->SetFont('Times', 'B', 15);
         // $this->SetTextColor(255,0,0);
         $this->pdf->SetTextColor(187, 53, 197);
         $this->pdf->Cell(46, 14, '', 0, 0, 'L');
         $this->pdf->Cell(98, 14, 'BUKTI PENGELUARAN KAS / BANK', 0, 0, 'C');
-        $this->pdf->SetFont('times', '', 9);
+        $this->pdf->SetFont('Times', '', 9);
         $this->pdf->SetXY($x + 32 + 108, $y);
         $this->pdf->Cell(6, 7, 'No : ', 0, 0, 'L');
         $this->pdf->SetTextColor(255, 0, 0);
-        $this->pdf->SetFont('times', '', 9);
+        $this->pdf->SetFont('Times', '', 9);
 
         if ($bkk_header->name == '' || $bkk_header->name == '0' || $bkk_header->name == '/\s/') {
             $name = "BK/" . substr($bkk_header->bank_initial, 0, 4) . "/" . $bkk_header->initial . "/____/____/____";
@@ -84,7 +88,7 @@ class PrintBkk extends Fpdf
         $this->pdf->SetTextColor(187, 53, 197);
         // $this->SetTextColor(255,0,0);
 
-        $this->pdf->SetFont('times', '', 11);
+        $this->pdf->SetFont('Times', '', 11);
         $y = $this->pdf->getY();
         $this->pdf->SetY($y);
         $this->pdf->Cell(200, 33, ' ', 'LTRB', 0, 'C', 0);
@@ -94,7 +98,6 @@ class PrintBkk extends Fpdf
         $this->pdf->Cell(5, 5, ': ', 0, 0, 'L');
         $this->pdf->SetTextColor(0, 0, 0);
         $this->pdf->Cell(55, 5, $bkk_header->bank_name . ' - ' . $bkk_header->rekening, 0, 0, 'L');
-
     }
 
     public function setFooter(): void

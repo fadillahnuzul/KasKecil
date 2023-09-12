@@ -43,6 +43,6 @@ class BKKController extends Controller
         $bkkDetail = BKK::where('bkk_header_id', $id)->get();
         $project = Project::find($bkkHeader->project_id);
         $tipe = "spi";
-        $terbilang = (new PrintBkk)->printBkk($project, $bkkHeader, $bkkDetail, $tipe);
+        (new PrintBkk)->printBkk($project, $bkkHeader, $bkkDetail, $tipe);
     }
 }
