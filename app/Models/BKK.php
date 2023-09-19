@@ -51,4 +51,8 @@ class BKK extends Model
     public function coa() : BelongsTo {
         return $this->setConnection('mysql')->belongsTo(Coa::class, 'coa_id','coa_id');
     }
+
+    public function cop() : BelongsTo {
+        return $this->belongsTo(COP_SPI::class, 'cop_id','cop_id');
+    }
 }

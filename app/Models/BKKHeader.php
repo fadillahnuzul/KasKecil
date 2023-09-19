@@ -50,6 +50,14 @@ class BKKHeader extends Model
         return $this->setConnection('mysql')->belongsTo(Rekening::class, 'bank_id', 'bank_id');
     }
 
+    public function otorisator() : BelongsTo {
+        return $this->setConnection('mysql')->belongsTo(User::class, 'otorisasi_by', 'id');
+    }
+
+    public function creator() : BelongsTo {
+        return $this->setConnection('mysql')->belongsTo(User::class, 'created_by', 'id');
+    }
+
     public function scopeSearchByCompany($query, string|null $company)
     {
         return ($company) ? $query->whereRelation('project', 'project_company_id', $company) : $query;

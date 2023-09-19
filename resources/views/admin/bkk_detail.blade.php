@@ -95,7 +95,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-2" style="align-text:left; background-color:white;">
-                                <a href="/print_bkk/{{$bkkHeader->id}}" style="float: right;" class="btn btn-success btn-sm">Print <i class="fas fa-print fa-sm"></i></a>
+                            <a href="/print_bkk/{{$bkkHeader->id}}" style="float: right;" class="btn btn-success btn-sm" target="_blank">Print <i class="fas fa-print fa-sm"></i></a>
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -152,8 +152,10 @@
                                             <th class="font-weight-bold text-dark">Barcode</th>
                                             <th class="font-weight-bold text-dark">Pekerjaan</th>
                                             <th class="font-weight-bold text-dark">COA</th>
-                                            <th class="font-weight-bold text-dark">Payment</th>
                                             <th class="font-weight-bold text-dark">DPP</th>
+                                            <th class="font-weight-bold text-dark">PPN</th>
+                                            <th class="font-weight-bold text-dark">PPH</th>
+                                            <th class="font-weight-bold text-dark">Payment</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -162,8 +164,10 @@
                                             <td class="font-weight-bold text-dark">{{$row->id}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->pekerjaan}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->coa->code}} {{$row->coa->name}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->payment}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->dpp}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->ppn}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->pph}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->payment}}</td>
                                         </tr>
                                         @empty
                                         <tr>
@@ -172,8 +176,10 @@
                                         @endforelse
                                         <tr class="font-weight-bold text-dark">
                                             <td colspan="3">Total</td>
-                                            <td>{{$totalPayment}}</td>
                                             <td>{{$totalDpp}}</td>
+                                            <td>{{$totalPpn}}</td>
+                                            <td>{{$totalPph}}</td>
+                                            <td>{{$totalPayment}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

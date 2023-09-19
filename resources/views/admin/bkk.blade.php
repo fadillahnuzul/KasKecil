@@ -154,7 +154,7 @@
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">
                                                 <a href="/bkk_detail/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
-                                                <a class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
+                                                <a href="/print_bkk/{{$row->id}}" class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach

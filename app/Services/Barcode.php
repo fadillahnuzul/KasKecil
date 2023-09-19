@@ -20,7 +20,7 @@ class Barcode extends Fpdf
     protected $JStart = array("A" => 103, "B" => 104, "C" => 105); // Caractères de sélection de jeu au début du C128
     protected $JSwap = array("A" => 101, "B" => 100, "C" => 99);   // Caractères de changement de jeu
 
-    public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4')
+    public function __construct($orientation, $unit, $format)
     {
 
         parent::__construct($orientation, $unit, $format);
