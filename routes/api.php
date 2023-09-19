@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\ApiBkkController;
 use App\Http\Controllers\Api\ApiBkkSpkController;
 use App\Http\Controllers\Api\ApiBkmController;
+use App\Http\Controllers\Api\ApiPrintBkkController;
+use App\Http\Controllers\Api\ApiPrintBkkSpkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +28,6 @@ Route::get('/send_data_kas', [AdminController::class, 'sendDataKas']);
 Route::post('create-bkk', [ApiBkkController::class, 'store']);
 Route::post('create-bkk-spk', [ApiBkkSpkController::class, 'store']);
 Route::post('create-bkm', [ApiBkmController::class, 'store']);
+
+Route::post('print-bkk-spi', [ApiPrintBkkController::class, 'create']);
+Route::post('print-bkk-spk', [ApiPrintBkkSpkController::class, 'create']);

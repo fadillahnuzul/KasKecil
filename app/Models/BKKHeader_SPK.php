@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BKKHeader_SPK extends Model
 {
@@ -38,5 +39,21 @@ class BKKHeader_SPK extends Model
     public function bkk()
     {
         return $this->hasMany(BKK_SPK::class, 'bkk_header_id', 'id');
+    }
+
+    public function project() : BelongsTo {
+        return $this->belongsTo(Project::class, 'project_id','project_id');
+    }
+
+    public function bank() : BelongsTo {
+        return $this->belongsTo(Rekening::class, 'bank_id', 'bank_id');
+    }
+
+    public function otorisator() : BelongsTo {
+        return $this->belongsTo(User::class, 'otorisasi_by', 'id');
+    }
+
+    public function creator() : BelongsTo {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 }
