@@ -43,7 +43,7 @@ class BKK extends Model
         'otorisasi_by',
         'no_rfca',
         'no_calr',
-        'no_rfpd',
+        'no_rfp',
         'kwitansi_id'
     ];
 
