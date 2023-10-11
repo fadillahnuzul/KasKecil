@@ -248,7 +248,7 @@ class PrintBkk extends Barcode
             $x_row = $this->pdf->getX();
             $y_row = $this->pdf->getY();
 
-            $jumlah = $detail_bkk->dpp + $detail_bkk->ppn - $detail_bkk->pph;
+            $jumlah = (float) $detail_bkk->dpp + (float) $detail_bkk->ppn - (float) $detail_bkk->pph;
 
             $this->pdf->SetFont('Times', '', 8);
 
@@ -261,7 +261,6 @@ class PrintBkk extends Barcode
             //$y1 = $this->pdf->getY()+50;
 
             $this->pdf->SetXY($x_row + 15, $y_row);
-
             $this->pdf->Cell(40, 4, ($detail_bkk->cop) ? $detail_bkk->cop->spk->name : '', 0, 1, 'L');
             $this->pdf->SetX($x_row + 15);
             $this->pdf->Cell(40, 4, ($detail_bkk->cop) ? $detail_bkk->cop->name : '', 'B', 0, 'L');
@@ -282,13 +281,13 @@ class PrintBkk extends Barcode
             $this->pdf->Cell(60, 8, '', 'B', 0, 'L');
 
             $this->pdf->SetXY($x_row + 55 + 60, $y_row);
-            $this->pdf->Cell(23, 8, number_format($detail_bkk->dpp * 1, 0, ',', '.'), 'B', 0, 'R');
+            $this->pdf->Cell(23, 8, number_format((float) $detail_bkk->dpp * 1, 0, ',', '.'), 'B', 0, 'R');
 
-            $this->pdf->Cell(19, 8, number_format($detail_bkk->ppn * 1, 0, ',', '.'), 'B', 0, 'R');
+            $this->pdf->Cell(19, 8, number_format((float) $detail_bkk->ppn * 1, 0, ',', '.'), 'B', 0, 'R');
 
             $this->pdf->SetFont('times', '', 9);
             $this->pdf->SetXY($x_row + 55 + 60 + 23 + 19, $y_row);
-            $this->pdf->Cell(20, 4, number_format($detail_bkk->pph * 1, 0, ',', '.'), '', 1, 'R');
+            $this->pdf->Cell(20, 4, number_format((float) $detail_bkk->pph * 1, 0, ',', '.'), '', 1, 'R');
 
             $this->pdf->SetX($x_row + 55 + 60 + 23 + 19);
             $this->pdf->SetFont('times', '', 8);
@@ -299,10 +298,10 @@ class PrintBkk extends Barcode
             $this->pdf->SetFont('times', '', 9);
             $this->pdf->Cell(23, 8, number_format($detail_bkk->payment, 0, ',', '.'), 'B', 1, 'R');
 
-            $total_dpp += $detail_bkk->dpp;
-            $total_ppn += $detail_bkk->ppn;
-            $total_pph += $detail_bkk->pph;
-            $total_jumlah += $detail_bkk->payment;
+            $total_dpp += (float) $detail_bkk->dpp;
+            $total_ppn += (float) $detail_bkk->ppn;
+            $total_pph += (float) $detail_bkk->pph;
+            $total_jumlah += (float) $detail_bkk->payment;
         }
 
         $this->pdf->SetY($y + 45);

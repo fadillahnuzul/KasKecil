@@ -9,7 +9,6 @@ use App\Models\BKKHeader_SPK;
 use App\Services\PrintBkk;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ApiPrintBkkSpkController extends Controller
 {

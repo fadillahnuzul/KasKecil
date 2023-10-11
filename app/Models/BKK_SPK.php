@@ -40,6 +40,10 @@ class BKK_SPK extends Model
         'giro_jatuh_tempo',
         'otorisasi_tanggal',
         'otorisasi_by',
+        'no_rfca',
+        'no_calr',
+        'no_rfpd',
+        'kwitansi_id'
     ];
 
     public function bkkHeader()
