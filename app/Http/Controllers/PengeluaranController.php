@@ -40,9 +40,10 @@ class PengeluaranController extends Controller
 
     public function hitung_saldo($id = null)
     {
+        $admin = new AdminController;
         $id = ($id) ? $id : Auth::user()->id;
-        $saldo = (new AdminController)->hitung_pengajuan($id);
-        $kas = (new AdminController)->hitung_belum_klaim($id);
+        $saldo = $admin->hitung_pengajuan($id);
+        $kas = $admin->hitung_belum_klaim($id) + $admin->hitung_klaim($id);
         $saldo = $saldo - $kas;
         return $saldo;
     }

@@ -148,7 +148,6 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($laporan==TRUE)
                         <!-- Card Tunai -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100">
@@ -156,8 +155,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Set BKK</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalSetBKK,2, ",", ".")}}</div>
+                                                Total Klaim</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalKlaim,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -174,8 +173,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Belum Set BKK</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalBelumSetBKK,2, ",", ".")}}</div>
+                                                Sisa Saldo</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -184,8 +183,81 @@
                                 </div>
                             </div>
                         </div>
-                        @endif
                     </div>
+                    @if ($laporan==TRUE)
+                    @foreach ($userList as $user)
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
+                                                Total Pengajuan ({{$user->username}})</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_pengajuan,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Saldo -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
+                                                Total Terpakai ({{$user->username}})</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_pengeluaran,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card Tunai -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
+                                                Total Klaim ({{$user->username}})</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_diklaim,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Tunai -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
+                                                Sisa Saldo ({{$user->username}})</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->sisa_saldo,2, ",", ".")}}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @endif
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">

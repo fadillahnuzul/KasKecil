@@ -93,6 +93,11 @@ class Pengeluaran extends Model
         return $query->whereIn('status', [7, 8]);
     }
 
+    public function scopeStatusKlaim($query)
+    {
+        return $query->whereIn('status', [7]);
+    }
+
     public function scopeStatusSetBKK($query)
     {
         return $query->whereIn('status', [8]);
