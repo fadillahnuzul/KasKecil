@@ -212,9 +212,15 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item" href="/index_filter_keluar">All</a>
+                                    @if ($laporan == TRUE)
+                                    @foreach ($userList as $list)
+                                    <a class="dropdown-item" href="/index_filter_keluar/2/{{$list->id}}">{{$list->username}}</a>
+                                    @endforeach
+                                    @elseif ($laporan == FALSE)
                                     @foreach ($userList as $list)
                                     <a class="dropdown-item" href="/index_filter_keluar/1/{{$list->id}}">{{$list->username}}</a>
                                     @endforeach
+                                    @endif
                                 </div>
                             </div>
                             <!-- End Dropdown User -->
@@ -252,7 +258,6 @@
                                 <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            @if ($filter_keluar == FALSE)
                                             <th class="font-weight-bold text-dark">Kode</th>
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">User</th>
@@ -260,17 +265,6 @@
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Status</th>
-                                            @elseif ($filter_keluar == TRUE)
-                                            <th class="font-weight-bold text-dark">Tanggal</th>
-                                            <th class="font-weight-bold text-dark">Keterangan</th>
-                                            <th class="font-weight-bold text-dark">User</th>
-                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
-                                            <th class="font-weight-bold text-dark">COA</th>
-                                            <th class="font-weight-bold text-dark">Pembebanan</th>
-                                            <th class="font-weight-bold text-dark">Status</th>
-                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
-                                            <th class="font-weight-bold text-dark">Tanggal BKK</th>
-                                            @endif
                                             <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
                                     </thead>
@@ -278,7 +272,6 @@
                                         <?php $no = 1; ?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <!-- @if ($filter_keluar == FALSE) -->
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
@@ -295,34 +288,6 @@
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td> -->
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <!-- filter kas keluar di dashboard admin -->
-                                            @elseif ($filter_keluar == TRUE)
-                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">@if ($row->coa)
-                                                {{$row->COA->code}} <br>
-                                                {{$row->COA->name}}
-                                                @endif
-                                            </td>
-                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
-                                                {{$row->Pembebanan->name}}
-                                                @endif
-                                            </td>
-                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">
-                                                @if ($row->tanggal_respon)
-                                                {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
-                                                @endif
-                                            </td>
-                                            <td class="font-weight-bold text-dark">
-                                                @if ($row->tanggal_set_bkk)
-                                                {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
-                                                @endif
-                                            </td>
-                                            @endif
-                                            <!-- filter kas keluar di dashboard admin -->
                                             <td class="font-weight-bold text-dark">
                                                 <a href="export_pengajuan/{{$row->id}}" class="btn btn-success btn-sm">Print</a>
                                                 @if ($row->Status->id==4 OR $row->Status->id==2)

@@ -48,7 +48,7 @@ class AdminController extends Controller
         $filter_keluar = FALSE;
         $laporan = FALSE;
 
-        $dataKas = Pengajuan::with('Sumber', 'User', 'Status')->where('status', '!=', 5)->searchByUser($id)->get();
+        $dataKas = Pengajuan::with('Sumber', 'User', 'Status')->isNotDone()->searchByUser($id)->get();
         $Saldo = (new HitungSaldoService)->hitung_saldo_all_user();
         $divisi = Divisi::get();
         $title = "Admin Kas Kecil";
@@ -99,9 +99,9 @@ class AdminController extends Controller
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
         $companyList = DB::table('project_company')->join('pettycash_pengeluaran', 'project_company.project_company_id', '=', 'pettycash_pengeluaran.pembebanan')->select('project_company.*')->get()->unique('project_company_id');
         $user = ($id) ? User::find($id) : null;
-        $dataKas = Pengajuan::with('Sumber', 'User', 'Status')->where(function($query){
-            $query->where('status', '!=', 5);
-        })->searchByUser($id)->get();
+        $dataKas = Pengajuan::with('Sumber', 'User', 'Status')->where(function($query) use ($filter){
+            ($filter==1) ? $query->isNotDone() : $query->isDone();
+        })->searchByUser($id)->searchByDateRange($startDate, $endDate)->get();
         // $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')
         //     ->where(function ($query) use ($filter, $id, $user) {
         //         ($filter == 1) ? $query->searchByUser($id) : $query->searchByCompany($id);

@@ -95,6 +95,11 @@ class Pengajuan extends Model
 
     public function scopeIsDone($query)
     {
-        return $query->where('status', 5);
+        return $query->whereIn('status', [5,10]);
+    }
+
+    public function scopeIsNotDone($query)
+    {
+        return $query->whereNotIn('status', [5,10]);
     }
 }
