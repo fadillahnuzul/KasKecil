@@ -32,8 +32,7 @@ class PengeluaranController extends Controller
 
     public function __construct()
     {
-        $kas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->get();
-        $this->startDate = Carbon::parse($kas->min('tanggal'))->format('d-m-Y');
+        $this->startDate = Carbon::now()->month(9)->startOfMonth();
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = NULL;
         $this->companySelected = null;
@@ -73,9 +72,10 @@ class PengeluaranController extends Controller
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $project_company_id);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id, $startDate, $endDate, $company);
+        $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
         session(['key' => $id]);
 
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran','totalKlaim', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran','totalKlaim', 'transaksiLuarTanggal', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }
 
     public function laporan(Request $request)
@@ -108,8 +108,8 @@ class PengeluaranController extends Controller
         $company = Company::get();
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $request->company);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id, $startDate, $endDate, $company);
-
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo','totalPengeluaran','totalKlaim', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
+        $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo','totalPengeluaran','totalKlaim','transaksiLuarTanggal', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }
 
     public function set_tanggal($startDate, $endDate)
