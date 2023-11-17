@@ -25,7 +25,7 @@ class BKKHeaderController extends Controller
 
     public function index(Request $request) : View {
         $companyList = DB::table('project_company')->join('pettycash_pengeluaran', 'project_company.project_company_id', '=', 'pettycash_pengeluaran.pembebanan')->select('project_company.*')->get()->unique('project_company_id');
-        $dataBkk = BKKHeader::where('status',1)->where('project_id','!=',null)->get();
+        $dataBkk = BKKHeader::where('status',1)->where('project_id','!=',null)->orderByDesc('created_at')->get();
         $title = "List BKK";
         $selectedCompany = $this->selectedCompany;
         $startDate = ($request->startDate) ? $request->startDate  : $this->startDate;

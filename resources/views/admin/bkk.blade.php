@@ -24,7 +24,6 @@
 
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    @livewireStyles
 </head>
 
 <body id="page-top">
@@ -152,7 +151,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->id}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->project->company->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->project->name}}</td>
-                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark">@if($row->created_at) {{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}} @endif</td>
                                             <td class="font-weight-bold text-dark">
                                                 <a href="/bkk_detail/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/print_bkk/{{$row->id}}" class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
@@ -161,7 +160,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <ul class="pagination p1">
+                                <ul>
                                     {{$dataBkk->links()}}
                                 </ul>
                             </div>
@@ -317,7 +316,6 @@
                 $("#button-set-bkk").prop('disabled', !button_bkk)
             })
         </script>
-        @livewireScripts
 </body>
 
 </html>

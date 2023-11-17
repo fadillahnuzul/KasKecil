@@ -125,7 +125,7 @@
                                                 <tr>
                                                     <td>Tanggal</td>
                                                     <td>:</td>
-                                                    <td>{{$bkkHeader->created_at}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($bkkHeader->created_at)->format('d-m-Y H:i:s')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Company</td>

@@ -71,9 +71,10 @@ class PengeluaranController extends Controller
         session(['key' => $id]);
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $project_company_id);
+        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id, $startDate, $endDate, $company);
         session(['key' => $id]);
 
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran','totalKlaim', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }
 
     public function laporan(Request $request)
@@ -104,8 +105,10 @@ class PengeluaranController extends Controller
         $title = "Laporan Pengeluaran Kas Kecil";
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $company = Company::get();
+        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $request->company);
+        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id, $startDate, $endDate, $company);
 
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo','totalPengeluaran','totalKlaim', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }
 
     public function set_tanggal($startDate, $endDate)

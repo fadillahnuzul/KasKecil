@@ -33,7 +33,7 @@ class PrintBkk extends Barcode
         $this->setBarcode($bkk_header, $tipe);
         $this->setContent($detail_bkk, $bkk_header, $tipe, $y);
         // $this->setFooter($bkk_header, $this->pdf->GetY());
-        $this->pdf->Output('D', 'BKK.pdf');
+        $this->pdf->Output('D', 'BKK-'.$bkk_header->id.'.pdf');
     }
 
     public function setHeader($bkk_header): void
@@ -329,12 +329,11 @@ class PrintBkk extends Barcode
         $this->pdf->Ln(1);
         $this->pdf->SetX($x - 5);
         $this->pdf->Cell(40, 5, '', 0, 0, 'L');
+        $this->setFooter($bkk_header, $this->pdf->GetY());
 
         $ket = "PAGE " . 1 . " / " . 1;
         $this->pdf->SetXY(5, 5);
         $this->pdf->Cell(10, 5, $ket, 0, 0, 'L', 0);
-
-        $this->setFooter($bkk_header, $this->pdf->GetY());
     }
 
     public function multiplePageContent($detail_bkk, $bkk_header, $detail_bkk_awal , $tipe, $page, $totalPage, $y): void
