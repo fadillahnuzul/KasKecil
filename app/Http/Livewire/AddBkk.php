@@ -68,13 +68,13 @@ class AddBkk extends Component
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
         if (Auth::user()->kk_access==1) {
-            $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8,10])->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
             ->searchByDateRange($this->startDate, $this->endDate)
             ->searchByCompany($this->selectedCompany)
             // ->searchByProject($this->selectedProject)
             ->paginate(10);
         } elseif(Auth::user()->kk_access==2) {
-            $kas = Pengeluaran::with('COA', 'project')->where('status', 8)->where('user_id',Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8,10])->where('user_id',Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
             ->searchByDateRange($this->startDate, $this->endDate)
             ->searchByCompany($this->selectedCompany)
             // ->searchByProject($this->selectedProject)

@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
     Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
     Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
-    Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
+    // Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
     //Dropdown Project
     Route::post('fetch_project', [PengeluaranController::class, 'fetchProject']);
 
@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/done_pengajuan/{id}', [AdminController::class, 'done_pengajuan']);
     // Route::get('/set_bkk/{id}', [AdminController::class, 'set_bkk']);
     Route::post('/set_bkk_checkbox', [AdminController::class, 'set_bkk']);
+    Route::post('/set_uang_kembali', [AdminController::class, 'set_tanggal_kembali']);
     Route::get('/konfirm_kembali/{id}', [AdminController::class, 'konfirm_kembali']);
 
     Route::post('/input_sumber', [SumberController::class, 'save']);

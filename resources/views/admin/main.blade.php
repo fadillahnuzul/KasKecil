@@ -123,16 +123,9 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($laporan == FALSE)
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo ,2, ",", ".")}}</div>
-                                            @endif
-                                            @if ($laporan == TRUE)
                                             <div class="text-s font-weight-bold text-success text-uppercase mb-1">
                                                 Total Pengajuan</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
-                                            @endif
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -149,15 +142,9 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan ,2, ",", ".")}}</div>
-                                            @elseif ($laporan == TRUE)
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Belum Diklaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
-                                            @endif
+                                                Pengajuan Admin</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan_admin ,2, ",", ".")}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -170,45 +157,23 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            @if ($laporan == FALSE)
                                             <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Kas Keluar</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengeluaran ,2, ",", ".")}}</div>
-                                            @elseif ($laporan == TRUE)
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Total Diklaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
-                                            @endif
+                                                Pengajuan User</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_pengajuan_user ,2, ",", ".")}}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- End Card Belum Diklaim -->
-                        <!-- Card Sisa Saldo -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-danger shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Sisa Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($total_diklaim ,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Sisa Saldo -->
                     </div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">
                             <!-- Dropdown Divisi -->
-                            <div class="dropdown" style="float:right;">
+                            <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
+                            <!-- <div class="dropdown" style="float:right;">
                                 <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Pilih Unit
                                 </button>
@@ -216,21 +181,19 @@
                                     @if ($laporan==TRUE)
                                     <a class="dropdown-item" href="/admin_laporan">All</a>
                                     @foreach ($divisi as $divisi)
-                                    <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
                                     <a class="dropdown-item" href="/kas_divisi/2/{{$divisi->id}}">{{$divisi->name}}</a>
                                     @endforeach
                                     @elseif ($laporan==FALSE)
                                     <a class="dropdown-item" href="/home_admin">All</a>
                                     @foreach ($divisi as $divisi)
-                                    <!-- 1 = filter unit dashboard, 2 = filter unit laporan -->
                                     <a class="dropdown-item" href="/kas_divisi/1/{{$divisi->id}}">{{$divisi->name}}</a>
                                     @endforeach
                                     @endif
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- End Dropdown Divisi -->
                             <!-- Dropdown Company -->
-                            <div class="dropdown" style="float:right; margin-right:10px;">
+                            <!-- <div class="dropdown" style="float:right; margin-right:10px;">
                                 <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Pilih Company
                                 </button>
@@ -240,7 +203,7 @@
                                     <a class="dropdown-item" href="/index_filter_keluar/2/{{$list->project_company_id}}">{{$list->name}}</a>
                                     @endforeach
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- End Dropdown Company -->
                             <!-- Dropdown User -->
                             <div class="dropdown" style="float:right; margin-right:10px;">
@@ -315,7 +278,7 @@
                                         <?php $no = 1; ?>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            @if ($filter_keluar == FALSE)
+                                            <!-- @if ($filter_keluar == FALSE) -->
                                             <td class="font-weight-bold text-dark">{{$row->kode}}</td>
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>

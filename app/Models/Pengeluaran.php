@@ -23,6 +23,7 @@ class Pengeluaran extends Model
         'user_id',
         'in_budget',
         'project_id',
+        'tanggal_uang_kembali'
     ];
     protected $dates = [
         'tanggal'

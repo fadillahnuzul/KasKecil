@@ -18,6 +18,9 @@ use App\Exports\KasKecilExport;
 use Alert;
 use Carbon\Carbon;
 use App\Services\CekBudgetService;
+use App\Services\HitungPengajuanService;
+use App\Services\HitungSaldoService;
+use App\Services\HitungTransaksiService;
 use Illuminate\Support\Facades\DB;
 
 class PengeluaranController extends Controller
@@ -36,16 +39,6 @@ class PengeluaranController extends Controller
         session(['startDate' => $this->startDate]);
         session(['endDate' => $this->endDate]);
         session(['company' => $this->company]);
-    }
-
-    public function hitung_saldo($id = null)
-    {
-        $admin = new AdminController;
-        $id = ($id) ? $id : Auth::user()->id;
-        $saldo = $admin->hitung_pengajuan($id);
-        $kas = $admin->hitung_belum_klaim($id) + $admin->hitung_klaim($id);
-        $saldo = $saldo - $kas;
-        return $saldo;
     }
 
     public function fetchProject(Request $request)
@@ -76,8 +69,8 @@ class PengeluaranController extends Controller
             ->searchByProject($request->project)
             ->get();
         session(['key' => $id]);
-        $saldo = $this->hitung_saldo(Auth::user()->id);
-        $totalPengeluaran = (new AdminController)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $project_company_id);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $project_company_id);
         session(['key' => $id]);
 
         return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
@@ -109,7 +102,7 @@ class PengeluaranController extends Controller
                 ->get();
         }
         $title = "Laporan Pengeluaran Kas Kecil";
-        $saldo = $this->hitung_saldo(Auth::user()->id);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $company = Company::get();
 
         return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));

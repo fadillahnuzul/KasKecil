@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{$title}}</title>
     <!-- css table -->
@@ -115,7 +116,7 @@
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div> -->
                     <div class="row">
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-2">
                             <div class="card border-left-success shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -132,7 +133,7 @@
                             </div>
                         </div>
                         <!-- End Card Saldo -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-2">
                             <div class="card border-left-danger shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -149,7 +150,7 @@
                             </div>
                         </div>
                         <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-2">
                             <div class="card border-left-warning shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -167,7 +168,7 @@
                         </div>
 
                         <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-2">
                             <div class="card border-left-info shadow h-100">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -184,7 +185,7 @@
                             </div>
                         </div>
                     </div>
-                    @if ($laporan==TRUE)
+                    <hr>
                     @foreach ($userList as $user)
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -210,7 +211,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Terpakai ({{$user->username}})</div>
+                                                Belum Klaim ({{$user->username}})</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_pengeluaran,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
@@ -227,7 +228,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Klaim ({{$user->username}})</div>
+                                                Sudah Klaim ({{$user->username}})</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_diklaim,2, ",", ".")}}</div>
                                         </div>
                                         <div class="col-auto">
@@ -257,7 +258,6 @@
                         </div>
                     </div>
                     @endforeach
-                    @endif
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">
@@ -347,6 +347,7 @@
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Tanggal BKK</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Kembali</th>
                                             <th class="font-weight-bold text-dark">Barcode</th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
@@ -389,7 +390,11 @@
                                                 {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
                                                 @endif
                                             </td>
-                                            
+                                            <td class="font-weight-bold text-dark">
+                                                @if ($row->tanggal_uang_kembali)
+                                                {{Carbon\Carbon::parse($row->tanggal_uang_kembali)->format('d-m-Y')}}
+                                                @endif
+                                            </td>
                                             <td class="font-weight-bold text-dark">{{$row->bkk_header_id}}</td>
                                             <!-- <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
@@ -405,6 +410,7 @@
                                 <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
                                 @elseif ($laporan==TRUE)
                                 <button id="button-set-bkk" type="button" disabled onclick="setBKK()" class="btn btn-sm btn-success">Set BKK</button>
+                                <button id="button-set-kembali" type="button" disabled onclick="setUangKembali()" class="btn btn-sm btn-warning">Set Uang Kembali</button>
                                 @endif
                             </div>
                         </div>
@@ -567,6 +573,7 @@
             var isChecked = $("#head-cb").prop('checked')
             $(".cb-child").prop('checked', isChecked)
             $("#button-set-bkk").prop('disabled', !isChecked)
+            $("#button-set-kembali").prop('disabled', !isChecked)
         })
 
         $("#myTable tbody").on('click', '.cb-child', function() {
@@ -577,6 +584,7 @@
             let semua_checkbox = $("#myTable tbody .cb-child:checked")
             let button_bkk = (semua_checkbox.length > 0)
             $("#button-set-bkk").prop('disabled', !button_bkk)
+            $("#button-set-kembali").prop('disabled', !button_bkk)
         })
 
         
@@ -592,6 +600,26 @@
                 method: 'post',
                 data: {
                     ids: semua_id
+                },
+                success: function(res) {
+                    alert(res.message)
+                    table.ajax.reload(null, false)
+                }
+            })
+            location.reload()
+        }
+
+        function setUangKembali() {
+            let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+            let semua_id = []
+            $.each(checkbox_terpilih, function(index, elm) {
+                semua_id.push(checkbox_terpilih[index].value)
+            })
+            $.ajax({
+                url: "{{url('')}}/set_uang_kembali",
+                method: 'post',
+                data: {
+                    ids: semua_id, _token: '{{csrf_token()}}' 
                 },
                 success: function(res) {
                     alert(res.message)

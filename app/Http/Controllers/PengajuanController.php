@@ -16,6 +16,7 @@ use App\Models\Project;
 use App\Exports\PengajuanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Alert;
+use App\Services\HitungSaldoService;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 
@@ -46,7 +47,7 @@ class PengajuanController extends Controller
         $laporan = FALSE;
         $title = "Kas Kecil";
         $data_pengajuan = Pengajuan::with('Status')->searchByUser(Auth::user()->id)->get();
-        $saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         
         return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo, 'laporan'=>$laporan]);
     }
@@ -58,7 +59,7 @@ class PengajuanController extends Controller
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         session(['startDate' => $startDate]); session(['endDate' => $endDate]);
         $dataKas = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->searchByDateRange($startDate, $endDate)->get();
-        $Saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
+        $Saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         if (Auth::user()->kk_access == '1') {
             return view ('admin/main', compact('dataKas','title', 'Saldo'));
         } else {
