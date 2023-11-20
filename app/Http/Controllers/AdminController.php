@@ -58,7 +58,7 @@ class AdminController extends Controller
         // Perhitungan sisa dan total belanja pada card
         $pengajuanServices = new HitungPengajuanService;
         // $transaksiServices = new HitungTransaksiService;
-        $total_pengajuan = $pengajuanServices->hitung_pengajuan(null, $startDate, $endDate);
+        $total_pengajuan = $pengajuanServices->hitung_pengajuan();
         $total_pengajuan_admin = $pengajuanServices->hitung_pengajuan_admin();
         $total_pengajuan_user = $pengajuanServices->hitung_pengajuan_all_user();
         // if ($id && $startDate && $endDate && $startDate != $this->startDate && $endDate != $this->endDate) {
@@ -123,7 +123,7 @@ class AdminController extends Controller
         //     $total_pengeluaran = $transaksiServices->hitung_belum_klaim();
         //     $total_diklaim = $transaksiServices->hitung_klaim();
         // }
-        $total_pengajuan = $pengajuanServices->hitung_pengajuan(null, $startDate, $endDate);
+        $total_pengajuan = $pengajuanServices->hitung_pengajuan();
         $total_pengajuan_admin = $pengajuanServices->hitung_pengajuan_admin();
         $total_pengajuan_user = $pengajuanServices->hitung_pengajuan_all_user();
         if($id) {
@@ -197,8 +197,8 @@ class AdminController extends Controller
         $selectedUser = ($request->user) ? User::find($request->user) : null;
         $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
-        $userList = $this->getTotalPerUser($userList,$request->company, $startDate, $endDate);
-        [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi($startDate, $endDate, $request->company);
+        $userList = $this->getTotalPerUser($userList,$request->company, null, null);
+        [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
         // $dataKas = DB::table('pettycash_pengeluaran')->select('coa',DB::raw('sum(jumlah) as total'))->groupBy('coa')->get();
         $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->orderBy('status', 'asc')
             ->searchByDateRange($startDate, $endDate)
@@ -231,8 +231,8 @@ class AdminController extends Controller
         $selectedUser = ($request->user) ? User::find($request->user) : null;
         $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
-        $userList = $this->getTotalPerUser($userList,$request->company, $startDate, $endDate);
-        [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi($startDate, $endDate, $request->company);
+        $userList = $this->getTotalPerUser($userList,$request->company, null, null);
+        [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
         $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()
             ->searchByDateRange($startDate, $endDate)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {

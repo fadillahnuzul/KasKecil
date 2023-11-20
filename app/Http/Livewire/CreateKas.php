@@ -7,6 +7,7 @@ use App\Models\Coa;
 use App\Models\Company;
 use App\Models\Project;
 use App\Services\CekBudgetService;
+use App\Services\HitungSaldoService;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +72,7 @@ class CreateKas extends Component
 
     public function cekSaldo()
     {
-        $saldo = (new PengeluaranController)->hitung_saldo(Auth::user()->id);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         if ($this->jumlah > $saldo) {
             session()->flash('message_kas', 'Input kas gagal, saldo tidak cukup');
             return false;

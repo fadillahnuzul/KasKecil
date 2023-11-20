@@ -70,8 +70,8 @@ class PengeluaranController extends Controller
             ->get();
         session(['key' => $id]);
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
-        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $project_company_id);
-        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id, $startDate, $endDate, $company);
+        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $project_company_id);
+        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $project_company_id);
         $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
         session(['key' => $id]);
 
@@ -106,8 +106,8 @@ class PengeluaranController extends Controller
         $title = "Laporan Pengeluaran Kas Kecil";
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $company = Company::get();
-        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, $startDate, $endDate, $request->company);
-        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id, $startDate, $endDate, $company);
+        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $request->company);
+        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $request->company);
         $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
         return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo','totalPengeluaran','totalKlaim','transaksiLuarTanggal', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }

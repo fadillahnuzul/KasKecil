@@ -25,7 +25,7 @@ use App\Http\Controllers\BKKHeaderController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [PengajuanController::class, 'index']);
     Route::get('/home', [PengajuanController::class, 'index'])->name('home');
-    Route::match(['GET', 'POST'], '/laporan', [PengajuanController::class, 'laporan']);
+    Route::match(['GET', 'POST'], '/laporan', [PengajuanController::class, 'laporan'])->name('laporan');
     Route::post('/simpan_pengajuan', [PengajuanController::class, 'save']);
     Route::get('/home', [PengajuanController::class, 'index']);
     Route::get('/pengajuan', [PengajuanController::class, 'create'])->name('pengajuan');
@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kas', [PengeluaranController::class, 'create']);
     Route::post('/simpan_kas', [PengeluaranController::class, 'save']);
     Route::post('/kas_selesai', [PengeluaranController::class, 'done']);
-    Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan']);
+    Route::match(['GET', 'POST'],'/laporan_kas_keluar', [PengeluaranController::class, 'laporan'])->name('laporan_kas_keluar');
     Route::get('/pengembalian_saldo/{id}', [PengeluaranController::class, 'pengembalian_saldo']);
     // Route::post('/set_bkk_checkbox', [PengeluaranController::class, 'set_bkk']);
     //Dropdown Project
