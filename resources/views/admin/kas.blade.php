@@ -115,149 +115,34 @@
                         <a href="/export" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan</a>
                     </div> -->
-                    <div class="row">
-                        <div class="col-xl-3 col-md-6 mb-2">
-                            <div class="card border-left-success shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Total Pengajuan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($Saldo,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Saldo -->
-                        <div class="col-xl-3 col-md-6 mb-2">
-                            <div class="card border-left-danger shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Terpakai</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalKeluar,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-2">
-                            <div class="card border-left-warning shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Klaim</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($totalKlaim,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-2">
-                            <div class="card border-left-info shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Sisa Saldo</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($sisa,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    @foreach ($userList as $user)
-                    <div class="row">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                                Total Pengajuan ({{$user->username}})</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_pengajuan,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card Saldo -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-danger shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-danger text-uppercase mb-1">
-                                                Belum Klaim ({{$user->username}})</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_pengeluaran,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                                Sudah Klaim ({{$user->username}})</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->total_diklaim,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Tunai -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-s font-weight-bold text-info text-uppercase mb-1">
-                                                Sisa Saldo ({{$user->username}})</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($user->sisa_saldo,2, ",", ".")}}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
+                    
+                    <table class="table table-light table-bordered table-hover">
+                        <thead class="bg-primary text-white text-center align-middle">
+                            <th>User</th>
+                            <th>Total Pengajuan</th>
+                            <th>Belum Diklaim</th>
+                            <th>Sudah Diklaim</th>
+                            <th>Sisa Saldo</th>
+                        </thead>
+                        <tbody class="font-weight-bold text-dark">
+                            @foreach ($userList as $user)
+                            <tr>
+                                <td>{{$user->username}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($user->total_pengajuan,2, ",", ".")}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($user->total_pengeluaran,2, ",", ".")}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($user->total_diklaim,2, ",", ".")}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($user->sisa_saldo,2, ",", ".")}}</td>
+                            </tr>
+                            @endforeach
+                            <tr class="table-success">
+                                <td>Total</td>
+                                <td class="text-right align-right">Rp. {{number_format($Saldo,2, ",", ".")}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($totalKeluar,2, ",", ".")}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($totalKlaim,2, ",", ".")}}</td>
+                                <td class="text-right align-right">Rp. {{number_format($sisa,2, ",", ".")}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">
@@ -271,7 +156,7 @@
                                     <form action="" method="POST">
                                         @csrf
                                         <div class="container-fluid">
-                                        <div class="form-group row">
+                                            <div class="form-group row">
                                                 <label for="date" class="col-form-label">Mulai</label>
                                                 <div class="form-group-row" style="margin-inline: 5px;">
                                                     <input type="date" class="datepicker form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
@@ -509,7 +394,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
-    
+
     <!-- table js -->
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -518,7 +403,9 @@
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script>
-        var company = {!! json_encode($selectedCompany) !!};
+        var company = {
+            !!json_encode($selectedCompany) !!
+        };
         if (company == null) {
             company_name = 'PT ABDAEL NUSA'
         } else {
@@ -587,7 +474,7 @@
             $("#button-set-kembali").prop('disabled', !button_bkk)
         })
 
-        
+
 
         function setBKK() {
             let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
@@ -619,7 +506,8 @@
                 url: "{{url('')}}/set_uang_kembali",
                 method: 'post',
                 data: {
-                    ids: semua_id, _token: '{{csrf_token()}}' 
+                    ids: semua_id,
+                    _token: '{{csrf_token()}}'
                 },
                 success: function(res) {
                     alert(res.message)
