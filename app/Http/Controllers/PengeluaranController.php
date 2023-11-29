@@ -59,7 +59,7 @@ class PengeluaranController extends Controller
         $selectedStatus = ($request->status) ? Status::find($request->status) : Status::find(4);
         $selectedCompany = ($request->company) ? Company::find($request->company) : null;
         $project_company_id = ($selectedCompany) ? $selectedCompany->project_company_id : null;
-        $status = Status::whereIn('id', [4, 6, 7, 8])->get();
+        $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
         $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->searchByUser(Auth::user()->id)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {
                 ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();
@@ -69,13 +69,14 @@ class PengeluaranController extends Controller
             ->searchByProject($request->project)
             ->get();
         session(['key' => $id]);
+        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id);
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $project_company_id);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $project_company_id);
         $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
         session(['key' => $id]);
 
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo', 'totalPengeluaran','totalKlaim', 'transaksiLuarTanggal', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldoAwal','saldo', 'totalPengeluaran','totalKlaim', 'transaksiLuarTanggal', 'pengajuan', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }
 
     public function laporan(Request $request)
@@ -87,7 +88,7 @@ class PengeluaranController extends Controller
         $button_kas = FALSE;
         $selectedStatus = ($request->status) ? Status::find($request->status) : null;
         $selectedCompany = ($request->company) ? Company::find($request->company) : null;
-        $status = Status::whereIn('id', [4, 6, 7, 8])->get();
+        $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
         if (Auth::user()->kk_access == 1) {
             $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->statusKlaimAndSetBKK()
                 ->searchByDateRange($startDate, $endDate)
@@ -104,12 +105,13 @@ class PengeluaranController extends Controller
                 ->get();
         }
         $title = "Laporan Pengeluaran Kas Kecil";
+        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id);
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
         $company = Company::get();
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $request->company);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $request->company);
         $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
-        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldo','totalPengeluaran','totalKlaim','transaksiLuarTanggal', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
+        return view('detail_pengajuan', compact('dataKas', 'title', 'button_kas', 'startDate', 'endDate', 'saldoAwal','saldo','totalPengeluaran','totalKlaim','transaksiLuarTanggal', 'company', 'companySelected', 'status', 'selectedStatus', 'selectedCompany'));
     }
 
     public function set_tanggal($startDate, $endDate)

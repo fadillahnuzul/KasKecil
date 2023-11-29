@@ -16,7 +16,9 @@ use App\Models\Project;
 use App\Exports\PengajuanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Alert;
+use App\Services\HitungPengajuanService;
 use App\Services\HitungSaldoService;
+use App\Services\HitungTransaksiService;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 
@@ -46,10 +48,13 @@ class PengajuanController extends Controller
     public function index(Request $request){
         $laporan = FALSE;
         $title = "Kas Kecil";
-        $data_pengajuan = Pengajuan::with('Status')->searchByUser(Auth::user()->id)->get();
-        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $dataKas = Pengajuan::with('Status')->searchByUser(Auth::user()->id)->get();
+        $Saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id);
+        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id);
+        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id); 
         
-        return view ('main', ['dataKas' => $data_pengajuan],['title'=>$title, 'Saldo'=>$saldo, 'laporan'=>$laporan]);
+        return view ('main', compact('dataKas','title', 'saldoAwal','Saldo','laporan','totalPengeluaran','totalKlaim'));
     }
 
     public function laporan(Request $request){
@@ -60,10 +65,13 @@ class PengajuanController extends Controller
         session(['startDate' => $startDate]); session(['endDate' => $endDate]);
         $dataKas = Pengajuan::with('Status')->where('user_id', Auth::user()->id)->searchByDateRange($startDate, $endDate)->get();
         $Saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id);
+        $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id);
+        $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id);
         if (Auth::user()->kk_access == '1') {
             return view ('admin/main', compact('dataKas','title', 'Saldo'));
         } else {
-            return view ('main', compact('dataKas','title', 'Saldo','laporan', 'startDate', 'endDate'));
+            return view ('main', compact('dataKas','title', 'saldoAwal','Saldo','laporan', 'startDate', 'endDate','totalPengeluaran','totalKlaim'));
         }
         
     }
