@@ -205,17 +205,17 @@
                                 </div>
                                 <div class="col-md-10">
                                     <form action="" method="POST">
-                                        <div class="row">
+                                        <div class="form-group row">
                                             @csrf
                                             <label for="date" class="col-form-label">Mulai</label>
-                                            <div class="col-md-2">
+                                            <div class="form-group-row" style="margin-inline: 5px;">
                                                 <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                             </div>
                                             <label for="date" class="col-form-label">Selesai</label>
-                                            <div class="col-md-2">
+                                            <div class="form-group-row" style="margin-inline: 5px;">
                                                 <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="form-group-row" style="margin-inline: 5px;">
                                                 <select name="status" id="status">
                                                     @if ($selectedStatus)
                                                     <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
@@ -228,7 +228,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="form-group-row" style="margin-inline: 5px;">
                                                 <select name="company" id="company">
                                                     @if ($selectedCompany)
                                                     <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
@@ -239,7 +239,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="form-group-row" style="margin-inline: 5px;">
                                                 <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                             </div>
                                         </div>

@@ -295,7 +295,7 @@
                                 <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
                                 @elseif ($laporan==TRUE)
                                 <button id="button-set-bkk" type="button" disabled onclick="setBKK()" class="btn btn-sm btn-success">Set BKK</button>
-                                <button id="button-set-kembali" type="button" disabled onclick="setUangKembali()" class="btn btn-sm btn-warning">Set Uang Kembali</button>
+                                <button id="button-set-kembali" type="button" disabled onclick="setUangKembali()" class="btn btn-sm btn-warning">Dana Dikembalikan</button>
                                 @endif
                             </div>
                         </div>
