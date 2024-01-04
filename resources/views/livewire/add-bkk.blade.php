@@ -1,17 +1,20 @@
 <div>
     <!-- {{-- Nothing in the world is as soft and yielding as water. --}} -->
     <!-- Filter COA & Tanggal -->
+    <div class="alert alert-danger">
+        Tidak dapat menambahkan BKK. Sistem sedang dalam maintenance.
+    </div>
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px; max-width:430px; color:black;">
-            <input type="text" autocomplete="search-coa" wire:model="searchCoa" placeholder="Cari COA" class="form-control form-control-sm" style="color:black;">
-            <select wire:model="selectedCoaId" id="selectedCoaFromInput" required onclick="getCoa()" class="form-control form-control-sm" style="color:black;">
+            <input type="text" autocomplete="search-coa" wire:model="searchCoa" placeholder="Cari COA" class="form-control form-control-sm" style="color:black;" disabled>
+            <select wire:model="selectedCoaId" id="selectedCoaFromInput" required onclick="getCoa()" class="form-control form-control-sm" style="color:black;" disabled>
                 @foreach ($coaList as $itemCoa)
                 <option value="{{$itemCoa->coa_id}}">{{$itemCoa->code}} {{$itemCoa->name}}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:400px; ">
-            <select wire:model="selectedCompany" required class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedCompany" required class="form-control form-control-sm" style="color:black;" disabled>
                 <option value="">Input company</option>
                 @foreach ($companyList as $item)
                 <option value="{{$item->project_company_id}}">{{$item->name}}</option>
@@ -19,7 +22,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
-            <select wire:model="selectedProject" required class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedProject" required class="form-control form-control-sm" style="color:black;" disabled>
                 <option value="">Input project</option>
                 @foreach ($projectList as $item)
                 <option value="{{$item->project_id}}">{{$item->name}}</option>
@@ -30,11 +33,11 @@
     <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>
         <div class="col-md-2" x-data="datepicker()">
-            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
+            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required disabled>
         </div>
         <label for="date" class="col-form-label">Selesai</label>
         <div class="col-md-2" x-data="datepicker2()">
-            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
+            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required disabled>
         </div>
     </div>
     <!-- Filter COA & Tanggal -->
@@ -82,7 +85,7 @@
         {{ session('message_overbudget') }}
     </div>
     @endif
-    <button style="float:right;" class="btn-sm btn-primary" wire:click="getSelectedKas">Add Transaction</button>
+    <button style="float:right;" class="btn-sm btn-primary" wire:click="getSelectedKas" disabled>Add Transaction</button>
     <div>
         @if (session()->has('message_coa'))
         <div class="alert alert-danger">
@@ -158,7 +161,7 @@
     <!-- Form Input -->
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
-            <select wire:model="selectedRekening" required class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedRekening" required class="form-control form-control-sm" style="color:black;" disabled>
                 <option value="">Input rekening</option>
                 @foreach ($rekeningList as $item)
                 <option value="{{$item->bank_id}}">{{$item->name}} {{$item->rekening}}</option>
@@ -166,7 +169,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:250px;">
-            <select wire:model="selectedPartner" onchange="removeRequired()" id="selectedPartnerDropdownId" class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedPartner" onchange="removeRequired()" id="selectedPartnerDropdownId" class="form-control form-control-sm" style="color:black;" disabled>
                 <option value="">Input partner</option>
                 @foreach ($partnerList as $item)
                 <option value="{{$item->name}}">{{$item->name}}</option>
@@ -174,16 +177,16 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; width:250px;">
-            <input type="text" wire:model="manualTypePartner" oninput="removeRequired()" id="manualTypePartnerTextId" class="form-control form-control-sm" placeholder="Ketik Partner, Pilih Atau Ketik" style="color:black;">
+            <input type="text" wire:model="manualTypePartner" oninput="removeRequired()" id="manualTypePartnerTextId" class="form-control form-control-sm" placeholder="Ketik Partner, Pilih Atau Ketik" style="color:black;" disabled>
         </div>
         <div class="form-group-row" style="color:black">
             Tanggal BKK
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
-            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK">
+            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK" disabled>
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
-            <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
+            <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK" disabled>Create BKK</button>
             <div wire:loading wire:target="createBKK">
                 Processing BKK...
             </div>
