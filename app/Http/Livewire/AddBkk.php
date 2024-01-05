@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Alert;
 use App\Http\Controllers\BKKController;
 use App\Http\Controllers\BKKHeaderController;
+use App\Models\Unit;
 use App\Services\CekBudgetService;
 use App\Services\CreateBKKService;
 
@@ -30,6 +31,7 @@ class AddBkk extends Component
     public $endDate;
     public $companyList;
     public $partnerList;
+    public $unitList;
     public $selectedCompany;
     public $selectedProject;
     public $selectedRekening;
@@ -53,6 +55,7 @@ class AddBkk extends Component
     {
         $this->companyList = Company::get();
         $this->partnerList = Partner::get();
+        $this->unitList = Unit::get();
         $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
     }

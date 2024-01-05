@@ -1,25 +1,27 @@
     <div>
-        <!-- {{-- Care about people's approval and you will be their prisoner. --}} -->
+        <div class="alert alert-danger">
+            Tidak dapat menambahkan Kas. Sistem sedang dalam maintenance.
+        </div>
         <div class="form-group">
             <label for="tanggal">Tanggal Pengeluaran :</label>
-            <input type="date" wire:model.defer="selectedDate" class="datepicker form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
+            <input type="date" wire:model.defer="selectedDate" class="datepicker form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required disabled>
         </div>
         <div class="form-group">
             <label for="deskripsi">Keterangan :</label>
-            <input type="text" autocomplete="on" wire:model.defer="deskripsi" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required>
+            <input type="text" autocomplete="on" wire:model.defer="deskripsi" class="form-control" placeholder="Keterangan Pengeluaran" id="deskripsi" name="deskripsi" required disabled>
         </div>
         <div class="form-group">
             <label for="kredit">Nominal :</label>
-            <input type="text" autocomplete="on" wire:model.defer="jumlah" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required>
+            <input type="text" autocomplete="on" wire:model.defer="jumlah" class="form-control" placeholder="Nominal Pengeluaran" id="kredit" name="kredit" required disabled>
         </div>
         <div class="form-group">
             <label for="coa">COA :</label>
             <div class="row">
                 <div class="col-md-3">
-                    <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Pilih COA">
+                    <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Pilih COA" disabled>
                 </div>
                 <div class="col-md-9">
-                    <select wire:model="selectedCoa" id="selectedCoaFromInput" onchange="getCoa()" name="coa" id="coa" class="form-control" required>
+                    <select wire:model="selectedCoa" id="selectedCoaFromInput" onchange="getCoa()" name="coa" id="coa" class="form-control" required disabled>
                         @foreach ($coaList as $coa)
                         <option value="{{$coa->coa_id}}">{{$coa->code}} {{$coa->name}}</option>
                         @endforeach
@@ -29,7 +31,7 @@
         </div>
         <div class="form-group">
             <label for="company">Company :</label>
-            <select wire:model="selectedCompany" class="form-control">
+            <select wire:model="selectedCompany" class="form-control" disabled>
                 <option value="">--</option>
                 @foreach ($companyList as $Company)
                 <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
@@ -38,7 +40,7 @@
         </div>
         <div class="form-group">
             <label for="project">Project :</label>
-            <select wire:model.defer="selectedProject" class="form-control">
+            <select wire:model.defer="selectedProject" class="form-control" disabled>
                 <option value="">--</option>
                 @foreach ($projectList as $project)
                 <option value="{{$project->project_id}}">{{$project->name}}</option>
@@ -47,11 +49,11 @@
         </div>
         <div class="form-group">
             <label for="tujuan">Dibayarkan kepada (Nota tujuan) :</label>
-            <input wire:model.defer="tujuan" autocomplete="on" type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required>
+            <input wire:model.defer="tujuan" autocomplete="on" type="text" class="form-control" placeholder="Dibayarkan Kepada" id="tujuan" name="tujuan" required disabled>
         </div>
         <div class="form-group">
             <label for="pic">PIC :</label>
-            <input wire:model.defer="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
+            <input wire:model.defer="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic" disabled>
         </div>
         @if (session()->has('message_kas'))
         <div class="alert alert-danger">

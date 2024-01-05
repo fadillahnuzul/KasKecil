@@ -29,6 +29,14 @@
                 @endforeach
             </select>
         </div>
+        <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
+            <select  required class="form-control form-control-sm" style="color:black;" disabled>
+                <option value="">Input unit</option>
+                @foreach ($unitList as $item)
+                <option value="{{$item->id}}">{{$item->name}}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>

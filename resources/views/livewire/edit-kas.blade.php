@@ -1,25 +1,28 @@
 <div>
     <!-- {{-- The Master doesn't talk, he acts. --}} -->
+    <div class="alert alert-danger">
+            Tidak dapat mengedit Kas. Sistem sedang dalam maintenance.
+        </div>
     <div class="form-group">
         <label for="tanggal">Tanggal :</label>
-        <input wire:model.defer="selectedDate" type="date" class="datepicker form-control" placeholder="Tanggal Kas" id="tanggal" name="tanggal" required>
+        <input wire:model.defer="selectedDate" type="date" class="datepicker form-control" placeholder="Tanggal Kas" id="tanggal" name="tanggal" required disabled>
     </div>
     <div class="form-group">
         <label for="deskripsi">Keterangan :</label>
-        <input wire:model.defer="deskripsi" type="text" class="form-control" placeholder="Keterangan Kas" id="deskripsi" name="deskripsi" required>
+        <input wire:model.defer="deskripsi" type="text" class="form-control" placeholder="Keterangan Kas" id="deskripsi" name="deskripsi" required disabled>
     </div>
     <div class="form-group">
         <label for="jumlah">Kas Keluar :</label>
-        <input wire:model.defer="jumlah" type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah">
+        <input wire:model.defer="jumlah" type="text" class="form-control" placeholder="Nominal Kas Keluar" id="jumlah" name="jumlah" disabled>
     </div>
     <div class="form-group">
         <label for="coa">COA :</label>
         <div class="row">
             <div class="col-md-3">
-                <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Cari COA">
+                <input wire:model="searchCoa" class="form-control" type="text" name="" id="" placeholder="Cari COA" disabled>
             </div>
             <div class="col-md-9">
-                <select wire:model="selectedCoa" name="coa" id="selectedCoaFromInput" onchange="getCoa()" class="form-control" required>
+                <select wire:model="selectedCoa" name="coa" id="selectedCoaFromInput" onchange="getCoa()" class="form-control" required disabled>
                     @foreach ($coaList as $coa)
                     <option value="{{$coa->coa_id}}">{{$coa->code}} {{$coa->name}}</option>
                     @endforeach
@@ -29,7 +32,7 @@
     </div>
     <div class="form-group">
         <label for="company">Company :</label>
-        <select wire:model="selectedCompany" name="company" id="company" class="form-control">
+        <select wire:model="selectedCompany" name="company" id="company" class="form-control" disabled>
             <option value="">--</option>
             @foreach ($companyList as $Company)
             <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
@@ -38,7 +41,7 @@
     </div>
     <div class="form-group">
         <label for="project">Project :</label>
-        <select wire:model.defer="selectedProject" name="project" id="project" class="form-control">
+        <select wire:model.defer="selectedProject" name="project" id="project" class="form-control" disabled>
             <option value="">--</option>
             @foreach ($projectList as $project)
             <option value="{{$project->project_id}}">{{$project->name}}</option>
@@ -47,11 +50,11 @@
     </div>
     <div class="form-group">
         <label for="tujuan">Dibayarkan kepada (Nota tujuan):</label>
-        <input wire:model.defer="tujuan" type="text" class="form-control" placeholder="Keterangan Pengeluaran" value="{{$kas->tujuan}}" id="tujuan" name="tujuan">
+        <input wire:model.defer="tujuan" type="text" class="form-control" placeholder="Keterangan Pengeluaran" value="{{$kas->tujuan}}" id="tujuan" name="tujuan" disabled>
     </div>
     <div class="form-group">
         <label for="pic">PIC :</label>
-        <input wire:model.defer="pic" value="{{$kas->pic}}" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
+        <input wire:model.defer="pic" value="{{$kas->pic}}" type="text" class="form-control" placeholder="PIC" id="pic" name="pic" disabled>
     </div>
     @if (session()->has('message_kas'))
     <div class="alert alert-danger">
