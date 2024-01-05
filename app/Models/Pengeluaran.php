@@ -54,6 +54,11 @@ class Pengeluaran extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'divisi_id', 'id');
+    }
+
     public function coa()
     {
         return $this->belongsTo(Coa::class, 'coa', 'coa_id');

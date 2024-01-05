@@ -6,6 +6,7 @@ use App\Http\Controllers\PengeluaranController;
 use App\Models\Coa;
 use App\Models\Company;
 use App\Models\Project;
+use App\Models\Unit;
 use App\Services\CekBudgetService;
 use App\Services\HitungSaldoService;
 use Livewire\Component;
@@ -15,9 +16,11 @@ use Illuminate\Support\Facades\Auth;
 class CreateKas extends Component
 {
     public $companyList;
+    public $unitList;
     public $selectedCompany;
     public $selectedProject;
     public $selectedDate;
+    public $selectedUnit;
     public $deskripsi;
     public $jumlah;
     public $selectedCoa;
@@ -32,6 +35,7 @@ class CreateKas extends Component
     public function mount()
     {
         $this->companyList = Company::get();
+        $this->unitList = Unit::get();
     }
 
     public function render()
@@ -44,6 +48,9 @@ class CreateKas extends Component
         })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
         if (!$this->selectedCoaExist && $coaList->first() && $this->searchCoa) {
             $this->selectedCoa = $coaList->first()->coa_id;
+        }
+        if (!$this->selectedUnit) {
+            $this->selectedUnit = Auth::user()->level;
         }
 
         // $this->selectedCoaExist = false;
@@ -96,6 +103,7 @@ class CreateKas extends Component
             'pic' => $this->pic,
             'tujuan' => $this->tujuan,
             'in_budget' => $inBudget,
+            'unit_id' => $this->selectedUnit,
         ]);
         if ($inSaldo) {
             (new PengeluaranController)->save($data_kas);

@@ -7,6 +7,7 @@ use App\Models\Coa;
 use App\Models\Company;
 use App\Models\Pengeluaran;
 use App\Models\Project;
+use App\Models\Unit;
 use App\Services\CekBudgetService;
 use App\Services\HitungSaldoService;
 use Carbon\Carbon;
@@ -19,9 +20,11 @@ class EditKas extends Component
     public $kas;
     public $searchCoa;
     public $companyList;
+    public $unitList;
     public $selectedCompany;
     public $selectedProject;
     public $selectedDate;
+    public $selectedUnit;
     public $deskripsi;
     public $jumlah;
     public $selectedCoa;
@@ -36,6 +39,7 @@ class EditKas extends Component
     {
         $this->kas = Pengeluaran::with('coa')->find($this->id_kas);
         $this->companyList = Company::get();
+        $this->unitList = Unit::get();
         $this->setValueAwal();
     }
 
@@ -71,6 +75,7 @@ class EditKas extends Component
         $this->jumlah = $this->kas->jumlah;
         $this->pic = $this->kas->pic;
         $this->tujuan = $this->kas->tujuan;
+        $this->selectedUnit = $this->kas->divisi_id;
     }
 
     public function cekBudgetEditKas()
@@ -110,6 +115,7 @@ class EditKas extends Component
             'pic' => $this->pic,
             'tujuan' => $this->tujuan,
             'in_budget' => $inBudget,
+            'unit_id' => $this->selectedUnit,
         ]);
         if ($inSaldo) {
             (new PengeluaranController)->update($data_kas, $this->id_kas);
