@@ -61,4 +61,8 @@ class BKK extends Model
     public function cop() : BelongsTo {
         return $this->belongsTo(COP_SPI::class, 'cop_id','cop_id');
     }
+
+    public function unit() : BelongsTo {
+        return $this->belongsTo(Unit::class, 'unit_id','id');
+    }
 }

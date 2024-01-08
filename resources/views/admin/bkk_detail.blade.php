@@ -152,6 +152,7 @@
                                             <th class="font-weight-bold text-dark">Barcode</th>
                                             <th class="font-weight-bold text-dark">Pekerjaan</th>
                                             <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Unit</th>
                                             <th class="font-weight-bold text-dark">DPP</th>
                                             <th class="font-weight-bold text-dark">PPN</th>
                                             <th class="font-weight-bold text-dark">PPH</th>
@@ -164,6 +165,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->id}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->pekerjaan}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->coa->code}} {{$row->coa->name}}</td>
+                                            <td class="font-weight-bold text-dark">{{$row->unit->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->dpp}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->ppn}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->pph}}</td>
@@ -175,7 +177,7 @@
                                         </tr>
                                         @endforelse
                                         <tr class="font-weight-bold text-dark">
-                                            <td colspan="3">Total</td>
+                                            <td colspan="4">Total</td>
                                             <td>{{$totalDpp}}</td>
                                             <td>{{$totalPpn}}</td>
                                             <td>{{$totalPph}}</td>

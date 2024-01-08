@@ -142,22 +142,22 @@
             @foreach ($row as $data)
             @foreach ($totalKasCoa as $total)
             @foreach ($total as $kasCoaUnit)
+            @if($kasCoaUnit['id'] == $data['id'])
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                @if($kasCoaUnit['id'] == $data['id'])
                 <td class="font-weight-bold text-dark"><strong>Subtotal</strong></td>
                 <td class="font-weight-bold text-dark" style="text-align:right"><strong>Rp. {{number_format($kasCoaUnit['total_kas'],2,",", ".")}}</strong></td>
-                @else
-                <td></td>
-                <td></td>
-                @endif
             </tr>
+            @endif
             @endforeach
             @endforeach
             @endforeach
+            <tr>
+                <td colspan="6"></td>
+            </tr>
             @endforeach
             @endforeach
             @endif
