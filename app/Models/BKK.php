@@ -44,7 +44,9 @@ class BKK extends Model
         'no_rfca',
         'no_calr',
         'no_rfp',
-        'kwitansi_id'
+        'kwitansi_id',
+        'unit_initial',
+        'unit_id'
     ];
 
     public function bkkHeader()

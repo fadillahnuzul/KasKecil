@@ -37,6 +37,7 @@ class AddBkk extends Component
     public $selectedRekening;
     public $selectedCoaId;
     public $selectedPartner;
+    public $selectedUnit;
     public $manualTypePartner;
     public $tanggalBkk;
     public $selectedKasId = [];
@@ -64,36 +65,38 @@ class AddBkk extends Component
     {
         $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
-        $coaList = Coa::join('budget', function($q){
-            $q->on('budget.kode_coa','=', 'coa.coa_id');
+        $coaList = Coa::join('budget', function ($q) {
+            $q->on('budget.kode_coa', '=', 'coa.coa_id');
         })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
         if (!$this->selectedCoaExist && $coaList->first() && !$this->selectedCoaId) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
-        if (Auth::user()->kk_access==1) {
-            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8,10])->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
-            ->searchByDateRange($this->startDate, $this->endDate)
-            ->searchByCompany($this->selectedCompany)
-            // ->searchByProject($this->selectedProject)
-            ->paginate(10);
-        } elseif(Auth::user()->kk_access==2) {
-            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8,10])->where('user_id',Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
-            ->searchByDateRange($this->startDate, $this->endDate)
-            ->searchByCompany($this->selectedCompany)
-            // ->searchByProject($this->selectedProject)
-            ->paginate(10);
+        if (Auth::user()->kk_access == 1) {
+            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+                ->searchByDateRange($this->startDate, $this->endDate)
+                ->searchByCompany($this->selectedCompany)
+                ->searchByUnit($this->selectedUnit)
+                // ->searchByProject($this->selectedProject)
+                ->paginate(10);
+        } elseif (Auth::user()->kk_access == 2) {
+            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->where('user_id', Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+                ->searchByDateRange($this->startDate, $this->endDate)
+                ->searchByCompany($this->selectedCompany)
+                ->searchByUnit($this->selectedUnit)
+                // ->searchByProject($this->selectedProject)
+                ->paginate(10);
         }
-        
+
         $this->selectedCoaExist = false;
-        return view('livewire.add-bkk', compact('kas','projectList','rekeningList','coaList'));
+        return view('livewire.add-bkk', compact('kas', 'projectList', 'rekeningList', 'coaList'));
     }
 
-    public function getCoa($coaId=null)
+    public function getCoa($coaId = null)
     {
         if ($coaId) {
             $this->selectedCoaId = $coaId;
             $this->selectedCoaExist = true;
-        } 
+        }
     }
 
     public function getSelectedKas()
@@ -111,9 +114,9 @@ class AddBkk extends Component
         //         });
         //     }
         // }
-        
+
         $this->totalKas = $this->selectedKas->sum('jumlah');
-        $this->selectedKas = $this->selectedKas->sortBy('coa')->groupBy('coa')->toBase();
+        $this->selectedKas = $this->selectedKas->sortBy('coa')->groupBy(['coa', 'divisi_id'])->toBase();
         // $statusCoa = $this->cekJumlahCoa();
         // if ($statusCoa == false) {
         //     session()->flash('message_coa', 'Gagal menambahkan transaksi, COA yang dipilih lebih dari 5');
@@ -129,10 +132,10 @@ class AddBkk extends Component
             if ($budgetCOA) {
                 $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], collect($value)->sum('jumlah'));
             } else {
-                $isInBudget=false;
+                $isInBudget = false;
             }
-            
-            if(!$isInBudget) {
+
+            if (!$isInBudget) {
                 session()->flash('message_budget', 'Gagal membuat BKK! overbudget atau tidak ada budget untuk COA yang dipilih');
             }
         }
@@ -162,19 +165,22 @@ class AddBkk extends Component
 
     public function hitungKasCOA()
     {
-        $this->totalKasCoa = $this->selectedKas->map(function ($group) {
-            return [
-                'id' => $group->first()['id'],
-                'total_kas' => $group->sum('jumlah'),
-                'jumlah_data' => $group->count(),
-            ];
-        });
+        $this->totalKasCoa = [];
+        foreach ($this->selectedKas as $kas) {
+            array_push($this->totalKasCoa, $kas->map(function ($item) {
+                return [
+                    'id' => $item->first()['id'],
+                    'total_kas' => $item->sum('jumlah'),
+                    'jumlah_data' => $item->count(),
+                ];
+            }));
+        }
     }
 
     public function statusBudgetCoa()
     {
         $coa = Coa::find($this->selectedCoa);
-        if ((!$this->isInBudget)&&($coa->status_budget=='budget')) {
+        if ((!$this->isInBudget) && ($coa->status_budget == 'budget')) {
             session()->flash('budget_kurang', 'Input kas gagal, budget pada COA ini tidak cukup. Ajukan penambahan budget.');
             return false;
         }
@@ -186,58 +192,64 @@ class AddBkk extends Component
         // $statusCoa = $this->cekJumlahCoa();
         // $budgetCOA = $this->cekBudget();
         // if ($statusCoa && $budgetCOA) {
-            //data bkk header
-            $bkk_header_data = [
-                'bank_id' => $this->selectedRekening,
-                'name' => null,
-                'tanggal' => $this->tanggalBkk,
-                'partner' => $this->manualTypePartner ?? $this->selectedPartner,
-                'otorisasi' => 0,
-                'project_id' => $this->selectedProject,
-                'layer_cashflow_id' => 0,
-                'created_by' => Auth::user()->id,
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'status' => 1,
-            ];
+        //data bkk header
+        $bkk_header_data = [
+            'bank_id' => $this->selectedRekening,
+            'name' => null,
+            'tanggal' => $this->tanggalBkk,
+            'partner' => $this->manualTypePartner ?? $this->selectedPartner,
+            'otorisasi' => 0,
+            'project_id' => $this->selectedProject,
+            'layer_cashflow_id' => 0,
+            'created_by' => Auth::user()->id,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'status' => 1,
+        ];
 
-            //data BKK
-            $bkk_collection = collect();
-            $this->selectedKas->map(function ($item) use (&$bkk_collection) {
+        //data BKK
+        $bkk_collection = collect();
+        $this->selectedKas->map(function ($item) use (&$bkk_collection) {
+            foreach ($item as $dataBkk) {
+                $dataBkk = array_values($dataBkk);
                 $bkk_collection->push([
                     'ppn' => 0,
                     'pph' => 0,
-                    'coa_id' => $item[0]['coa']['coa_id'],
-                    'pekerjaan' => "Pengeluaran " . $item[0]['coa']['name'],
+                    'coa_id' => $dataBkk[0]['coa']['coa_id'],
+                    'pekerjaan' => "Pengeluaran " . $dataBkk[0]['coa']['name'] . " Unit " . $dataBkk[0]['unit']['name'],
                     'status_jurnal' => 0,
                     'status' => 0,
                     'otorisasi' => 0,
-                    'payment' => collect($item)->sum('jumlah'),
-                    'dpp' => collect($item)->sum('jumlah'),
+                    'payment' => collect($dataBkk)->sum('jumlah'),
+                    'dpp' => collect($dataBkk)->sum('jumlah'),
                     'action' => "create",
                     'action_by' => Auth::user()->id,
                     'action_date' => Carbon::now()->format('Y-m-d'),
                     'layer_cashflow_id' => 0,
                     'using_budget' => "DEFAULT",
+                    'unit_initial' => $dataBkk[0]['unit']['initial'],
+                    'unit_id' => $dataBkk[0]['unit']['id']
                 ]);
-            });
-            //save
-            $this->bkk = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
-            
-            if ($this->bkk) {
-                collect($this->bkk["bkk_detail"])->map(function ($item) {
-                    Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
-                });
-                session()->flash('message_save', 'BKK berhasil dibuat');
-            } else {
-                session()->flash('message_not_save', 'BKK gagal dibuat');
             }
+        });
+        //save
+        $this->bkk = CreateBKKService::createBKK($bkk_header_data, $bkk_collection->toArray());
+
+        if ($this->bkk) {
+            collect($this->bkk["bkk_detail"])->map(function ($item) {
+                Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
+            });
+            session()->flash('message_save', 'BKK berhasil dibuat');
+        } else {
+            session()->flash('message_not_save', 'BKK gagal dibuat');
+        }
         // } else {
-            // session()->flash('message_not_save', 'BKK gagal dibuat');
+        // session()->flash('message_not_save', 'BKK gagal dibuat');
         // }
         $this->render();
     }
 
-    public function printBkk() : void {
-        (new BKKController)->print($this->bkk['bkk_detail'],$this->bkk['bkk_header'],$this->selectedProject);
+    public function printBkk(): void
+    {
+        (new BKKController)->print($this->bkk['bkk_detail'], $this->bkk['bkk_header'], $this->selectedProject);
     }
 }

@@ -1,20 +1,17 @@
 <div>
     <!-- {{-- Nothing in the world is as soft and yielding as water. --}} -->
     <!-- Filter COA & Tanggal -->
-    <div class="alert alert-danger">
-        Tidak dapat menambahkan BKK. Sistem sedang dalam maintenance.
-    </div>
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px; max-width:430px; color:black;">
-            <input type="text" autocomplete="search-coa" wire:model="searchCoa" placeholder="Cari COA" class="form-control form-control-sm" style="color:black;" disabled>
-            <select wire:model="selectedCoaId" id="selectedCoaFromInput" required onclick="getCoa()" class="form-control form-control-sm" style="color:black;" disabled>
+            <input type="text" autocomplete="search-coa" wire:model="searchCoa" placeholder="Cari COA" class="form-control form-control-sm" style="color:black;">
+            <select wire:model="selectedCoaId" id="selectedCoaFromInput" required onclick="getCoa()" class="form-control form-control-sm" style="color:black;">
                 @foreach ($coaList as $itemCoa)
                 <option value="{{$itemCoa->coa_id}}">{{$itemCoa->code}} {{$itemCoa->name}}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:400px; ">
-            <select wire:model="selectedCompany" required class="form-control form-control-sm" style="color:black;" disabled>
+            <select wire:model="selectedCompany" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input company</option>
                 @foreach ($companyList as $item)
                 <option value="{{$item->project_company_id}}">{{$item->name}}</option>
@@ -22,7 +19,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
-            <select wire:model="selectedProject" required class="form-control form-control-sm" style="color:black;" disabled>
+            <select wire:model="selectedProject" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input project</option>
                 @foreach ($projectList as $item)
                 <option value="{{$item->project_id}}">{{$item->name}}</option>
@@ -30,8 +27,8 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
-            <select  required class="form-control form-control-sm" style="color:black;" disabled>
-                <option value="">Input unit</option>
+            <select wire:model="selectedUnit" class="form-control form-control-sm" style="color:black;">
+                <option value="">All Unit</option>
                 @foreach ($unitList as $item)
                 <option value="{{$item->id}}">{{$item->name}}</option>
                 @endforeach
@@ -41,11 +38,11 @@
     <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>
         <div class="col-md-2" x-data="datepicker()">
-            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required disabled>
+            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
         </div>
         <label for="date" class="col-form-label">Selesai</label>
         <div class="col-md-2" x-data="datepicker2()">
-            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required disabled>
+            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
         </div>
     </div>
     <!-- Filter COA & Tanggal -->
@@ -58,6 +55,7 @@
                 <th scope="col" class="font-weight-bold text-dark">Tanggal</th>
                 <th scope="col" class="font-weight-bold text-dark">Keterangan</th>
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
+                <th scope="col" class="font-weight-bold text-dark">Unit</th>
                 <th scope="col" class="font-weight-bold text-dark">Pembebanan</th>
                 <th scope="col" class="font-weight-bold text-dark">Project</th>
                 <th scope="col" class="font-weight-bold text-dark">Barcode</th>
@@ -75,6 +73,7 @@
                     @endif
                 </td>
                 <td class="font-weight-bold text-dark">{{$item->COA->code}} {{$item->COA->name}}</td>
+                <td class="font-weight-bold text-dark">{{$item->unit->name}}</td>
                 <td class="font-weight-bold text-dark">{{$item->Pembebanan->name}}</td>
                 <td class="font-weight-bold text-dark">
                     @if ($item->project_id)
@@ -93,7 +92,7 @@
         {{ session('message_overbudget') }}
     </div>
     @endif
-    <button style="float:right;" class="btn-sm btn-primary" wire:click="getSelectedKas" disabled>Add Transaction</button>
+    <button style="float:right;" class="btn-sm btn-primary" wire:click="getSelectedKas">Add Transaction</button>
     <div>
         @if (session()->has('message_coa'))
         <div class="alert alert-danger">
@@ -116,6 +115,7 @@
                 <th scope="col" class="font-weight-bold text-dark">Tanggal</th>
                 <th scope="col" class="font-weight-bold text-dark">Keterangan</th>
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
+                <th scope="col" class="font-weight-bold text-dark">Unit</th>
                 <th scope="col" class="font-weight-bold text-dark">Kas Keluar</th>
                 <th></th>
             </tr>
@@ -124,33 +124,40 @@
             @if ($selectedKas)
             @foreach ($selectedKas as $item => $list_kas)
             @foreach ($list_kas as $row)
+            @foreach ($row as $data)
             <tr>
-                <td><i class="fas fa-trash" wire:click="deleteKas({{$row['id']}})"></i></td>
-                <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($row['tanggal'])->format('d-m-Y')}}</td>
-                <td class="font-weight-bold text-dark">{{$row['deskripsi']}}
-                    @if($row['in_budget']==1)
+                <td><i class="fas fa-trash" wire:click="deleteKas({{$data['id']}})"></i></td>
+                <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($data['tanggal'])->format('d-m-Y')}}</td>
+                <td class="font-weight-bold text-dark">{{$data['deskripsi']}}
+                    @if($data['in_budget']==1)
                     <span class="badge bg-danger text-white">Overbudget</span>
                     @endif
                 </td>
                 <td class="font-weight-bold text-dark">{{App\Models\Coa::getCoa($item)->code}} {{App\Models\Coa::getCoa($item)->name}}</td>
-                <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($row['jumlah'],2,",", ".")}}</td>
+                <td class="font-weight-bold text-dark">{{$data['unit']['name']}}</td>
+                <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($data['jumlah'],2,",", ".")}}</td>
                 <td></td>
             </tr>
             @endforeach
+            @foreach ($row as $data)
             @foreach ($totalKasCoa as $total)
-            <tr rowspan="{{$total['jumlah_data']}}">
+            @foreach ($total as $kasCoaUnit)
+            <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                @if($total['id'] == $list_kas[0]['id'])
+                @if($kasCoaUnit['id'] == $data['id'])
                 <td class="font-weight-bold text-dark"><strong>Subtotal</strong></td>
-                <td class="font-weight-bold text-dark" style="text-align:right"><strong>Rp. {{number_format($total['total_kas'],2,",", ".")}}</strong></td>
+                <td class="font-weight-bold text-dark" style="text-align:right"><strong>Rp. {{number_format($kasCoaUnit['total_kas'],2,",", ".")}}</strong></td>
                 @else
                 <td></td>
                 <td></td>
                 @endif
             </tr>
+            @endforeach
+            @endforeach
+            @endforeach
             @endforeach
             @endforeach
             @endif
@@ -169,7 +176,7 @@
     <!-- Form Input -->
     <div class="row">
         <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
-            <select wire:model="selectedRekening" required class="form-control form-control-sm" style="color:black;" disabled>
+            <select wire:model="selectedRekening" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input rekening</option>
                 @foreach ($rekeningList as $item)
                 <option value="{{$item->bank_id}}">{{$item->name}} {{$item->rekening}}</option>
@@ -177,7 +184,7 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; max-width:250px;">
-            <select wire:model="selectedPartner" onchange="removeRequired()" id="selectedPartnerDropdownId" class="form-control form-control-sm" style="color:black;" disabled>
+            <select wire:model="selectedPartner" onchange="removeRequired()" id="selectedPartnerDropdownId" class="form-control form-control-sm" style="color:black;">
                 <option value="">Input partner</option>
                 @foreach ($partnerList as $item)
                 <option value="{{$item->name}}">{{$item->name}}</option>
@@ -185,16 +192,16 @@
             </select>
         </div>
         <div class="form-group-row" style="margin-right: 5px; width:250px;">
-            <input type="text" wire:model="manualTypePartner" oninput="removeRequired()" id="manualTypePartnerTextId" class="form-control form-control-sm" placeholder="Ketik Partner, Pilih Atau Ketik" style="color:black;" disabled>
+            <input type="text" wire:model="manualTypePartner" oninput="removeRequired()" id="manualTypePartnerTextId" class="form-control form-control-sm" placeholder="Ketik Partner, Pilih Atau Ketik" style="color:black;">
         </div>
         <div class="form-group-row" style="color:black">
             Tanggal BKK
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
-            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK" disabled>
+            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK">
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
-            <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK" disabled>Create BKK</button>
+            <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK">Create BKK</button>
             <div wire:loading wire:target="createBKK">
                 Processing BKK...
             </div>

@@ -225,6 +225,7 @@
                                             <th class="font-weight-bold text-dark">User</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Unit</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
                                             <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">Nota Tujuan</th>
@@ -252,6 +253,10 @@
                                             <td class="font-weight-bold text-dark">{{number_format($row->jumlah ,2, ",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">@if ($row->coa)
                                                 {{$row->COA->code}} {{$row->COA->name}}
+                                                @endif
+                                            </td>
+                                            <td class="font-weight-bold text-dark" style="font-size: 11pt;">@if ($row->divisi_id)
+                                                {{$row->unit->name}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)
