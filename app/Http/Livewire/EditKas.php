@@ -103,7 +103,7 @@ class EditKas extends Component
     public function updateKas()
     {
         $budget = $this->cekBudgetEditKas();
-        $inSaldo = $this->cekSaldo();
+        // $inSaldo = $this->cekSaldo();
         $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
         $data_kas = array([
             'date' => $this->selectedDate,
@@ -117,8 +117,8 @@ class EditKas extends Component
             'in_budget' => $inBudget,
             'unit_id' => $this->selectedUnit,
         ]);
-        if ($inSaldo) {
+        // if ($inSaldo) {
             (new PengeluaranController)->update($data_kas, $this->id_kas);
-        }
+        // }
     }
 }
