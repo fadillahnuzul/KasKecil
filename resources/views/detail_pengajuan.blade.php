@@ -310,13 +310,15 @@
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">
-                                                @if ($row->status != 7 && $row->status != 6 && $row->status != 8)
+                                                @if ($row->status != 6)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
                                                     Edit</a>
+                                                @if ($row->status != 7 && $row->status != 8)
                                                 <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">
                                                     Hapus</a>
                                                 <!-- <a onclick="set_modal_id({{$row->id}})" data-toggle="modal" data-target="#DoneModal" class="btn btn-success btn-sm" data-id="{{ $row->id }}">
                                                     Selesai</a> -->
+                                                @endif
                                                 @endif
                                             </td>
                                         </tr>
