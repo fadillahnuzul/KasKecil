@@ -530,7 +530,7 @@
                     title: 'Laporan Kas Keluar',
                     filename: 'Laporan_Kas_Kecil',
                     exportOptions: {
-                        columns: [1, 3, 5, 6, 7, 8, 2],
+                        columns: [1, 3, 4, 5, 6, 7, 8, 2],
                         format: {
                             body: function(data, row, column, node) {
                                 // Strip $ from salary column to make it numeric
@@ -566,7 +566,7 @@
                     title: 'Laporan Kas Keluar',
                     filename: 'Laporan_Kas_Kecil',
                     exportOptions: {
-                        columns: [1, 2, 4, 6, 7, 8, 3],
+                        columns: [1, 2, 4, 5, 6, 7, 8, 3],
                         format: {
                             body: function(data, row, column, node) {
                                 // Strip $ from salary column to make it numeric
