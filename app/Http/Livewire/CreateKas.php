@@ -91,7 +91,7 @@ class CreateKas extends Component
     {
         $this->jumlah = preg_replace("/[^0-9]/", "", $this->jumlah);
         $budget = $this->cekBudgetCreateKas();
-        $inSaldo = $this->cekSaldo();
+        // $inSaldo = $this->cekSaldo();
         $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
         $data_kas = array([
             'date' => $this->selectedDate,
@@ -105,8 +105,9 @@ class CreateKas extends Component
             'in_budget' => $inBudget,
             'unit_id' => $this->selectedUnit,
         ]);
-        if ($inSaldo) {
-            (new PengeluaranController)->save($data_kas);
-        }
+        // if ($inSaldo) {
+        //     (new PengeluaranController)->save($data_kas);
+        // }
+        (new PengeluaranController)->save($data_kas);
     }
 }
