@@ -73,7 +73,7 @@
                     @endif
                 </td>
                 <td class="font-weight-bold text-dark">{{$item->COA->code}} {{$item->COA->name}}</td>
-                <td class="font-weight-bold text-dark">{{$item->unit->name}}</td>
+                <td class="font-weight-bold text-dark">{{strtolower($item->unit->name)}}</td>
                 <td class="font-weight-bold text-dark">{{$item->Pembebanan->name}}</td>
                 <td class="font-weight-bold text-dark">
                     @if ($item->project_id)

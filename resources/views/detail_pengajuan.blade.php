@@ -286,8 +286,8 @@
                                                 {{$row->COA->code}} {{$row->COA->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">@if ($row->divisi_id)
-                                                {{$row->unit->name}}
+                                            <td class="font-weight-bold text-dark" style="font-size: 11pt;">@if ($row->divisi_id)
+                                                {{strtolower($row->unit->name)}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">@if($row->pembebanan)

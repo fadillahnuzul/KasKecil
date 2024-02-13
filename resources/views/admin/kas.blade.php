@@ -256,7 +256,7 @@
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark" style="font-size: 11pt;">@if ($row->divisi_id)
-                                                {{$row->unit->name}}
+                                                {{strtolower($row->unit->name)}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)
