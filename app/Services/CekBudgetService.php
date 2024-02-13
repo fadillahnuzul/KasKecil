@@ -11,7 +11,7 @@ use GuzzleHttp\Client;
  */
 class CekBudgetService
 {
-    public function getBudget($company_id, $coa_id, $date)
+    public function getBudget(int $company_id, int $coa_id, string $date, int $unit=null)
     {
         if (env("BUDGET_DUMMY_DATA") == true) {
             return [[
@@ -26,6 +26,7 @@ class CekBudgetService
                 'company' => $company_id,
                 'coa' => $coa_id,
                 'date' => $date,
+                'unit' => $unit
             ]
         ]);
 

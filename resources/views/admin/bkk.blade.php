@@ -102,11 +102,11 @@
                                         <div class="form-group row">
                                             <label for="date" class="col-form-label">Mulai</label>
                                             <div class="col-md-2" x-data="datepicker()">
-                                                <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
+                                                <input class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
                                             </div>
                                             <label for="date" class="col-form-label">Selesai</label>
                                             <div class="col-md-2" x-data="datepicker2()">
-                                                <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
+                                                <input id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
                                             </div>
                                             <div class="form-group-row" style="margin-inline: 5px;">
                                                 <select name="company" id="company-dropdown">
@@ -129,13 +129,13 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         @if ($selectedCompany)
                                         <tr class="font-weight-bold text-dark">{{$selectedCompany->name}}</tr>
                                         @endif
                                         <tr>
-                                            <th><input type="checkbox" id="head-cb"></th>
+                                            <th class="font-weight-bold text-dark">No</th>
                                             <th class="font-weight-bold text-dark">Barcode</th>
                                             <th class="font-weight-bold text-dark">Company</th>
                                             <th class="font-weight-bold text-dark">Project</th>
@@ -143,11 +143,20 @@
                                             <th></th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
+                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
+                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
+                                            <th class="font-weight-bold text-dark"><input class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker"></th>
+                                            <th></th>
+                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataBkk as $row)
                                         <tr>
-                                            <td><input type="checkbox" class="cb-child" value="{{$row->id}}"></td>
+                                            <td class="font-weight-bold text-dark">{{$loop->iteration}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->id}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->project->company->name}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->project->name}}</td>

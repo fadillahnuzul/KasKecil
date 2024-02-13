@@ -39,7 +39,7 @@ class EditKas extends Component
     {
         $this->kas = Pengeluaran::with('coa')->find($this->id_kas);
         $this->companyList = Company::get();
-        $this->unitList = Unit::get();
+        $this->unitList = Unit::get()->sortBy('name');
         $this->setValueAwal();
     }
 
@@ -81,11 +81,14 @@ class EditKas extends Component
     public function cekBudgetEditKas()
     {
         $cekBudget = new CekBudgetService;
-        $budgetCOA = $cekBudget->getBudget($this->selectedCompany, $this->selectedCoa, $this->selectedDate);
-        if (!$budgetCOA[0]['budgetbulan'] && !$budgetCOA[0]['budgettahun']) {
-            // session()->flash('tidak_ada_budget', 'Input kas gagal, tidak ada budget pada COA ini');
-            return false;
+        $budgetCOA = $cekBudget->getBudget($this->selectedCompany, $this->selectedCoa, $this->selectedDate, $this->selectedUnit);
+        if (!$budgetCOA) {
+            if (!$budgetCOA[0]['budgetbulan'] && !$budgetCOA[0]['budgettahun']) {
+                // session()->flash('tidak_ada_budget', 'Input kas gagal, tidak ada budget pada COA ini');
+                return false;
+            }
         }
+        
         $this->isInBudget = $cekBudget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $this->jumlah);
         return true;
     }
@@ -102,9 +105,9 @@ class EditKas extends Component
 
     public function updateKas()
     {
-        $budget = $this->cekBudgetEditKas();
+        // $budget = $this->cekBudgetEditKas();
         // $inSaldo = $this->cekSaldo();
-        $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
+        // $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
         $data_kas = array([
             'date' => $this->selectedDate,
             'deskripsi' => $this->deskripsi,
@@ -114,7 +117,8 @@ class EditKas extends Component
             'project' => $this->selectedProject,
             'pic' => $this->pic,
             'tujuan' => $this->tujuan,
-            'in_budget' => $inBudget,
+            // 'in_budget' => $inBudget,
+            'in_budget' => 0,
             'unit_id' => $this->selectedUnit,
         ]);
         // if ($inSaldo) {
