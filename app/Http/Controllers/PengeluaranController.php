@@ -152,7 +152,7 @@ class PengeluaranController extends Controller
         return view('form-edit', compact('id_kas'));
     }
 
-    public function update($data, $id)
+    public function update($data, $id, $isPribadi=null)
     {
         $kas = Pengeluaran::find($id)->update([
             'tanggal' => $data[0]['date'],
@@ -167,6 +167,10 @@ class PengeluaranController extends Controller
             'tujuan' => $data[0]['tujuan'],
             'in_budget' => $data[0]['in_budget'],
         ]);
+
+        if($isPribadi) {
+            return redirect('kas_keluar_pribadi');
+        }
         
         return redirect('kas_keluar');
     }

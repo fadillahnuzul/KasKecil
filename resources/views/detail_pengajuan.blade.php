@@ -30,7 +30,7 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-    @include('asset.sidebar')
+        @include('asset.sidebar')
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -243,9 +243,9 @@
                                                 <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                             </div>
                                         </div>
+                                    </form>
                                 </div>
                             </div>
-                            </form>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -514,7 +514,7 @@
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     @if ($button_kas == FALSE)
     <script>
-        var company = {!! json_encode($selectedCompany) !!};
+        var company = @json($selectedCompany);
         if (company == null) {
             company_name = 'PT ABDAEL NUSA'
         } else {
@@ -550,7 +550,7 @@
     </script>
     @elseif ($button_kas == TRUE)
     <script>
-        var company = {!! json_encode($selectedCompany) !!};
+        var company = @json($selectedCompany);
         if (company == null) {
             company_name = 'PT ABDAEL NUSA'
         } else {

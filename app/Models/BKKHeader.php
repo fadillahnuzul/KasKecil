@@ -62,4 +62,14 @@ class BKKHeader extends Model
     {
         return ($company) ? $query->whereRelation('project', 'project_company_id', $company) : $query;
     }
+
+    public function scopeNotPribadi($query)
+    {
+        return $query->whereNotIn('project_id', [111,112]);
+    }
+
+    public function scopeIsPribadi($query)
+    {
+        return $query->whereIn('project_id', [111,112]);
+    }
 }

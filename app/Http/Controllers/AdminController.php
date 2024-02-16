@@ -188,7 +188,7 @@ class AdminController extends Controller
     public function laporan_keluar(Request $request)
     {
         $title = "Laporan Kas Kecil";
-        $company = Company::get();
+        $company = Company::notPribadi()->get();
         $laporan = TRUE;
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
@@ -200,7 +200,7 @@ class AdminController extends Controller
         $userList = $this->getTotalPerUser($userList,$request->company, null, null);
         [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
         // $dataKas = DB::table('pettycash_pengeluaran')->select('coa',DB::raw('sum(jumlah) as total'))->groupBy('coa')->get();
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->orderBy('status', 'asc')
+        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->orderBy('status', 'asc')->notPribadi()
             ->searchByDateRange($startDate, $endDate)
             ->searchByCompany($request->company)
             ->searchByStatus($request->status)
@@ -222,7 +222,7 @@ class AdminController extends Controller
     public function kas_keluar(Request $request)
     {
         $title = "Pengeluaran Kas Kecil";
-        $company = Company::get();
+        $company = Company::notPribadi()->get();
         $laporan = FALSE;
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
@@ -233,7 +233,7 @@ class AdminController extends Controller
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
         $userList = $this->getTotalPerUser($userList,$request->company, null, null);
         [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()
+        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->notPribadi()
             ->searchByDateRange($startDate, $endDate)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {
                 ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();

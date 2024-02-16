@@ -142,69 +142,60 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header pb-0">
-                            <!-- End Dropdown Divisi -->
-                            <!-- @if ($laporan == TRUE) -->
+                        <div class="card-header py-3">
+
                             <!-- <a href="/pengeluaran.export" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right; margin-right:5px"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
-                            <!-- @endif -->
-                            <div class="container">
-                                <div class="row">
+    class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @if ($laporan == FALSE)
+                                    <a href="{{url('/kas_pribadi')}}" class="btn btn-warning btn-sm btn-icon-split">
+                                        <span class="text">Catat Kas</span>
+                                    </a>
+                                    @endif
+                                </div>
+                                <div class="col-md-10">
                                     <form action="" method="POST">
-                                        @csrf
-                                        <div class="container-fluid">
-                                            <div class="form-group row">
-                                                <label for="date" class="col-form-label">Mulai</label>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <input type="date" class="datepicker form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                                </div>
-                                                <label for="date" class="col-form-label">Selesai</label>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <input type="date" class="datepicker form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
-                                                </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="status" id="status">
-                                                        @if ($selectedStatus)
-                                                        <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
-                                                        @endif
-                                                        @foreach ($status as $status)
-                                                        <option value="{{$status->id}}">{{$status->nama_status}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="company" id="company-dropdown">
-                                                        @if ($selectedCompany)
-                                                        <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
-                                                        @endif
-                                                        <option value="">All Company</option>
-                                                        @foreach ($company as $company)
-                                                        <option value="{{$company->project_company_id}}">{{$company->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <!-- <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="project" id="project-dropdown">
-                                                        <option value="">All Project</option>
-                                                    </select>
-                                                </div> -->
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="user" id="user">
-                                                        @if ($selectedUser)
-                                                        <option selected value="{{$selectedUser->id}}">{{$selectedUser->username}}</option>
-                                                        @endif
-                                                        <option value="">All User</option>
-                                                        @foreach ($userList as $user)
-                                                        <option value="{{$user->id}}">{{$user->username}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <button style="margin-left:5px; margin-right:5px;" type="submit" class="btn btn-sm btn-primary">Tampil</button>
-                                                </div>
+                                        <div class="form-group row">
+                                            @csrf
+                                            <label for="date" class="col-form-label">Mulai</label>
+                                            <div class="form-group-row" style="margin-inline: 5px;">
+                                                <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
+                                            </div>
+                                            <label for="date" class="col-form-label">Selesai</label>
+                                            <div class="form-group-row" style="margin-inline: 5px;">
+                                                <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
+                                            </div>
+                                            <div class="form-group-row" style="margin-inline: 5px;">
+                                                <select name="status" id="status">
+                                                    @if ($selectedStatus)
+                                                    <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
+                                                    @endif
+                                                    @if ($laporan==TRUE)
+                                                    <option value="">All Status</option>
+                                                    @endif
+                                                    @foreach ($status as $status)
+                                                    <option value="{{$status->id}}">{{$status->nama_status}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group-row" style="margin-inline: 5px;">
+                                                <select name="company" id="company">
+                                                    @if ($selectedCompany)
+                                                    <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
+                                                    @endif
+                                                    <option value="">All Company</option>
+                                                    @foreach ($company as $company)
+                                                    <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group-row" style="margin-inline: 5px;">
+                                                <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                             </div>
                                         </div>
                                     </form>
@@ -212,7 +203,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                        <div class="table-responsive">
+                            <div class="table-responsive">
                                 <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         @if ($selectedCompany)
@@ -225,16 +216,19 @@
                                             <th class="font-weight-bold text-dark">User</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
                                             <th class="font-weight-bold text-dark">COA</th>
-                                            <th class="font-weight-bold text-dark">Unit</th>
                                             <th class="font-weight-bold text-dark">Pembebanan</th>
                                             <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">Nota Tujuan</th>
                                             <th class="font-weight-bold text-dark">PIC</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            @if ($laporan == TRUE)
                                             <th class="font-weight-bold text-dark">Tanggal BKK</th>
                                             <th class="font-weight-bold text-dark">Tanggal Kembali</th>
                                             <th class="font-weight-bold text-dark">Barcode</th>
+                                            @elseif ($laporan == FALSE)
+                                            <th class="font-weight-bold text-dark">Aksi</th>
+                                            @endif
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
                                     </thead>
@@ -255,10 +249,6 @@
                                                 {{$row->COA->code}} {{$row->COA->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark" style="font-size: 11pt;">@if ($row->divisi_id && $row->unit)
-                                                {{strtolower($row->unit->name)}}
-                                                @endif
-                                            </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
                                                 @endif
@@ -275,6 +265,7 @@
                                                 {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
                                                 @endif
                                             </td>
+                                            @if ($laporan == TRUE)
                                             <td class="font-weight-bold text-dark">
                                                 @if ($row->tanggal_set_bkk)
                                                 {{Carbon\Carbon::parse($row->tanggal_set_bkk)->format('d-m-Y')}}
@@ -286,6 +277,12 @@
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->bkk_header_id}}</td>
+                                            @elseif($laporan == FALSE)
+                                            <td>
+                                            <a href="/edit_kas_keluar_pribadi/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
+                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
+                                            </td>
+                                            @endif
                                             <!-- <td class="font-weight-bold text-dark">
                                         @if($row->status != 8)
                                             <a href="/set_bkk/{{$row->id}}" class="btn btn-warning btn-sm">Set BKK</a>

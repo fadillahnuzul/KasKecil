@@ -26,4 +26,14 @@ class Company extends Model
     public function project() : HasMany {
         return $this->hasMany(Project::class, 'project_company_id','project_company_id');
     }
+
+    public function scopeNotPribadi($query)
+    {
+        return $query->WhereNotIn('project_company_id',[28,29,30]);
+    }
+
+    public function scopeIsPribadi($query)
+    {
+        return $query->WhereIn('project_company_id',[28,29,30]);
+    }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminPribadiController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\SumberController;
@@ -103,6 +104,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/create_bkk', [BKKController::class, 'create'])->name('create_bkk');
     Route::post('/save_bkk', [BKKController::class, 'save']);
     Route::get('/bkk_detail/{id}',[BKKController::class, 'index']);
+
+    //Pribadi
+    Route::match(['GET', 'POST'], '/kas_keluar_pribadi', [AdminPribadiController::class, 'kas_keluar'])->name('kas_keluar_pribadi');
+    Route::match(['GET', 'POST'], '/laporan_kas_keluar_pribadi', [AdminPribadiController::class, 'laporan_keluar'])->name('laporan_kas_keluar_pribadi');
+    Route::get('/create_bkk_pribadi', [AdminPribadiController::class, 'create_bkk'])->name('create_bkk_pribadi');
+    Route::match(['GET', 'POST'], '/list_bkk_pribadi', [AdminPribadiController::class, 'list_bkk'])->name('list_bkk_pribadi');
+    Route::get('/kas_pribadi', [AdminPribadiController::class, 'create_kas']);
+    Route::get('/edit_kas_keluar_pribadi/{id}', [AdminPribadiController::class, 'edit_kas']);
 });
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');

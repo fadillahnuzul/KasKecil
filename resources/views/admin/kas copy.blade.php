@@ -519,9 +519,7 @@
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script>
-        var company = {
-            !!json_encode($selectedCompany) !!
-        };
+        var company = @json($selectedCompany);
         if (company == null) {
             company_name = 'PT ABDAEL NUSA'
         } else {

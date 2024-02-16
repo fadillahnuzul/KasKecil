@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Pribadi;
 
 use App\Models\Coa;
 use App\Models\Company;
@@ -50,11 +50,11 @@ class AddBkk extends Component
     public $selectedCoaExist;
     public $bkk;
 
-    protected $listeners = ['getSelectedCoa' => 'getCoa'];
+    protected $listeners = ['getSelectedCoaPribadi' => 'getCoa'];
 
     public function mount()
     {
-        $this->companyList = Company::notPribadi()->get();
+        $this->companyList = Company::isPribadi()->get();
         $this->partnerList = Partner::get();
         $this->unitList = Unit::get()->sortBy('name');
         $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -63,7 +63,7 @@ class AddBkk extends Component
 
     public function render()
     {
-        $projectList = Project::where('project_company_id', $this->selectedCompany)->notPribadi()->get();
+        $projectList = Project::where('project_company_id', $this->selectedCompany)->isPribadi()->get();
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
         $coaList = Coa::join('budget', function ($q) {
             $q->on('budget.kode_coa', '=', 'coa.coa_id');
@@ -253,3 +253,4 @@ class AddBkk extends Component
         (new BKKController)->print($this->bkk['bkk_detail'], $this->bkk['bkk_header'], $this->selectedProject);
     }
 }
+

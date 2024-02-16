@@ -26,4 +26,14 @@ class Project extends Model
     public function company() : BelongsTo {
         return $this->belongsTo(Company::class, 'project_company_id','project_company_id');
     }
+
+    public function scopeNotPribadi($query)
+    {
+        return $query->whereNotIn('project_id', [111,112])->orWhereNotIn('project_company_id',[28,29,30]);
+    }
+
+    public function scopeIsPribadi($query)
+    {
+        return $query->whereIn('project_id', [111,112])->orWhereIn('project_company_id',[28,29,30]);
+    }
 }

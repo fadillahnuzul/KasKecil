@@ -47,6 +47,27 @@
             <i class="fas fa-fw fa-book"></i>
             <span>List BKK</span></a>
     </li>
+    <hr class="sidebar-divider d-none d-md-block">
+    <li class="nav-item {{ Route::currentRouteNamed('kas_keluar_pribadi') ? 'active' : '' }}">
+        <a class="nav-link" href="/kas_keluar_pribadi">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Kas Keluar Pribadi</span></a>
+    </li>
+    <li class="nav-item {{ Route::currentRouteNamed('laporan_kas_keluar_pribadi') ? 'active' : '' }}">
+        <a class="nav-link" href="/laporan_kas_keluar_pribadi">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Laporan Kas Keluar Pribadi</span></a>
+    </li>
+    <li class="nav-item {{ Route::currentRouteNamed('create_bkk_pribadi') ? 'active' : '' }}">
+        <a class="nav-link" href="/create_bkk_pribadi">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Buat BKK Pribadi</span></a>
+    </li>
+    <li class="nav-item {{ Route::currentRouteNamed('list_bkk_pribadi') ? 'active' : '' }}">
+        <a class="nav-link" href="/list_bkk_pribadi">
+            <i class="fas fa-fw fa-book"></i>
+            <span>List BKK Pribadi</span></a>
+    </li>
     @elseif (Auth::user()->kk_access=='2')
     <li class="nav-item {{ Route::currentRouteNamed('home') ? 'active' : '' }}">
         <a class="nav-link" href="{{url('/home')}}">

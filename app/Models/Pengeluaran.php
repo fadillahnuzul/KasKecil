@@ -160,4 +160,14 @@ class Pengeluaran extends Model
     {
         return $query->where('status', '!=', 6);
     }
+
+    public function scopeNotPribadi($query)
+    {
+        return $query->whereNotIn('project_id', [111,112])->orWhereNotIn('pembebanan',[28,29,30]);
+    }
+
+    public function scopeIsPribadi($query)
+    {
+        return $query->whereIn('project_id', [111,112])->orWhereIn('pembebanan',[28,29,30]);
+    }
 }
