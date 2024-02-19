@@ -26,14 +26,6 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group-row" style="margin-right: 5px; max-width:400px;">
-            <select wire:model="selectedUnit" class="form-control form-control-sm" style="color:black;">
-                <option value="">All Unit</option>
-                @foreach ($unitList as $item)
-                <option value="{{$item->id}}">{{$item->name}}</option>
-                @endforeach
-            </select>
-        </div>
     </div>
     <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>
@@ -55,7 +47,6 @@
                 <th scope="col" class="font-weight-bold text-dark">Tanggal</th>
                 <th scope="col" class="font-weight-bold text-dark">Keterangan</th>
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
-                <th scope="col" class="font-weight-bold text-dark">Unit</th>
                 <th scope="col" class="font-weight-bold text-dark">Pembebanan</th>
                 <th scope="col" class="font-weight-bold text-dark">Project</th>
                 <th scope="col" class="font-weight-bold text-dark">Barcode</th>
@@ -73,7 +64,6 @@
                     @endif
                 </td>
                 <td class="font-weight-bold text-dark">{{$item->COA->code}} {{$item->COA->name}}</td>
-                <td class="font-weight-bold text-dark">{{strtolower($item->unit->name)}}</td>
                 <td class="font-weight-bold text-dark">{{$item->Pembebanan->name}}</td>
                 <td class="font-weight-bold text-dark">
                     @if ($item->project_id)
@@ -115,7 +105,6 @@
                 <th scope="col" class="font-weight-bold text-dark">Tanggal</th>
                 <th scope="col" class="font-weight-bold text-dark">Keterangan</th>
                 <th scope="col" class="font-weight-bold text-dark">COA</th>
-                <th scope="col" class="font-weight-bold text-dark">Unit</th>
                 <th scope="col" class="font-weight-bold text-dark">Kas Keluar</th>
                 <th></th>
             </tr>
@@ -134,7 +123,6 @@
                     @endif
                 </td>
                 <td class="font-weight-bold text-dark">{{App\Models\Coa::getCoa($item)->code}} {{App\Models\Coa::getCoa($item)->name}}</td>
-                <td class="font-weight-bold text-dark">{{$data['unit']['name']}}</td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($data['jumlah'],2,",", ".")}}</td>
                 <td></td>
             </tr>

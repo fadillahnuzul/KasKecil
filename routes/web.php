@@ -110,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['GET', 'POST'], '/laporan_kas_keluar_pribadi', [AdminPribadiController::class, 'laporan_keluar'])->name('laporan_kas_keluar_pribadi');
     Route::get('/create_bkk_pribadi', [AdminPribadiController::class, 'create_bkk'])->name('create_bkk_pribadi');
     Route::match(['GET', 'POST'], '/list_bkk_pribadi', [AdminPribadiController::class, 'list_bkk'])->name('list_bkk_pribadi');
+    Route::get('/bkk_detail_pribadi/{id}',[AdminPribadiController::class, 'detail_bkk']);
     Route::get('/kas_pribadi', [AdminPribadiController::class, 'create_kas']);
     Route::get('/edit_kas_keluar_pribadi/{id}', [AdminPribadiController::class, 'edit_kas']);
 });

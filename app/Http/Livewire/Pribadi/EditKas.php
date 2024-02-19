@@ -118,8 +118,8 @@ class EditKas extends Component
             'pic' => $this->pic,
             'tujuan' => $this->tujuan,
             // 'in_budget' => $inBudget,
-            'in_budget' => 0,
-            'unit_id' => $this->selectedUnit,
+            'in_budget' => 1,
+            'unit_id' => null,
         ]);
         // if ($inSaldo) {
             (new PengeluaranController)->update($data_kas, $this->id_kas, true);

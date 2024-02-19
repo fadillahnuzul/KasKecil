@@ -162,7 +162,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->project->name}}</td>
                                             <td class="font-weight-bold text-dark">@if($row->created_at) {{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}} @endif</td>
                                             <td class="font-weight-bold text-dark">
-                                                <a href="/bkk_detail/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
+                                                <a href="/bkk_detail_pribadi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/print_bkk/{{$row->id}}" class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
                                             </td>
                                         </tr>

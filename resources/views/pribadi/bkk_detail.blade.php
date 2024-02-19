@@ -109,12 +109,12 @@
                                                 <tr>
                                                     <td>Bank</td>
                                                     <td>:</td>
-                                                    <td>{{$bkkHeader->bank->name}}</td>
+                                                    <td>@if($bkkHeader->bank) {{$bkkHeader->bank->name}} @endif</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Rekening</td>
                                                     <td>:</td>
-                                                    <td>{{$bkkHeader->bank->rekening}}</td>
+                                                    <td>@if($bkkHeader->bank) {{$bkkHeader->bank->rekening}} @endif</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -165,7 +165,7 @@
                                             <td class="font-weight-bold text-dark">{{$row->id}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->pekerjaan}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->coa->code}} {{$row->coa->name}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->unit->name}}</td>
+                                            <td class="font-weight-bold text-dark">@if($row->unit) {{$row->unit->name}} @endif</td>
                                             <td class="font-weight-bold text-dark">{{$row->dpp}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->ppn}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->pph}}</td>
@@ -252,7 +252,7 @@
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
         <script>
-            var company = @json($selectedCompany);
+            var company = @json($bkkHeader->project->company->name);
             if (company == null) {
                 company_name = 'PT ABDAEL NUSA'
             } else {

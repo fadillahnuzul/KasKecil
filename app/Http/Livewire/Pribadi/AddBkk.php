@@ -88,7 +88,7 @@ class AddBkk extends Component
         }
 
         $this->selectedCoaExist = false;
-        return view('livewire.add-bkk', compact('kas', 'projectList', 'rekeningList', 'coaList'));
+        return view('livewire.pribadi.add-bkk', compact('kas', 'projectList', 'rekeningList', 'coaList'));
     }
 
     public function getCoa($coaId = null)
@@ -215,7 +215,7 @@ class AddBkk extends Component
                     'ppn' => 0,
                     'pph' => 0,
                     'coa_id' => $dataBkk[0]['coa']['coa_id'],
-                    'pekerjaan' => "Pengeluaran " . $dataBkk[0]['coa']['name'] . " Unit " . $dataBkk[0]['unit']['name'],
+                    'pekerjaan' => "Pengeluaran " . $dataBkk[0]['coa']['name'],
                     'status_jurnal' => 0,
                     'status' => 0,
                     'otorisasi' => 0,
@@ -226,8 +226,8 @@ class AddBkk extends Component
                     'action_date' => Carbon::now()->format('Y-m-d'),
                     'layer_cashflow_id' => 0,
                     'using_budget' => "DEFAULT",
-                    'unit_initial' => $dataBkk[0]['unit']['initial'],
-                    'unit_id' => $dataBkk[0]['unit']['id']
+                    'unit_initial' => null,
+                    'unit_id' => null
                 ]);
             }
         });

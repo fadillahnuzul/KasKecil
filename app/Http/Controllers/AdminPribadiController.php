@@ -17,6 +17,7 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use App\Models\BKK;
 use App\Models\BKKHeader;
 use App\Services\HitungSaldoService;
 use App\Services\HitungTransaksiService;
@@ -331,6 +332,18 @@ class AdminPribadiController extends Controller
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $dataBkk = (new PaginateCollection)->paginate($dataBkk, 15);
         return view('pribadi/bkk', compact('title', 'companyList', 'dataBkk', 'selectedCompany', 'startDate', 'endDate'));
+    }
+
+    public function detail_bkk($id)
+    {
+        $title = "BKK Detail";
+        $bkkHeader = BKKHeader::find($id);
+        $bkkDetail = BKK::where('bkk_header_id', $bkkHeader->id)->get();
+        $totalPayment = $bkkDetail->sum('payment');
+        $totalDpp = $bkkDetail->sum('dpp');
+        $totalPpn = $bkkDetail->sum('ppn');
+        $totalPph = $bkkDetail->sum('pph');
+        return view('pribadi/bkk_detail', compact('title', 'bkkHeader', 'bkkDetail', 'totalPayment', 'totalDpp', 'totalPph', 'totalPpn'));
     }
 
     public function create_kas() {

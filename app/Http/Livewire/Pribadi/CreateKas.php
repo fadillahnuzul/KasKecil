@@ -90,9 +90,9 @@ class CreateKas extends Component
     public function createPettyCash()
     {
         $this->jumlah = preg_replace("/[^0-9]/", "", $this->jumlah);
-        $budget = $this->cekBudgetCreateKas();
+        // $budget = $this->cekBudgetCreateKas();
         // $inSaldo = $this->cekSaldo();
-        $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
+        // $inBudget = (!$budget && !$this->isInBudget) ? 1 : null;
         $data_kas = array([
             'date' => $this->selectedDate,
             'deskripsi' => $this->deskripsi,
@@ -102,13 +102,13 @@ class CreateKas extends Component
             'project' => $this->selectedProject,
             'pic' => $this->pic,
             'tujuan' => $this->tujuan,
-            'in_budget' => $inBudget,
+            'in_budget' => 1,
             // 'in_budget' => 0,
-            'unit_id' => $this->selectedUnit,
+            'unit_id' => null,
         ]);
         // if ($inSaldo) {
         //     (new PengeluaranController)->save($data_kas);
         // }
-        (new PengeluaranController)->save($data_kas);
+        (new PengeluaranController)->save($data_kas, true);
     }
 }

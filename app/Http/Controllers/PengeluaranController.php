@@ -125,7 +125,7 @@ class PengeluaranController extends Controller
         return view('form_kas');
     }
 
-    public function save($data)
+    public function save($data, $isPribadi=null)
     {
         $kas = Pengeluaran::updateOrCreate([
             'tanggal' => $data[0]['date'],
@@ -141,6 +141,10 @@ class PengeluaranController extends Controller
             'user_id' => Auth::user()->id,
             'in_budget' => $data[0]['in_budget'],
         ]);
+
+        if($isPribadi) {
+            return redirect('kas_keluar_pribadi');
+        }
 
         return redirect('kas_keluar');
     }
