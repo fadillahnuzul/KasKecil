@@ -293,9 +293,11 @@
 
                                     </tbody>
                                 </table>
-                                @if ($laporan==FALSE)
+                                @if ($laporan==FALSE && Auth::user()->kk_access==1)
                                 <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
-                                @elseif ($laporan==TRUE)
+                                @elseif($laporan==FALSE && Auth::user()->kk_access==2)
+                                <button id="button-set-bkk" type="button" disabled onclick="done()" class="btn btn-sm btn-success">Selesai</button>
+                                @elseif ($laporan==TRUE && Auth::user()->kk_access==1)
                                 <button id="button-set-bkk" type="button" disabled onclick="setBKK()" class="btn btn-sm btn-success">Set BKK</button>
                                 <button id="button-set-kembali" type="button" disabled onclick="setUangKembali()" class="btn btn-sm btn-warning">Dana Dikembalikan</button>
                                 @endif
@@ -531,6 +533,26 @@
                 },
                 success: function(res) {
                     alert(res.message);
+                    table.ajax.reload(null, false)
+                }
+            })
+            location.reload()
+        }
+
+        function done() {
+            let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
+            let semua_id = []
+            $.each(checkbox_terpilih, function(index, elm) {
+                semua_id.push(checkbox_terpilih[index].value)
+            })
+            $.ajax({
+                url: "{{url('')}}/kas_selesai",
+                method: 'post',
+                data: {
+                    ids: semua_id
+                },
+                success: function(res) {
+                    alert(res.message)
                     table.ajax.reload(null, false)
                 }
             })

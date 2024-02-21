@@ -99,6 +99,17 @@
             <i class="fas fa-fw fa-book"></i>
             <span>Buat BKK</span></a>
     </li>
+    <hr class="sidebar-divider d-none d-md-block">
+    <li class="nav-item {{ Route::currentRouteNamed('kas_keluar_pribadi') ? 'active' : '' }}">
+        <a class="nav-link" href="/kas_keluar_pribadi">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Kas Keluar Pribadi</span></a>
+    </li>
+    <li class="nav-item {{ Route::currentRouteNamed('laporan_kas_keluar_pribadi') ? 'active' : '' }}">
+        <a class="nav-link" href="/laporan_kas_keluar_pribadi">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Laporan Kas Keluar Pribadi</span></a>
+    </li>
     @elseif (Auth::user()->kk_access=='3')
     <li class="nav-item {{ Route::currentRouteNamed('home_bank') ? 'active' : '' }}">
         <a class="nav-link" href="/home_bank">
