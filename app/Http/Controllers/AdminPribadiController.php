@@ -88,7 +88,7 @@ class AdminPribadiController extends Controller
             ->searchByDateRange($startDate, $endDate)
             ->searchByCompany($request->company)
             ->searchByStatus($request->status)
-            ->searchByUser($request->user)
+            ->searchByUser((Auth::user()->kk_access==2) ? Auth::user()->id : $request->user)
             ->searchByProject($request->project)
             ->get();
         (new PengeluaranController)->set_tanggal($startDate, $endDate);
@@ -123,7 +123,7 @@ class AdminPribadiController extends Controller
                 ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();
             })
             ->searchByCompany($request->company)
-            ->searchByUser($request->user)
+            ->searchByUser((Auth::user()->kk_access==2) ? Auth::user()->id : $request->user)
             ->searchByProject($request->project)
             ->get();
         (new PengeluaranController)->set_tanggal($startDate, $endDate);
