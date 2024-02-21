@@ -38,14 +38,14 @@ class EditKas extends Component
     public function mount()
     {
         $this->kas = Pengeluaran::with('coa')->find($this->id_kas);
-        $this->companyList = Company::get();
+        $this->companyList = Company::notPribadi()->get();
         $this->unitList = Unit::get()->sortBy('name');
         $this->setValueAwal();
     }
 
     public function render()
     {
-        $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
+        $projectList = Project::notPribadi()->where('project_company_id', $this->selectedCompany)->get();
         // $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
         $coaList = Coa::join('budget', function($q){
             $q->on('budget.kode_coa','=', 'coa.coa_id');

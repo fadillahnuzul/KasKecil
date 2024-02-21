@@ -34,13 +34,13 @@ class CreateKas extends Component
 
     public function mount()
     {
-        $this->companyList = Company::get();
+        $this->companyList = Company::notPribadi()->get();
         $this->unitList = Unit::get()->sortBy('name');
     }
 
     public function render()
     {
-        $projectList = Project::where('project_company_id', $this->selectedCompany)->get();
+        $projectList = Project::notPribadi()->where('project_company_id', $this->selectedCompany)->get();
         // $coaList = DB::table('coa')->select('coa.*')->join('budget', 'coa.coa_id', '=', 'budget.kode_coa')->get();
         // $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
         $coaList = Coa::join('budget', function($q){
