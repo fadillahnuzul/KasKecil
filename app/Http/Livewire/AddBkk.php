@@ -217,7 +217,7 @@ class AddBkk extends Component
                     'ppn' => 0,
                     'pph' => 0,
                     'coa_id' => $dataBkk[0]['coa']['coa_id'],
-                    'pekerjaan' => "Pengeluaran " . $dataBkk[0]['coa']['name'] . " Unit " . $dataBkk[0]['unit']['name'],
+                    'pekerjaan' => "Pengeluaran " . $dataBkk[0]['coa']['name'] . " Unit " . strtolower($dataBkk[0]['unit']['name']),
                     'status_jurnal' => 0,
                     'status' => 0,
                     'otorisasi' => 0,
