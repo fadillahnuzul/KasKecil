@@ -76,6 +76,7 @@ class AddBkk extends Component
                 ->searchByDateRange($this->startDate, $this->endDate)
                 ->searchByCompany($this->selectedCompany)
                 ->searchByUnit($this->selectedUnit)
+                ->notPribadi()
                 // ->searchByProject($this->selectedProject)
                 ->paginate(10);
         } elseif (Auth::user()->kk_access == 2) {
@@ -83,6 +84,7 @@ class AddBkk extends Component
                 ->searchByDateRange($this->startDate, $this->endDate)
                 ->searchByCompany($this->selectedCompany)
                 ->searchByUnit($this->selectedUnit)
+                ->notPribadi()
                 // ->searchByProject($this->selectedProject)
                 ->paginate(10);
         }
