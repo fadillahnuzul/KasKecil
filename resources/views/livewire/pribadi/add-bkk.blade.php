@@ -229,7 +229,7 @@
     }
 
     function getCoa() {
-        Livewire.emit('getSelectedCoa', document.getElementById("selectedCoaFromInput").value)
+        Livewire.emit('getSelectedCoaPribadi', document.getElementById("selectedCoaFromInput").value)
     }
 </script>
 @endonce

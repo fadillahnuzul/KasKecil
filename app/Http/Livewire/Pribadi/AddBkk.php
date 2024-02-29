@@ -75,17 +75,17 @@ class AddBkk extends Component
             $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
                 ->searchByDateRange($this->startDate, $this->endDate)
                 ->searchByCompany($this->selectedCompany)
-                ->searchByUnit($this->selectedUnit)
                 ->isPribadi()
                 // ->searchByProject($this->selectedProject)
+                // ->searchByUnit($this->selectedUnit)
                 ->paginate(10);
         } elseif (Auth::user()->kk_access == 2) {
             $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->where('user_id', Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
                 ->searchByDateRange($this->startDate, $this->endDate)
                 ->searchByCompany($this->selectedCompany)
-                ->searchByUnit($this->selectedUnit)
                 ->isPribadi()
                 // ->searchByProject($this->selectedProject)
+                // ->searchByUnit($this->selectedUnit)
                 ->paginate(10);
         }
 
