@@ -195,6 +195,17 @@
                                                 </select>
                                             </div>
                                             <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="user" id="user">
+                                                        @if ($selectedUser)
+                                                        <option selected value="{{$selectedUser->id}}">{{$selectedUser->username}}</option>
+                                                        @endif
+                                                        <option value="">All User</option>
+                                                        @foreach ($userList as $user)
+                                                        <option value="{{$user->id}}">{{$user->username}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            <div class="form-group-row" style="margin-inline: 5px;">
                                                 <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                             </div>
                                         </div>
