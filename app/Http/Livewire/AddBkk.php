@@ -258,6 +258,7 @@ class AddBkk extends Component
 
     public function resetData() : void {
         $this->reset('selectedKas');
+        $this->reset('selectedKasId');
         $this->emit('refresh');
     }
 }
