@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Coa;
 use Carbon\Carbon;
 use Uwaiscode\Laravelterbilang\Converter;
 
@@ -33,7 +34,7 @@ class PrintBkk extends Barcode
         $this->setBarcode($bkk_header, $tipe);
         $this->setContent($detail_bkk, $bkk_header, $tipe, $y);
         // $this->setFooter($bkk_header, $this->pdf->GetY());
-        $this->pdf->Output('D', 'BKK-'.$bkk_header->id.'.pdf');
+        $this->pdf->Output('D', 'bkk-'.$tipe.'-'.$bkk_header->id.'.pdf');
     }
 
     public function setHeader($bkk_header): void
@@ -141,44 +142,46 @@ class PrintBkk extends Barcode
         $this->pdf->Cell(30, 5, 'Dibukukan ', 1, 0, 'C', 0);
         $this->pdf->Cell(30, 5, 'Penerima ', 1, 0, 'C', 0);
 
+        $this->pdf->MultiCell(80, 0, '', 'L', 'L');
+        $y = $this->pdf->getY();
+        $this->pdf->SetY($y);
         $this->pdf->SetTextColor(0, 0, 0);
-        $this->pdf->MultiCell(80, 5, $bkk_header->uraian, 0, 'L');
+        $this->pdf->Cell(80, 25, $bkk_header->uraian, 'LTRB', 0, 'L', 0);
         $this->pdf->SetTextColor(187, 53, 197);
-        $this->pdf->Cell(80, 20, '', 'LTRB', 0, 'C', 0);
-        $this->pdf->Cell(30, 20, '', 'LTRB', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, '', 'LTRB', 0, 'C', 0);
         if ($bkk_header->otorisasi == 0) {
-            $this->pdf->Cell(30, 20, "NOT", 'LTRB', 0, 'C', 0);
+            $this->pdf->Cell(30, 25, "NOT", 'LTRB', 0, 'C', 0);
         } else {
-            $this->pdf->Cell(30, 20, $bkk_header->otorisator->username, 'LTRB', 0, 'C', 0);
+            $this->pdf->Cell(30, 25, $bkk_header->otorisator->username, 'LTRB', 0, 'C', 0);
         }
 
-        $this->pdf->Cell(30, 20, $bkk_header->creator->username, 'LTRB', 0, 'C', 0);
-        $this->pdf->Cell(30, 20, ' ', 'LTRB', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, $bkk_header->creator->username, 'LTRB', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, ' ', 'LTRB', 0, 'C', 0);
 
         $this->pdf->Ln(4);
 
-        $this->pdf->Cell(80, 20, ' ', '', 0, 'C', 0);
-        $this->pdf->Cell(30, 20, '', '', 0, 'C', 0);
+        $this->pdf->Cell(80, 25, ' ', '', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, '', '', 0, 'C', 0);
         if ($bkk_header->otorisasi == 0) {
-            $this->pdf->Cell(30, 20, 'AUTHORIZED', '', 0, 'C', 0);
+            $this->pdf->Cell(30, 25, 'AUTHORIZED', '', 0, 'C', 0);
         } else {
-            $this->pdf->Cell(30, 20, Carbon::parse($bkk_header->otorisasi_tanggal)->format('d F Y'), '', 0, 'C', 0);
+            $this->pdf->Cell(30, 25, Carbon::parse($bkk_header->otorisasi_tanggal)->format('d F Y'), '', 0, 'C', 0);
         }
 
-        $this->pdf->Cell(30, 20, Carbon::parse($bkk_header->created_at)->format('d F Y'), '', 0, 'C', 0);
-        $this->pdf->Cell(30, 20, ' ', '', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, Carbon::parse($bkk_header->created_at)->format('d F Y'), '', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, ' ', '', 0, 'C', 0);
 
         $this->pdf->Ln(4);
 
-        $this->pdf->Cell(80, 20, ' ', '', 0, 'C', 0);
-        $this->pdf->Cell(30, 20, '', '', 0, 'C', 0);
+        $this->pdf->Cell(80, 25, ' ', '', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, '', '', 0, 'C', 0);
         if ($bkk_header->otorisasi == 0) {
-            $this->pdf->Cell(30, 20, '', '', 0, 'C', 0);
+            $this->pdf->Cell(30, 25, '', '', 0, 'C', 0);
         } else {
-            $this->pdf->Cell(30, 20, Carbon::parse($bkk_header->otorisasi_tanggal)->format('H:i'), '', 0, 'C', 0);
+            $this->pdf->Cell(30, 25, Carbon::parse($bkk_header->otorisasi_tanggal)->format('H:i'), '', 0, 'C', 0);
         }
-        $this->pdf->Cell(30, 20, Carbon::parse($bkk_header->created_at)->format('H:i'), '', 0, 'C', 0);
-        $this->pdf->Cell(30, 20, ' ', '', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, Carbon::parse($bkk_header->created_at)->format('H:i'), '', 0, 'C', 0);
+        $this->pdf->Cell(30, 25, ' ', '', 0, 'C', 0);
     }
 
     public function setBarcode($bkk_header, $tipe): void

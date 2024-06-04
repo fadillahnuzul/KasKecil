@@ -31,3 +31,6 @@ Route::post('create-bkm', [ApiBkmController::class, 'store']);
 
 Route::post('print-bkk-spi', [ApiPrintBkkController::class, 'create']);
 Route::post('print-bkk-spk', [ApiPrintBkkSpkController::class, 'create']);
+
+Route::get('print_bkk_spi/{id}', [ApiPrintBkkController::class, 'createFromGet']);
+Route::get('print_bkk_spk/{id}', [ApiPrintBkkSpkController::class, 'createFromGet']);

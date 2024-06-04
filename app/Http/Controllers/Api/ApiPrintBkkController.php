@@ -39,4 +39,30 @@ class ApiPrintBkkController extends Controller
             ], 500);
         }
     }
+
+    public function createFromGet($id) {
+        $bkkHeader = BKKHeader::find($id);
+        $bkkDetail = BKK::with('coa')->where('bkk_header_id', $id)->get();
+        $tipe = "spi";
+        try {
+            $data = (new PrintBkk)->printBkk($bkkHeader, $bkkDetail, $tipe);
+            return (response()->json([
+                'status' => "Success",
+                'message' => "Print BKK Berhasil",
+                'data' => $data,
+            ]));
+        } catch (QueryException $e) {
+            return new JsonResponse([
+                'status' => "Failed",
+                'message' => "Failed to store data in database",
+                'data' => $e
+            ], 500);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'status' => "Failed",
+                'message' => "Unknown error",
+                'data' => $e
+            ], 500);
+        }
+    }
 }

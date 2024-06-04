@@ -50,7 +50,7 @@ class AddBkk extends Component
     public $selectedCoaExist;
     public $bkk;
 
-    protected $listeners = ['getSelectedCoa' => 'getCoa'];
+    protected $listeners = ['getSelectedCoa' => 'getCoa', 'refresh' => '$refresh'];
 
     public function mount()
     {
@@ -247,11 +247,17 @@ class AddBkk extends Component
         // } else {
         // session()->flash('message_not_save', 'BKK gagal dibuat');
         // }
+        $this->resetData();
         $this->render();
     }
 
     public function printBkk(): void
     {
         (new BKKController)->print($this->bkk['bkk_detail'], $this->bkk['bkk_header'], $this->selectedProject);
+    }
+
+    public function resetData() : void {
+        $this->reset('selectedKas');
+        $this->emit('refresh');
     }
 }
