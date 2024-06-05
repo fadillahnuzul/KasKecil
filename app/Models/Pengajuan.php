@@ -11,7 +11,7 @@ class Pengajuan extends Model
 {
     use HasFactory;
     protected $table = 'pettycash_pengajuan';
-    protected $fillable = ['status'];
+    protected $fillable = ['status', 'company'];
     use AutoNumberTrait;
     
     /**

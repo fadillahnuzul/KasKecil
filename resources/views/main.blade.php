@@ -221,6 +221,7 @@
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Jumlah Pengajuan</th>
+                                            <th class="font-weight-bold text-dark">Company</th>
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
                                         </tr>
@@ -233,6 +234,12 @@
                                             <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">{{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark">@if($row->company)
+                                                {{$row->Company->name}}
+                                                @else
+                                                -
+                                                @endif
+                                            </td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td>
                                                 <a href="export_pengajuan/{{$row->id}}" class="btn btn-primary btn-sm">Print</a>

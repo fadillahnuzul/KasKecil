@@ -87,7 +87,7 @@ class PengajuanController extends Controller
     {
         $company = $request->session()->get('company');
         $project = $request->session()->get('project');
-        $Company = Company::where('project_company_id',$company)->get();
+        $Company = Company::get();
         $Project = Project::where('project_id',$project)->get();
 
         return view('form_pengajuan', compact('Company','Project'));
@@ -103,6 +103,7 @@ class PengajuanController extends Controller
         $pengajuan->status = "1";
         $pengajuan->user_id = Auth::user()->id;
         $pengajuan->divisi_id = Auth::user()->level;
+        $pengajuan->company = $request->company;
         $pengajuan->jumlah = preg_replace("/[^0-9]/","",$request->jumlah);
         //mengambil nama divisi untuk generate kode pengajuan
         $divisi = Divisi::find($pengajuan->divisi_id);
