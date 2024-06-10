@@ -33,7 +33,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(11)->year(2023)->startOfMonth();
+        $this->startDate = Carbon::now()->startOfYear('d-m-Y');
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = null;
     }
