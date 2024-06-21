@@ -98,32 +98,38 @@
                         <div class="card-header pb-0">
                             <div class="container">
                                 <div class="row">
-                                    <div class="container-fluid">
-                                        <div class="form-group row">
-                                            <label for="date" class="col-form-label">Mulai</label>
-                                            <div class="col-md-2" x-data="datepicker()">
-                                                <input class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
-                                            </div>
-                                            <label for="date" class="col-form-label">Selesai</label>
-                                            <div class="col-md-2" x-data="datepicker2()">
-                                                <input id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <select name="company" id="company-dropdown">
-                                                    @if ($selectedCompany)
-                                                    <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
-                                                    @endif
-                                                    <option value="">All Company</option>
-                                                    @foreach ($companyList as $company)
-                                                    <option value="{{$company->project_company_id}}">{{$company->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <button style="margin-left:5px; margin-right:5px;" type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                    <form action="" method="POST">
+                                        @csrf
+                                        <div class="container-fluid">
+                                            <div class="form-group row">
+                                                <label for="date" class="col-form-label">Mulai</label>
+                                                <div class="col-sm">
+                                                    <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
+                                                </div>
+                                                <label for="date" class="col-form-label">Selesai</label>
+                                                <div class="col-sm">
+                                                    <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
+                                                </div>
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="company" id="company-dropdown">
+                                                        @if ($selectedCompany)
+                                                        <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
+                                                        @endif
+                                                        <option value="">All Company</option>
+                                                        @foreach ($companyList as $company)
+                                                        <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input type="text" class="form-control input-sm" id="barcode" name="barcode" value="{{$barcode}}" placeholder="Barcode">
+                                                </div>
+                                                <div class="col-sm">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -140,15 +146,6 @@
                                             <th class="font-weight-bold text-dark">Company</th>
                                             <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">Tanggal</th>
-                                            <th></th>
-                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
-                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
-                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
-                                            <th class="font-weight-bold text-dark"><input class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker"></th>
                                             <th></th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
@@ -169,160 +166,153 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <ul>
-                                    {{$dataBkk->links()}}
-                                </ul>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
-                <!-- Begin Page Content -->
-
-                <!-- End of Main Content -->
-
-                <!-- Footer -->
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Abdael Nusa 2022</span>
-                        </div>
-                    </div>
-                </footer>
-                <!-- End of Footer -->
-
             </div>
-            <!-- End of Content Wrapper -->
+            <!-- Begin Page Content -->
+
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Abdael Nusa 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
         </div>
-        <!-- End of Page Wrapper -->
+        <!-- End of Content Wrapper -->
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+    </div>
+    <!-- End of Page Wrapper -->
 
-        <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="/logout">Logout</a>
-                    </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
                 </div>
             </div>
         </div>
-        <script>
-            function set_modal_id(id) {
-                document.getElementById("modal_id").value = id;
-            }
-        </script>
+    </div>
+    <script>
+        function set_modal_id(id) {
+            document.getElementById("modal_id").value = id;
+        }
+    </script>
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
-        <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{asset('style/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('style/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{asset('style/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{{asset('style/js/sb-admin-2.min.js')}}"></script>
 
-        <!-- Page level plugins -->
-        <!-- <script src="{{asset('style/vendor/datatables/jquery.dataTables.min.js')}}"></script> -->
-        <!-- <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script> -->
+    <!-- Page level plugins -->
+    <!-- <script src="{{asset('style/vendor/datatables/jquery.dataTables.min.js')}}"></script> -->
+    <!-- <script src="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script> -->
 
-        <!-- Page level custom scripts -->
-        <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
+    <!-- Page level custom scripts -->
+    <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 
-        <!-- table js -->
-        <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-        <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <script>
-            flatpickr(".datepicker", {
-                mode: "single"
-            });
-        </script>
-        <script>
-            var company = @json($selectedCompany);
-            if (company == null) {
-                company_name = 'PT ABDAEL NUSA'
-            } else {
-                company_name = company.name
-            }
-            $(document).ready(function() {
-                $('#myTable').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [{
-                        extend: 'excelHtml5',
-                        text: 'Cetak',
-                        messageTop: company_name,
-                        title: 'Laporan Kas Keluar',
-                        filename: 'Laporan_Kas_Kecil',
-                        exportOptions: {
-                            columns: [1, 2, 5, 7, 8, 10, 11, 4],
-                            format: {
-                                body: function(data, row, column, node) {
-                                    // Strip $ from salary column to make it numeric
-                                    return column == 7 ?
-                                        parseFloat(data.replace(/[^\d\,]/g, '')) :
-                                        data;
-                                }
-                            },
-                        }
-                    }],
-                    columnDefs: [{
-                            targets: [0],
-                            ordering: false,
+    <!-- table js -->
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr(".datepicker", {
+            mode: "single"
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    text: 'Cetak',
+                    messageTop: company_name,
+                    title: 'Laporan Kas Keluar',
+                    filename: 'Laporan_Kas_Kecil',
+                    exportOptions: {
+                        columns: [1, 2, 5, 7, 8, 10, 11, 4],
+                        format: {
+                            body: function(data, row, column, node) {
+                                // Strip $ from salary column to make it numeric
+                                return column == 7 ?
+                                    parseFloat(data.replace(/[^\d\,]/g, '')) :
+                                    data;
+                            }
                         },
-                        {
-                            targets: [1],
-                            type: "date",
-                        },
-                        // {
-                        //     targets: [4],
-                        //     render: (function (data, type, row) {
-                        //     return type === 'export' ?
-                        //         data.replace( /[$,.]/g, '' ) :
-                        //         data;
-                        //     }) 
-                        // },
-                    ],
-                    stateSave: true,
-                    order: [
-                        [9, 'asc']
-                    ],
-                });
+                    }
+                }],
+                columnDefs: [{
+                        targets: [0],
+                        ordering: false,
+                    },
+                    {
+                        targets: [1],
+                        type: "date",
+                    },
+                    // {
+                    //     targets: [4],
+                    //     render: (function (data, type, row) {
+                    //     return type === 'export' ?
+                    //         data.replace( /[$,.]/g, '' ) :
+                    //         data;
+                    //     }) 
+                    // },
+                ],
+                stateSave: true,
+                order: [
+                    [9, 'asc']
+                ],
             });
+        });
 
-            $("#head-cb").on('click', function() {
-                var isChecked = $("#head-cb").prop('checked')
-                $(".cb-child").prop('checked', isChecked)
-                $("#button-set-bkk").prop('disabled', !isChecked)
-            })
+        $("#head-cb").on('click', function() {
+            var isChecked = $("#head-cb").prop('checked')
+            $(".cb-child").prop('checked', isChecked)
+            $("#button-set-bkk").prop('disabled', !isChecked)
+        })
 
-            $("#myTable tbody").on('click', '.cb-child', function() {
-                if ($(this).prop('checked') != true) {
-                    $("#head-cb").prop('checked', false)
-                }
+        $("#myTable tbody").on('click', '.cb-child', function() {
+            if ($(this).prop('checked') != true) {
+                $("#head-cb").prop('checked', false)
+            }
 
-                let semua_checkbox = $("#myTable tbody .cb-child:checked")
-                let button_bkk = (semua_checkbox.length > 0)
-                $("#button-set-bkk").prop('disabled', !button_bkk)
-            })
-        </script>
+            let semua_checkbox = $("#myTable tbody .cb-child:checked")
+            let button_bkk = (semua_checkbox.length > 0)
+            $("#button-set-bkk").prop('disabled', !button_bkk)
+        })
+    </script>
 </body>
 
 </html>

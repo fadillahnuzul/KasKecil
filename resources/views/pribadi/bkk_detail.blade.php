@@ -252,12 +252,6 @@
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
         <script>
-            var company = @json($bkkHeader->project->company->name);
-            if (company == null) {
-                company_name = 'PT ABDAEL NUSA'
-            } else {
-                company_name = company.name
-            }
             $(document).ready(function() {
                 $('#myTable').DataTable({
                     dom: 'Bfrtip',

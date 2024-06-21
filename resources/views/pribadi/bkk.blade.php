@@ -98,32 +98,38 @@
                         <div class="card-header pb-0">
                             <div class="container">
                                 <div class="row">
-                                    <div class="container-fluid">
-                                        <div class="form-group row">
-                                            <label for="date" class="col-form-label">Mulai</label>
-                                            <div class="col-md-2" x-data="datepicker()">
-                                                <input class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
-                                            </div>
-                                            <label for="date" class="col-form-label">Selesai</label>
-                                            <div class="col-md-2" x-data="datepicker2()">
-                                                <input id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <select name="company" id="company-dropdown">
-                                                    @if ($selectedCompany)
-                                                    <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
-                                                    @endif
-                                                    <option value="">All Company</option>
-                                                    @foreach ($companyList as $company)
-                                                    <option value="{{$company->project_company_id}}">{{$company->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <button style="margin-left:5px; margin-right:5px;" type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                <form action="" method="POST">
+                                        @csrf
+                                        <div class="container-fluid">
+                                            <div class="form-group row">
+                                                <label for="date" class="col-form-label">Mulai</label>
+                                                <div class="col-sm">
+                                                    <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
+                                                </div>
+                                                <label for="date" class="col-form-label">Selesai</label>
+                                                <div class="col-sm">
+                                                    <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
+                                                </div>
+                                                <div class="form-group-row" style="margin-inline: 5px;">
+                                                    <select name="company" id="company-dropdown">
+                                                        @if ($selectedCompany)
+                                                        <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
+                                                        @endif
+                                                        <option value="">All Company</option>
+                                                        @foreach ($companyList as $company)
+                                                        <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input type="text" class="form-control input-sm" id="barcode" name="barcode" value="{{$barcode}}" placeholder="Barcode">
+                                                </div>
+                                                <div class="col-sm">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -140,15 +146,6 @@
                                             <th class="font-weight-bold text-dark">Company</th>
                                             <th class="font-weight-bold text-dark">Project</th>
                                             <th class="font-weight-bold text-dark">Tanggal</th>
-                                            <th></th>
-                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
-                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
-                                            <th class="font-weight-bold text-dark"><input class="form-control form-control-sm" type="text"></th>
-                                            <th class="font-weight-bold text-dark"><input class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker"></th>
                                             <th></th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
@@ -169,9 +166,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <ul>
-                                    {{$dataBkk->links()}}
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -257,12 +251,6 @@
         });
     </script>
     <script>
-        var company = @json($selectedCompany);
-        if (company == null) {
-            company_name = 'PT ABDAEL NUSA'
-        } else {
-            company_name = company.name
-        }
         $(document).ready(function() {
             $('#myTable').DataTable({
                 dom: 'Bfrtip',

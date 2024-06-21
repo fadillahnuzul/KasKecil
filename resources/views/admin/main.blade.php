@@ -262,6 +262,7 @@
                                             <th class="font-weight-bold text-dark">Tanggal</th>
                                             <th class="font-weight-bold text-dark">User</th>
                                             <th class="font-weight-bold text-dark">Divisi</th>
+                                            <th class="font-weight-bold text-dark">Company</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">Pengajuan</th>
                                             <th class="font-weight-bold text-dark">Status</th>
@@ -287,6 +288,12 @@
                                             </td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->total_belanja ,2, ",", ".")}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->diklaim,2, ",", ".")}}</td> -->
+                                            <td class="font-weight-bold text-dark">@if($row->company)
+                                                {{$row->Company->name}}
+                                                @else
+                                                -
+                                                @endif
+                                            </td>
                                             <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
                                             <td class="font-weight-bold text-dark">
                                                 <a href="export_pengajuan/{{$row->id}}" class="btn btn-success btn-sm">Print</a>

@@ -327,11 +327,17 @@ class AdminPribadiController extends Controller
             ->unique('project_company_id');
         $dataBkk = BKKHeader::where('status', 1)->where('project_id', '!=', null)->orderByDesc('created_at')->isPribadi()->get();
         $title = "List BKK";
-        $selectedCompany = $this->company;
+        $selectedCompany = ($request->company) ?? $this->company;
         $startDate = ($request->startDate) ? $request->startDate  : $this->startDate;
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
-        $dataBkk = (new PaginateCollection)->paginate($dataBkk, 15);
-        return view('pribadi/bkk', compact('title', 'companyList', 'dataBkk', 'selectedCompany', 'startDate', 'endDate'));
+        $barcode = $request->barcode;
+        $dataBkk = BKKHeader::where('status',1)->where('project_id', '!=', null)->searchByBarcode($barcode)->whereBetween('tanggal', [$startDate, $endDate])->isPribadi()->orderByDesc('created_at')->get();
+        if ($selectedCompany) {
+            $dataBkk = $dataBkk->filter(function($item) use ($selectedCompany) {
+                return $item->project->project_company_id == $selectedCompany->project_company_id;
+            });
+        }
+        return view('pribadi/bkk', compact('title', 'companyList', 'dataBkk', 'selectedCompany', 'startDate', 'endDate', 'barcode'));
     }
 
     public function detail_bkk($id)

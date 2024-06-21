@@ -9,10 +9,23 @@ use App\Services\PrintBkk;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Services\TerbilangNominal;
+use Carbon\Carbon;
 
 class BKKController extends Controller
 {
-    public function index($id): View
+    public $startDate;
+    public $endDate;
+    public $company;
+    public $companySelected;
+
+    public function __construct()
+    {
+        $this->startDate = Carbon::now()->month(3)->startOfMonth();
+        $this->endDate = Carbon::now()->endOfYear('d-m-Y');
+        $this->company = null;
+    }
+
+    public function index(Request $request, $id): View
     {
         $title = "BKK Detail";
         $bkkHeader = BKKHeader::find($id);
@@ -21,7 +34,9 @@ class BKKController extends Controller
         $totalDpp = $bkkDetail->sum('dpp');
         $totalPpn = $bkkDetail->sum('ppn');
         $totalPph = $bkkDetail->sum('pph');
-        return view('admin/bkk_detail', compact('title', 'bkkHeader', 'bkkDetail', 'totalPayment', 'totalDpp', 'totalPph', 'totalPpn'));
+        $startDate = ($request->startDate) ? $request->startDate  : $this->startDate;
+        $endDate = ($request->endDate) ? $request->endDate : $this->endDate; 
+        return view('admin/bkk_detail', compact('title', 'bkkHeader', 'bkkDetail', 'totalPayment', 'totalDpp', 'totalPph', 'totalPpn', 'startDate', 'endDate'));
     }
 
     public function create()

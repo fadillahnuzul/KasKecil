@@ -58,6 +58,11 @@ class BKKHeader extends Model
         return $this->setConnection('mysql')->belongsTo(User::class, 'created_by', 'id');
     }
 
+    public function scopeSearchByBarcode($query, string|null $barcode)
+    {
+        return ($barcode) ? $query->where('id', $barcode) : $query;
+    }
+
     public function scopeSearchByCompany($query, string|null $company)
     {
         return ($company) ? $query->whereRelation('project', 'project_company_id', $company) : $query;

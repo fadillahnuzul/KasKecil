@@ -127,7 +127,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
+                                    <button id="btnSubmit" type="submit" class="btn btn-primary" >Submit</button>
                                 </form>
                             </div>
                         </div>

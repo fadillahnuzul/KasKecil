@@ -252,57 +252,6 @@
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
         <script>
-            var company = @json($selectedCompany);
-            if (company == null) {
-                company_name = 'PT ABDAEL NUSA'
-            } else {
-                company_name = company.name
-            }
-            $(document).ready(function() {
-                $('#myTable').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [{
-                        extend: 'excelHtml5',
-                        text: 'Cetak',
-                        messageTop: company_name,
-                        title: 'Laporan Kas Keluar',
-                        filename: 'Laporan_Kas_Kecil',
-                        exportOptions: {
-                            columns: [1, 2, 5, 7, 8, 10, 11, 4],
-                            format: {
-                                body: function(data, row, column, node) {
-                                    // Strip $ from salary column to make it numeric
-                                    return column == 7 ?
-                                        parseFloat(data.replace(/[^\d\,]/g, '')) :
-                                        data;
-                                }
-                            },
-                        }
-                    }],
-                    columnDefs: [{
-                            targets: [0],
-                            ordering: false,
-                        },
-                        {
-                            targets: [1],
-                            type: "date",
-                        },
-                        // {
-                        //     targets: [4],
-                        //     render: (function (data, type, row) {
-                        //     return type === 'export' ?
-                        //         data.replace( /[$,.]/g, '' ) :
-                        //         data;
-                        //     }) 
-                        // },
-                    ],
-                    stateSave: true,
-                    order: [
-                        [9, 'asc']
-                    ],
-                });
-            });
-
             $("#head-cb").on('click', function() {
                 var isChecked = $("#head-cb").prop('checked')
                 $(".cb-child").prop('checked', isChecked)
