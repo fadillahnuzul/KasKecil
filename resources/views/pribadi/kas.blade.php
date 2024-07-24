@@ -195,16 +195,16 @@
                                                 </select>
                                             </div>
                                             <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="user" id="user">
-                                                        @if ($selectedUser)
-                                                        <option selected value="{{$selectedUser->id}}">{{$selectedUser->username}}</option>
-                                                        @endif
-                                                        <option value="">All User</option>
-                                                        @foreach ($userList as $user)
-                                                        <option value="{{$user->id}}">{{$user->username}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                                <select name="user" id="user">
+                                                    @if ($selectedUser)
+                                                    <option selected value="{{$selectedUser->id}}">{{$selectedUser->username}}</option>
+                                                    @endif
+                                                    <option value="">All User</option>
+                                                    @foreach ($userList as $user)
+                                                    <option value="{{$user->id}}">{{$user->username}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             <div class="form-group-row" style="margin-inline: 5px;">
                                                 <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
                                             </div>
@@ -290,8 +290,8 @@
                                             <td class="font-weight-bold text-dark">{{$row->bkk_header_id}}</td>
                                             @elseif($laporan == FALSE)
                                             <td>
-                                            <a href="/edit_kas_keluar_pribadi/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
-                                            <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
+                                                <a href="/edit_kas_keluar_pribadi/{{$row->id}}" class="btn btn-primary btn-sm">Edit</a>
+                                                <a onclick="return confirm ('Apakah yakin untuk menghapus?')" href="/hapus_kas_keluar/{{$row->id}}" class="btn btn-danger btn-sm">Hapus</a>
                                             </td>
                                             @endif
                                             <!-- <td class="font-weight-bold text-dark">
@@ -495,6 +495,11 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/set_bkk_checkbox",
                 method: 'post',
@@ -515,6 +520,11 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/set_uang_kembali",
                 method: 'post',
@@ -536,6 +546,11 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/done",
                 method: 'post',
@@ -556,6 +571,11 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/kas_selesai",
                 method: 'post',

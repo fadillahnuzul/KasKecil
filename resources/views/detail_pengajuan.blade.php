@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Home</title>
     <!-- css table -->
@@ -601,12 +602,18 @@
             $("#button-set-bkk").prop('disabled', !button_bkk)
         })
 
+        
         function done() {
             let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
             let semua_id = []
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/kas_selesai",
                 method: 'post',

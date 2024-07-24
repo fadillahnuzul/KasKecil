@@ -142,7 +142,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                        <div class="table-responsive">
+                            <div class="table-responsive">
                                 <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         @if ($selectedCompany)
@@ -505,6 +505,11 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/set_uang_kembali",
                 method: 'post',
@@ -526,6 +531,16 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/done",
                 method: 'post',

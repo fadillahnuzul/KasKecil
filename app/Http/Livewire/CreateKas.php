@@ -68,7 +68,7 @@ class CreateKas extends Component
     public function cekBudgetCreateKas()
     {
         $cekBudget = new CekBudgetService;
-        $budgetCOA = $cekBudget->getBudget($this->selectedCompany, $this->selectedCoa, $this->selectedDate);
+        $budgetCOA = $cekBudget->getBudget($this->selectedCompany, $this->selectedCoa, $this->selectedDate, $this->selectedUnit);
         if (!$budgetCOA[0]['budgetbulan'] && !$budgetCOA[0]['budgettahun']) {
             // session()->flash('tidak_ada_budget', 'Input kas gagal, tidak ada budget pada COA ini');
             return false;

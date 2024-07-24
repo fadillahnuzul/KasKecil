@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Detail Pengeluaran</title>
     <!-- Checkbox -->
@@ -388,6 +389,11 @@
             $.each(checkbox_terpilih, function(index, elm) {
                 semua_id.push(checkbox_terpilih[index].value)
             })
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{url('')}}/done",
                 method: 'post',
