@@ -31,9 +31,12 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 15000),
+    'lifetime' => env('SESSION_LIFETIME', 30000),
 
     'expire_on_close' => false,
+
+    'domain' => env('SESSION_DOMAIN', null),
+    'secure' => env('SESSION_SECURE_COOKIE', false), // in case of cookie
 
     /*
     |--------------------------------------------------------------------------
@@ -128,7 +131,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_session'
     ),
 
     /*
