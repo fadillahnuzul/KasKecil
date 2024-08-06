@@ -32,7 +32,7 @@ class PengeluaranController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(3)->startOfMonth();
+        $this->startDate = Carbon::now()->month(5)->startOfMonth();
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = NULL;
         $this->companySelected = null;

@@ -33,7 +33,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(3)->startOfMonth();
+        $this->startDate = Carbon::now()->month(5)->startOfMonth();
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = null;
     }
@@ -167,7 +167,7 @@ class AdminController extends Controller
             $item->total_pengajuan = $pengajuanServices->hitung_pengajuan($item->id);
             $item->total_pengeluaran = $transaksiServices->hitung_belum_klaim($item->id, $startDate, $endDate, $company);
             $item->total_diklaim = $transaksiServices->hitung_klaim($item->id, $startDate, $endDate, $company);
-            $item->sisa_saldo = $saldoServices->hitung_saldo_user($item->id);
+            $item->sisa_saldo = $item->total_pengajuan - ($item->total_pengeluaran + $item->total_diklaim);
         });
 
         return $userList;
@@ -180,7 +180,7 @@ class AdminController extends Controller
         $Saldo = $pengajuanServices->hitung_pengajuan();
         $totalKeluar = $transaksiServices->hitung_belum_klaim(null, $startDate, $endDate, $company);
         $totalKlaim = $transaksiServices->hitung_klaim(null, $startDate, $endDate, $company);
-        $sisa = $saldoServices->hitung_saldo_all_user();
+        $sisa = $Saldo - ($totalKeluar + $totalKlaim);
 
         return [$Saldo, $totalKeluar, $totalKlaim, $sisa];
     }

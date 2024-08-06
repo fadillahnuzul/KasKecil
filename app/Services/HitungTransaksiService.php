@@ -76,7 +76,13 @@ class HitungTransaksiService
                 ->searchByUnit($unit)
                 ->notDisabled()
                 ->searchByUser($id)
-                ->statusKlaim()
+                ->where(function ($query) {
+                    $query->statusKlaim()->orWhere(function ($query) {
+                        $query->whereIn('status', [8, 9])->whereHas('bkkHeader', function ($q) {
+                            $q->where('tanggal', '<', '2021-01-01')->where('status','=',1)->whereNull('flag_sudah_rekon')->whereNull('tanggal_rekon');
+                        });
+                    });
+                })
                 ->get();
             if (count($data_pengeluaran) > 0) {
                 $data_pengeluaran->map(function ($item) use (&$data_klaim_user) {
@@ -92,7 +98,13 @@ class HitungTransaksiService
                     ->searchByUnit($unit)
                     ->notDisabled()
                     ->searchByUser($user->user->id)
-                    ->statusKlaim()
+                    ->where(function ($query) {
+                        $query->statusKlaim()->orWhere(function ($query) {
+                            $query->whereIn('status', [8, 9])->whereHas('bkkHeader', function ($q) {
+                                $q->where('tanggal', '<', '2021-01-01')->where('status','=',1)->whereNull('flag_sudah_rekon')->whereNull('tanggal_rekon');
+                            });
+                        });
+                    })
                     ->get();
                 if (count($data_pengeluaran) > 0) {
                     $data_pengeluaran->map(function ($item) use (&$data_klaim_user) {
@@ -101,6 +113,7 @@ class HitungTransaksiService
                 }
             }
         }
+
         $total_diklaim = 0;
         foreach ($data_klaim_user as $keluar) {
             $total_diklaim = $total_diklaim + $keluar->jumlah;
