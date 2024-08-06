@@ -53,7 +53,7 @@ class Pengajuan extends Model
     
     public function User() 
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     
     public function Saldo() 

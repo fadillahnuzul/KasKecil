@@ -218,14 +218,11 @@
                                             </div>
                                             <div class="form-group-row" style="margin-inline: 5px;">
                                                 <select name="status" id="status">
-                                                    @if ($selectedStatus)
-                                                    <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
-                                                    @endif
                                                     @if ($button_kas==FALSE)
                                                     <option value="">All Status</option>
                                                     @endif
                                                     @foreach ($status as $status)
-                                                    <option value="{{$status->id}}">{{$status->nama_status}}</option>
+                                                    <option value="{{$status->id}}" @if($selectedStatus && ($selectedStatus == $status->id)) selected @endif>{{$status->nama_status}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

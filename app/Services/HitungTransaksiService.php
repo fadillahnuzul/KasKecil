@@ -13,8 +13,6 @@ class HitungTransaksiService
 {
     public function hitung_belum_klaim($id = null, $startDate = null, $endDate = null, $company = null, $unit = null)
     {
-        $user = ($id) ? User::find($id) : null;
-
         $data_pengeluaran_user = collect();
 
         if ($id) {
@@ -65,8 +63,6 @@ class HitungTransaksiService
 
     public function hitung_klaim($id = null, $startDate = null, $endDate = null, $company = null, $unit = null)
     {
-        $user = ($id) ? User::find($id) : null;
-
         $data_klaim_user = collect();
 
         if ($id) {

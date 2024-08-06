@@ -30,12 +30,14 @@ class AdminController extends Controller
     public $endDate;
     public $company;
     public $companySelected;
+    public $userList;
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(5)->startOfMonth();
+        $this->startDate = Carbon::now()->month(3)->startOfMonth();
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
-        $this->company = null;
+        $this->company = Company::notPribadi()->get();
+        $this->userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
     }
 
     public function index(Request $request, $id = null)
@@ -188,19 +190,19 @@ class AdminController extends Controller
     public function laporan_keluar(Request $request)
     {
         $title = "Laporan Kas Kecil";
-        $company = Company::notPribadi()->get();
+        $company = $this->company;
         $laporan = TRUE;
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
-        $selectedStatus = ($request->status) ? Status::find($request->status) : null;
-        $selectedCompany = ($request->company) ? Company::find($request->company) : null;
-        $selectedUser = ($request->user) ? User::find($request->user) : null;
+        $selectedStatus = ($request->status) ?? null;
+        $selectedCompany = ($request->company) ? Company::with('project')->find($request->company) : null;
+        $selectedUser = ($request->user) ?? null;
         $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
-        $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
+        $userList = $this->userList;
         $userList = $this->getTotalPerUser($userList,$request->company, null, null);
         [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
         // $dataKas = DB::table('pettycash_pengeluaran')->select('coa',DB::raw('sum(jumlah) as total'))->groupBy('coa')->get();
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->orderBy('status', 'asc')->notPribadi()
+        $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->bukanPengembalianSaldo()->orderBy('status', 'asc')->notPribadi()
             ->searchByDateRange($startDate, $endDate)
             ->searchByCompany($request->company)
             ->searchByStatus($request->status)
@@ -222,21 +224,21 @@ class AdminController extends Controller
     public function kas_keluar(Request $request)
     {
         $title = "Pengeluaran Kas Kecil";
-        $company = Company::notPribadi()->get();
+        $company = $this->company;
         $laporan = FALSE;
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
-        $selectedStatus = ($request->status) ? Status::find($request->status) : Status::find(4);
+        $selectedStatus = ($request->status) ?? 4;
         $selectedCompany = ($request->company) ? Company::find($request->company) : null;
-        $selectedUser = ($request->user) ? User::find($request->user) : null;
+        $selectedUser = ($request->user) ?? null;
         $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
-        $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
+        $userList = $this->userList;
         $userList = $this->getTotalPerUser($userList,$request->company, null, null);
         [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->notPribadi()
+        $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->bukanPengembalianSaldo()->notPribadi()
             ->searchByDateRange($startDate, $endDate)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {
-                ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();
+                ($selectedStatus) ? $query->searchByStatus($selectedStatus) : $query->statusProgress();
             })
             ->searchByCompany($request->company)
             ->searchByUser($request->user)

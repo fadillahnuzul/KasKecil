@@ -167,22 +167,16 @@
                                                 </div>
                                                 <div class="form-group-row" style="margin-inline: 5px;">
                                                     <select name="status" id="status">
-                                                        @if ($selectedStatus)
-                                                        <option selected value="{{$selectedStatus->id}}">{{$selectedStatus->nama_status}}</option>
-                                                        @endif
                                                         @foreach ($status as $status)
-                                                        <option value="{{$status->id}}">{{$status->nama_status}}</option>
+                                                        <option value="{{$status->id}}" @if ($selectedStatus && ($selectedStatus == $status->id)) selected @endif>{{$status->nama_status}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="form-group-row" style="margin-inline: 5px;">
                                                     <select name="company" id="company-dropdown">
-                                                        @if ($selectedCompany)
-                                                        <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
-                                                        @endif
                                                         <option value="">All Company</option>
                                                         @foreach ($company as $company)
-                                                        <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                        <option value="{{$company->project_company_id}}" @if ($selectedCompany && ($selectedCompany->project_company_id == $company->project_company_id)) selected @endif>{{$company->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -193,12 +187,9 @@
                                                 </div> -->
                                                 <div class="form-group-row" style="margin-inline: 5px;">
                                                     <select name="user" id="user">
-                                                        @if ($selectedUser)
-                                                        <option selected value="{{$selectedUser->id}}">{{$selectedUser->username}}</option>
-                                                        @endif
                                                         <option value="">All User</option>
                                                         @foreach ($userList as $user)
-                                                        <option value="{{$user->id}}">{{$user->username}}</option>
+                                                        <option value="{{$user->id}}" @if($selectedUser && ($selectedUser == $user->id)) selected @endif>{{$user->username}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

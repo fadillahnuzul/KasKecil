@@ -36,7 +36,7 @@ class AdminPribadiController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(11)->year(2023)->startOfMonth();
+        $this->startDate = Carbon::now()->startOfYear('d-m-Y');
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = null;
     }
@@ -84,7 +84,7 @@ class AdminPribadiController extends Controller
         $userList = $this->getTotalPerUser($userList, $request->company, null, null);
         [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
         // $dataKas = DB::table('pettycash_pengeluaran')->select('coa',DB::raw('sum(jumlah) as total'))->groupBy('coa')->get();
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->orderBy('status', 'asc')->isPribadi()
+        $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->bukanPengembalianSaldo()->orderBy('status', 'asc')->isPribadi()
             ->searchByDateRange($startDate, $endDate)
             ->searchByCompany($request->company)
             ->searchByStatus($request->status)
@@ -117,7 +117,7 @@ class AdminPribadiController extends Controller
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
         $userList = $this->getTotalPerUser($userList, $request->company, null, null);
         [$Saldo, $totalKeluar, $totalKlaim, $sisa] = $this->getGrandTotalTransaksi(null, null, $request->company);
-        $dataKas = Pengeluaran::with('pengajuan', 'Status', 'COA', 'Pembebanan')->bukanPengembalianSaldo()->isPribadi()
+        $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->bukanPengembalianSaldo()->isPribadi()
             ->searchByDateRange($startDate, $endDate)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {
                 ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();

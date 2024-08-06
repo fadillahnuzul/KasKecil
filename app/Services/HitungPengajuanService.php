@@ -14,10 +14,10 @@ class HitungPengajuanService
 {
     public function hitung_pengajuan($id = null, $startDate = null, $endDate = null, $unit = null)
     {
-        $data_saldo = Pengajuan::where(function ($query) {
+        $data_saldo = Pengajuan::with('User')->where(function ($query) {
             $query->statusProgressAndApproved()->orWhere('status', 9);
         })->noUsernameUser()->SearchByUser($id)->get();
-        $admin = ($id) ? User::find($id) : User::find(Auth::user()->id);
+        $admin = ($data_saldo->first()) ? $data_saldo->first()->User : null;
         $total_pengajuan = $data_saldo->sum('jumlah');
         if ($admin && $admin->kk_access == 1) {
             $data_pengajuan_user = Pengajuan::where(function ($query) {
@@ -32,7 +32,7 @@ class HitungPengajuanService
 
     public function hitung_pengajuan_admin(): float
     {
-        $data_saldo = Pengajuan::whereHas('User', function($query){
+        $data_saldo = Pengajuan::with('User')->whereHas('User', function($query){
             $query->where('kk_access', 1);
         })->where(function ($query) {
             $query->statusProgressAndApproved()->orWhere('status', 9);
@@ -44,7 +44,7 @@ class HitungPengajuanService
 
     public function hitung_pengajuan_all_user(): float
     {
-        $data_saldo = Pengajuan::whereHas('User', function($query){
+        $data_saldo = Pengajuan::with('User')->whereHas('User', function($query){
             $query->where('kk_access', 2);
         })->where(function ($query) {
             $query->statusProgressAndApproved()->orWhere('status', 9);

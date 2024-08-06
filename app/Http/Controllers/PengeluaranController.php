@@ -32,7 +32,7 @@ class PengeluaranController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(5)->startOfMonth();
+        $this->startDate = Carbon::now()->month(3)->startOfMonth();
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = NULL;
         $this->companySelected = null;
@@ -56,13 +56,13 @@ class PengeluaranController extends Controller
         $title = "Kas Keluar";
         $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
-        $selectedStatus = ($request->status) ? Status::find($request->status) : Status::find(4);
+        $selectedStatus = ($request->status) ?? 4;
         $selectedCompany = ($request->company) ? Company::find($request->company) : null;
         $project_company_id = ($selectedCompany) ? $selectedCompany->project_company_id : null;
         $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
-        $dataKas = Pengeluaran::with('Pembebanan', 'Status', 'COA')->searchByUser(Auth::user()->id)->orderBy('status', 'asc')
+        $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->searchByUser(Auth::user()->id)->orderBy('status', 'asc')
             ->where(function ($query) use ($selectedStatus) {
-                ($selectedStatus) ? $query->searchByStatus($selectedStatus->id) : $query->statusProgress();
+                ($selectedStatus) ? $query->searchByStatus($selectedStatus) : $query->statusProgress();
             })
             ->searchByDateRange($startDate, $endDate)
             ->searchByCompany($request->company)
@@ -86,21 +86,21 @@ class PengeluaranController extends Controller
         $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $button_kas = FALSE;
-        $selectedStatus = ($request->status) ? Status::find($request->status) : null;
+        $selectedStatus = ($request->status) ?? null;
         $selectedCompany = ($request->company) ? Company::find($request->company) : null;
         $status = Status::whereIn('id', [4, 6, 7, 8, 10])->get();
         if (Auth::user()->kk_access == 1) {
-            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->statusKlaimAndSetBKK()
+            $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->statusKlaimAndSetBKK()
                 ->searchByDateRange($startDate, $endDate)
                 ->searchByCompany($request->company)
-                ->searchByStatus($request->status)
+                ->searchByStatus($selectedStatus)
                 ->searchByProject($request->project)
                 ->get();
         } else {
-            $dataKas = Pengeluaran::with('pengajuan', 'Status', 'Pembebanan')->where('user_id', Auth::user()->id)->where('status', '!=', 6)->bukanPengembalianSaldo()
+            $dataKas = Pengeluaran::with('Project','pengajuan', 'Status', 'COA', 'Pembebanan', 'unit', 'User')->where('user_id', Auth::user()->id)->where('status', '!=', 6)->bukanPengembalianSaldo()
                 ->searchByDateRange($startDate, $endDate)
                 ->searchByCompany($request->company)
-                ->searchByStatus($request->status)
+                ->searchByStatus($selectedStatus)
                 ->searchByProject($request->project)
                 ->get();
         }
