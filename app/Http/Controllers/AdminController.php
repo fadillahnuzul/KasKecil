@@ -34,7 +34,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->month(3)->startOfMonth();
+        $this->startDate = Carbon::now()->month(6)->startOfMonth();
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->company = Company::notPribadi()->get();
         $this->userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
