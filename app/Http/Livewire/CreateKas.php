@@ -35,7 +35,7 @@ class CreateKas extends Component
     public function mount()
     {
         $this->companyList = Company::notPribadi()->get();
-        $this->unitList = Unit::get()->sortBy('name');
+        $this->unitList = Unit::where('status', 'enable')->get()->sortBy('name');
     }
 
     public function render()

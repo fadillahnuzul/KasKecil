@@ -51,7 +51,7 @@ class PengeluaranController extends Controller
     {
         $companySelected = $this->companySelected;
         $pengajuan = ($id) ? Pengajuan::find($id) : null;
-        $company = Company::get();
+        $company = Company::notPribadi()->get();
         $button_kas = TRUE;
         $title = "Kas Keluar";
         $startDate = ($request->startDate) ? $request->startDate : $this->startDate;

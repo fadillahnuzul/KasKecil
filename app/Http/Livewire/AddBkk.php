@@ -56,7 +56,7 @@ class AddBkk extends Component
     {
         $this->companyList = Company::notPribadi()->get();
         $this->partnerList = Partner::get();
-        $this->unitList = Unit::get()->sortBy('name');
+        $this->unitList = Unit::where('status', 'enable')->get()->sortBy('name');
         $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
     }

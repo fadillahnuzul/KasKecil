@@ -39,7 +39,7 @@ class EditKas extends Component
     {
         $this->kas = Pengeluaran::with('coa')->find($this->id_kas);
         $this->companyList = Company::notPribadi()->get();
-        $this->unitList = Unit::get()->sortBy('name');
+        $this->unitList = Unit::where('status', 'enable')->get()->sortBy('name');
         $this->setValueAwal();
     }
 
