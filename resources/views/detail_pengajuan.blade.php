@@ -24,7 +24,13 @@
 
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-
+    <style>
+        thead input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -265,6 +271,23 @@
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
+                                        </tr>
+                                        <tr>
+                                            @if ($button_kas==TRUE)
+                                            <th></th>
+                                            @endif
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -520,6 +543,26 @@
         }
         $(document).ready(function() {
             $('#myTable').DataTable({
+                initComplete: function() {
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            let column = this;
+                            let title = column.header().textContent;
+
+                            // Create input element
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+                            column.header().replaceChildren(input);
+
+                            // Event listener for user input
+                            input.addEventListener('keyup', () => {
+                                if (column.search() !== this.value) {
+                                    column.search(input.value).draw();
+                                }
+                            });
+                        });
+                },
                 dom: 'Bfrtip',
                 buttons: [{
                     extend: 'excelHtml5',
@@ -556,6 +599,26 @@
         }
         $(document).ready(function() {
             $('#myTable').DataTable({
+                initComplete: function() {
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            let column = this;
+                            let title = column.header().textContent;
+
+                            // Create input element
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+                            column.header().replaceChildren(input);
+
+                            // Event listener for user input
+                            input.addEventListener('keyup', () => {
+                                if (column.search() !== this.value) {
+                                    column.search(input.value).draw();
+                                }
+                            });
+                        });
+                },
                 dom: 'Bfrtip',
                 buttons: [{
                     extend: 'excelHtml5',

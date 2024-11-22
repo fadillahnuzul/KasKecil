@@ -24,7 +24,13 @@
 
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-
+    <style>
+        thead input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -167,8 +173,9 @@
                                                 </div>
                                                 <div class="form-group-row" style="margin-inline: 5px;">
                                                     <select name="status" id="status">
+                                                        <option value="">All Status</option>
                                                         @foreach ($status as $status)
-                                                        <option value="{{$status->id}}" @if ($selectedStatus && ($selectedStatus == $status->id)) selected @endif>{{$status->nama_status}}</option>
+                                                        <option value="{{$status->id}}" @if ($selectedStatus && ($selectedStatus==$status->id)) selected @endif>{{$status->nama_status}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -189,7 +196,7 @@
                                                     <select name="user" id="user">
                                                         <option value="">All User</option>
                                                         @foreach ($userList as $user)
-                                                        <option value="{{$user->id}}" @if($selectedUser && ($selectedUser == $user->id)) selected @endif>{{$user->username}}</option>
+                                                        <option value="{{$user->id}}" @if($selectedUser && ($selectedUser==$user->id)) selected @endif>{{$user->username}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -226,6 +233,25 @@
                                             <th class="font-weight-bold text-dark">Tanggal BKK</th>
                                             <th class="font-weight-bold text-dark">Tanggal Kembali</th>
                                             <th class="font-weight-bold text-dark">Barcode</th>
+                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
+                                            <th class="font-weight-bold text-dark"></th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
                                     </thead>
@@ -392,12 +418,21 @@
     <script src="{{asset('style/js/demo/datatables-demo.js')}}"></script>
 
     <!-- table js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> -->
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.5/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.5/vfs_fonts.js"></script>
     <script>
         var company = @json($selectedCompany);
         if (company == null) {
@@ -407,6 +442,26 @@
         }
         $(document).ready(function() {
             $('#myTable').DataTable({
+                initComplete: function() {
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            let column = this;
+                            let title = column.header().textContent;
+
+                            // Create input element
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+                            column.header().replaceChildren(input);
+
+                            // Event listener for user input
+                            input.addEventListener('keyup', () => {
+                                if (column.search() !== this.value) {
+                                    column.search(input.value).draw();
+                                }
+                            });
+                        });
+                },
                 dom: 'Bfrtip',
                 buttons: [{
                     extend: 'excelHtml5',
