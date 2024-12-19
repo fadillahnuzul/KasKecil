@@ -29,12 +29,10 @@ class BankController extends Controller
         $this->endDate = Carbon::now()->endOfYear();
     }
 
-    public function getSaldo()
+    public function getSaldo($company = null)
     {
         $adminController = new AdminController;
-        $total_pengajuan = $adminController->hitung_pengajuan();
-        $total_pengeluaran = $adminController->hitung_belum_klaim();
-        $diklaim = $adminController->hitung_klaim();
+        [$total_pengajuan, $total_pengeluaran, $diklaim] = $adminController->getGrandTotalTransaksi(null, null, $company);
 
         return [$total_pengajuan, $total_pengeluaran, $diklaim];
     }
@@ -46,7 +44,7 @@ class BankController extends Controller
         $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->searchByDateRange($startDate, $endDate)->get();
         $divisi = Divisi::get();
         $title = "Bank Kas Kecil";
-        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo($request->company);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
@@ -60,7 +58,7 @@ class BankController extends Controller
         $dataKas = Pengajuan::with('Sumber','User','Status')->searchByDateRange($startDate, $endDate)->get();
         $divisi = Divisi::get();
         $title = "Daftar Pengajuan";
-        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo($request->company);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
@@ -74,7 +72,7 @@ class BankController extends Controller
         $dataKas = Pengajuan::with('Sumber','User','Status')->where('divisi_id',$id)->searchByDateRange($startDate, $endDate)->get();
         $divisi = Divisi::get();
         $title = "Daftar Pengajuan";
-        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo($request->company);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
@@ -158,7 +156,7 @@ class BankController extends Controller
             ->searchByUser($request->user)
             ->get();
         $title = "Daftar Kas Keluar";
-        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo();
+        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo($request->company);
 
         return view ('/bank/laporan_kas', compact('title','startDate','endDate','dataKas','company','status','userList','selectedStatus','selectedCompany','selectedUser','total_pengeluaran','diklaim'));
     }

@@ -211,7 +211,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
+                                <table id="myTable" class="display table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         @if ($selectedCompany)
                                         <tr class="font-weight-bold text-dark">{{$selectedCompany->name}}</tr>
@@ -310,7 +310,6 @@
                                         </td> -->
                                         </tr>
                                         @endforeach
-
                                     </tbody>
                                 </table>
                                 @if ($laporan==FALSE)
@@ -423,7 +422,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> -->
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
@@ -443,6 +442,7 @@
         $(document).ready(function() {
             $('#myTable').DataTable({
                 initComplete: function() {
+                    const headerCells = [];
                     this.api()
                         .columns()
                         .every(function() {
@@ -461,6 +461,13 @@
                                 }
                             });
                         });
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            const columnHeader = this.header().textContent.trim();
+                            headerCells.push(columnHeader);
+                        });
+                    console.log('Headers:', headerCells);
                 },
                 dom: 'Bfrtip',
                 buttons: [{
@@ -479,7 +486,7 @@
                                     data;
                             }
                         },
-                    }
+                    },
                 }],
                 columnDefs: [{
                         targets: [0],
