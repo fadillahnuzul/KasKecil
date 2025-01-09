@@ -25,7 +25,7 @@
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
     <style>
-        thead input {
+        tfoot input {
             width: 100%;
             padding: 3px;
             box-sizing: border-box;
@@ -228,7 +228,7 @@
                                                     <option value="">All Status</option>
                                                     @endif
                                                     @foreach ($status as $status)
-                                                    <option value="{{$status->id}}" @if($selectedStatus && ($selectedStatus == $status->id)) selected @endif>{{$status->nama_status}}</option>
+                                                    <option value="{{$status->id}}" @if($selectedStatus && ($selectedStatus==$status->id)) selected @endif>{{$status->nama_status}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -271,23 +271,6 @@
                                             <th class="font-weight-bold text-dark">Status</th>
                                             <th class="font-weight-bold text-dark">Tanggal Respon</th>
                                             <th class="font-weight-bold text-dark">Aksi</th>
-                                        </tr>
-                                        <tr>
-                                            @if ($button_kas==TRUE)
-                                            <th></th>
-                                            @endif
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -345,6 +328,25 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            @if ($button_kas==TRUE)
+                                            <th><input type="checkbox" id="head-cb"></th>
+                                            @endif
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
+                                            <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Unit</th>
+                                            <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Project</th>
+                                            <th class="font-weight-bold text-dark">Nota Tujuan</th>
+                                            <th class="font-weight-bold text-dark">PIC</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Aksi</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                                 @if ($button_kas==TRUE)
                                 <button id="button-set-bkk" type="button" disabled onclick="done()" class="btn btn-sm btn-success">Selesai</button>
@@ -548,12 +550,12 @@
                         .columns()
                         .every(function() {
                             let column = this;
-                            let title = column.header().textContent;
+                            let title = column.footer().textContent;
 
                             // Create input element
                             let input = document.createElement('input');
                             input.placeholder = title;
-                            column.header().replaceChildren(input);
+                            column.footer().replaceChildren(input);
 
                             // Event listener for user input
                             input.addEventListener('keyup', () => {
@@ -604,12 +606,12 @@
                         .columns()
                         .every(function() {
                             let column = this;
-                            let title = column.header().textContent;
+                            let title = column.footer().textContent;
 
                             // Create input element
                             let input = document.createElement('input');
                             input.placeholder = title;
-                            column.header().replaceChildren(input);
+                            column.footer().replaceChildren(input);
 
                             // Event listener for user input
                             input.addEventListener('keyup', () => {
@@ -662,7 +664,7 @@
             $("#button-set-bkk").prop('disabled', !button_bkk)
         })
 
-        
+
         function done() {
             let checkbox_terpilih = $("#myTable tbody .cb-child:checked")
             let semua_id = []

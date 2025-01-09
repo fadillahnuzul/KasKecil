@@ -29,7 +29,7 @@ class PengajuanController extends Controller
     public $endDate;
 
     public function __construct() {
-        $this->startDate = Carbon::now()->month(3)->startOfMonth();
+        $this->startDate = Carbon::now()->startOfYear('d-m-Y');
         $this->endDate = Carbon::now()->endOfMonth('d-m-Y');
     }
 

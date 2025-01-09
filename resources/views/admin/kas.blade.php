@@ -25,7 +25,7 @@
     <!-- Custom styles for this page -->
     <link href="{{asset('style/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
     <style>
-        thead input {
+        tfoot input {
             width: 100%;
             padding: 3px;
             box-sizing: border-box;
@@ -235,25 +235,6 @@
                                             <th class="font-weight-bold text-dark">Barcode</th>
                                             <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
                                         </tr>
-                                        <tr>
-                                            <th></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <th class="font-weight-bold text-dark"></th>
-                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
-                                        </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataKas as $row)
@@ -311,6 +292,27 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th><input type="checkbox" id="head-cb"></th>
+                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark">Keterangan</th>
+                                            <th class="font-weight-bold text-dark">User</th>
+                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
+                                            <th class="font-weight-bold text-dark">COA</th>
+                                            <th class="font-weight-bold text-dark">Unit</th>
+                                            <th class="font-weight-bold text-dark">Pembebanan</th>
+                                            <th class="font-weight-bold text-dark">Project</th>
+                                            <th class="font-weight-bold text-dark">Nota Tujuan</th>
+                                            <th class="font-weight-bold text-dark">PIC</th>
+                                            <th class="font-weight-bold text-dark">Status</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-dark">Tanggal BKK</th>
+                                            <th class="font-weight-bold text-dark">Tanggal Kembali</th>
+                                            <th class="font-weight-bold text-dark">Barcode</th>
+                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
+                                        </tr>
+                                    </tfoot>
                                 </table>
                                 @if ($laporan==FALSE)
                                 <button id="button-set-bkk" type="button" disabled onclick="klaim()" class="btn btn-sm btn-success">Klaim</button>
@@ -447,12 +449,12 @@
                         .columns()
                         .every(function() {
                             let column = this;
-                            let title = column.header().textContent;
+                            let title = column.footer().textContent;
 
                             // Create input element
                             let input = document.createElement('input');
                             input.placeholder = title;
-                            column.header().replaceChildren(input);
+                            column.footer().replaceChildren(input);
 
                             // Event listener for user input
                             input.addEventListener('keyup', () => {
