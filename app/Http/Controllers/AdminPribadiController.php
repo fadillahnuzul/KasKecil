@@ -50,7 +50,7 @@ class AdminPribadiController extends Controller
             $item->total_pengajuan = $pengajuanServices->hitung_pengajuan($item->id);
             $item->total_pengeluaran = $transaksiServices->hitung_belum_klaim($item->id, $startDate, $endDate, $company);
             $item->total_diklaim = $transaksiServices->hitung_klaim($item->id, $startDate, $endDate, $company);
-            $item->sisa_saldo = $saldoServices->hitung_saldo_user($item->id);
+            $item->sisa_saldo = $saldoServices->hitung_saldo_user($item->id, $company);
         });
 
         return $userList;
@@ -64,7 +64,7 @@ class AdminPribadiController extends Controller
         $Saldo = $pengajuanServices->hitung_pengajuan();
         $totalKeluar = $transaksiServices->hitung_belum_klaim(null, $startDate, $endDate, $company);
         $totalKlaim = $transaksiServices->hitung_klaim(null, $startDate, $endDate, $company);
-        $sisa = $saldoServices->hitung_saldo_all_user();
+        $sisa = $saldoServices->hitung_saldo_all_user($company);
 
         return [$Saldo, $totalKeluar, $totalKlaim, $sisa];
     }

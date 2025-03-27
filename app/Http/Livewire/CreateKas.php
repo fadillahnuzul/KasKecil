@@ -79,7 +79,7 @@ class CreateKas extends Component
 
     public function cekSaldo()
     {
-        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id, $this->selectedCompany);
         if ($this->jumlah > $saldo) {
             session()->flash('message_kas', 'Input kas gagal, saldo tidak cukup');
             return false;

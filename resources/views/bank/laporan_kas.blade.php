@@ -173,7 +173,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-dark" width="8%">Tanggal</th>
                                             <th class="font-weight-bold text-dark">Keterangan</th>
                                             <th class="font-weight-bold text-dark">User</th>
                                             <th class="font-weight-bold text-dark">Kas Keluar</th>
@@ -187,21 +187,22 @@
                                     <tbody>
                                         @foreach ($dataKas as $row)
                                         <tr>
-                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
-                                            <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">@if ($row->coa)
+                                            <td class="font-weight-bold text-dark py-1">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-dark py-1">{{$row->deskripsi}}</td>
+                                            <td class="font-weight-bold text-dark py-1">{{$row->User->username}}</td>
+                                            <td class="font-weight-bold text-dark py-1">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-dark py-1">@if ($row->coa)
                                                 {{$row->COA->code}} <br>
                                                 {{$row->COA->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">@if ($row->pembebanan)
-                                                {{$row->Pembebanan->nama_pembebanan}}
+                                            <td class="font-weight-bold text-dark py-1">
+                                                @if ($row->pembebanan)
+                                                {{$row->Pembebanan->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">
+                                            <td class="font-weight-bold text-dark py-1">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-dark py-1">
                                                 @if ($row->tanggal_respon)
                                                 {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
                                                 @endif

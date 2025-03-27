@@ -76,6 +76,11 @@ class Pengajuan extends Model
         return ($id_user) ? $query->where('user_id', $id_user) : $query;
     }
 
+    public function scopeSearchByCompany($query, string|null $company)
+    {
+        return ($company) ? $query->where('company', $company) : $query;
+    }
+
     public function scopeSearchByDateRange($query, string|null $start = null, string|null $end = null)
     {
         $start = ($start) ? $start : Carbon::now()->firstOfYear()->format('Y-m-d');

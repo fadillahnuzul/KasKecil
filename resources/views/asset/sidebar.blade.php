@@ -114,13 +114,13 @@
     <li class="nav-item {{ Route::currentRouteNamed('home_bank') ? 'active' : '' }}">
         <a class="nav-link" href="/home_bank">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Daftar Pengajuan</span></a>
     </li>
-    <li class="nav-item {{ Route::currentRouteNamed('bank_laporan') ? 'active' : '' }}">
+    <!-- <li class="nav-item {{ Route::currentRouteNamed('bank_laporan') ? 'active' : '' }}">
         <a class="nav-link" href="/bank_laporan">
             <i class="fas fa-fw fa-book"></i>
             <span>Daftar Pengajuan</span></a>
-    </li>
+    </li> -->
     <li class="nav-item {{ Route::currentRouteNamed('bank_laporan_kas_keluar') ? 'active' : '' }}">
         <a class="nav-link" href="/bank_laporan_kas_keluar">
             <i class="fas fa-fw fa-table"></i>

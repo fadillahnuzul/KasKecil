@@ -69,8 +69,8 @@ class PengeluaranController extends Controller
             ->searchByProject($request->project)
             ->get();
         session(['key' => $id]);
-        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id);
-        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id, null, null, null, $request->company);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id, $request->company);
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $project_company_id);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $project_company_id);
         $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');
@@ -105,8 +105,8 @@ class PengeluaranController extends Controller
                 ->get();
         }
         $title = "Laporan Pengeluaran Kas Kecil";
-        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id);
-        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id);
+        $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id, null, null, null, $request->company);
+        $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id, $request->company);
         $company = Company::get();
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $request->company);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $request->company);

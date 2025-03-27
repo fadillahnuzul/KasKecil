@@ -51,7 +51,7 @@ class AdminController extends Controller
         $laporan = FALSE;
 
         $dataKas = Pengajuan::with('Sumber', 'User', 'Status')->isNotDone()->searchByUser($id)->get();
-        $Saldo = (new HitungSaldoService)->hitung_saldo_all_user();
+        $Saldo = (new HitungSaldoService)->hitung_saldo_all_user($company);
         $divisi = Divisi::get();
         $title = "Admin Kas Kecil";
         $userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
@@ -93,7 +93,7 @@ class AdminController extends Controller
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $company = ($request->id) ? $request->id : null;
         $companySelected = $this->companySelected;
-        $Saldo = (new HitungSaldoService)->hitung_saldo_all_user();
+        $Saldo = (new HitungSaldoService)->hitung_saldo_all_user($company);
         $divisi = Divisi::get();
         $filter_keluar = TRUE;
         $title = "Admin Kas Kecil";
@@ -166,7 +166,7 @@ class AdminController extends Controller
         $transaksiServices = new HitungTransaksiService;
         $pengajuanServices = new HitungPengajuanService;
         $userList->map(function ($item) use ($company, $startDate, $endDate, $saldoServices, $transaksiServices, $pengajuanServices) {
-            $item->total_pengajuan = $pengajuanServices->hitung_pengajuan($item->id);
+            $item->total_pengajuan = $pengajuanServices->hitung_pengajuan($item->id, null, null, null, $company);
             $item->total_pengeluaran = $transaksiServices->hitung_belum_klaim($item->id, $startDate, $endDate, $company);
             $item->total_diklaim = $transaksiServices->hitung_klaim($item->id, $startDate, $endDate, $company);
             $item->sisa_saldo = $item->total_pengajuan - ($item->total_pengeluaran + $item->total_diklaim);
@@ -179,7 +179,7 @@ class AdminController extends Controller
         $saldoServices = new HitungSaldoService;
         $transaksiServices = new HitungTransaksiService;
         $pengajuanServices = new HitungPengajuanService;
-        $Saldo = $pengajuanServices->hitung_pengajuan();
+        $Saldo = $pengajuanServices->hitung_pengajuan_admin($company) + $pengajuanServices->hitung_pengajuan_all_user($company);
         $totalKeluar = $transaksiServices->hitung_belum_klaim(null, $startDate, $endDate, $company);
         $totalKlaim = $transaksiServices->hitung_klaim(null, $startDate, $endDate, $company);
         $sisa = $Saldo - ($totalKeluar + $totalKlaim);

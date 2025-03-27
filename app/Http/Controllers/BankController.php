@@ -23,46 +23,54 @@ class BankController extends Controller
 {
     public $startDate;
     public $endDate;
+    public $companyList;
 
     public function __construct() {
         $this->startDate = Carbon::now()->startOfYear();
         $this->endDate = Carbon::now()->endOfYear();
+        $this->companyList = Company::get();
+
     }
 
     public function getSaldo($company = null)
     {
         $adminController = new AdminController;
         [$total_pengajuan, $total_pengeluaran, $diklaim] = $adminController->getGrandTotalTransaksi(null, null, $company);
+        $sisa_saldo = $total_pengajuan - $total_pengeluaran - $diklaim;
 
-        return [$total_pengajuan, $total_pengeluaran, $diklaim];
+        return [$total_pengajuan, $total_pengeluaran, $diklaim, $sisa_saldo];
     }
 
     public function index(Request $request){
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
         $laporan = FALSE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->searchByDateRange($startDate, $endDate)->get();
+        $selectedCompany = $request->company;
+        $companyList = $this->companyList;
+        $dataKas = Pengajuan::with('Sumber','User','Status')->where('status','!=',5)->searchByCompany($selectedCompany)->get()->sortBy('status');
         $divisi = Divisi::get();
         $title = "Bank Kas Kecil";
-        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo($request->company);
+        list($total_pengajuan, $total_pengeluaran, $diklaim, $sisa_saldo) = $this->getSaldo($selectedCompany);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim', 'companyList','selectedCompany', 'sisa_saldo'));
     }
 
     public function laporan(Request $request){
         $startDate = $request->startDate ? $request->startDate : $this->startDate;
         $endDate = $request->endDate ? $request->endDate : $this->endDate;
         $laporan = TRUE;
-        $dataKas = Pengajuan::with('Sumber','User','Status')->searchByDateRange($startDate, $endDate)->get();
+        $selectedCompany = $request->company;
+        $companyList = $this->companyList;
+        $dataKas = Pengajuan::with('Sumber','User','Status')->get();
         $divisi = Divisi::get();
         $title = "Daftar Pengajuan";
-        list($total_pengajuan, $total_pengeluaran, $diklaim) = $this->getSaldo($request->company);
+        list($total_pengajuan, $total_pengeluaran, $diklaim, $sisa_saldo) = $this->getSaldo($request->company);
         $pengajuan_admin = Pengajuan::with('Status')->where('divisi_id', 1)->where('status', 2)->orWhere('status', '4')->get();
         $admin = $pengajuan_admin->last();
 
-        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim'));
+        return view('bank/main', compact('dataKas','admin','divisi','title','laporan','startDate','endDate','total_pengajuan','total_pengeluaran','diklaim', 'selectedCompany', 'companyList', 'sisa_saldo'));
     }
 
     public function kas_divisi(Request $request, $id){
