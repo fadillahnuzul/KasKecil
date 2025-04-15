@@ -67,7 +67,9 @@ class AddBkk extends Component
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
         $coaList = Coa::join('budget', function ($q) {
             $q->on('budget.kode_coa', '=', 'coa.coa_id');
-        })->searchCoa($this->searchCoa)->orderBy('code')->get()->unique('coa_id');
+        })->searchCoa($this->searchCoa)->orderBy('code')
+            ->orWhere('code', 'like', '%2.120.000%')
+            ->get()->unique('coa_id');
         if (!$this->selectedCoaExist && $coaList->first() && !$this->selectedCoaId) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
@@ -256,7 +258,8 @@ class AddBkk extends Component
         (new BKKController)->print($this->bkk['bkk_detail'], $this->bkk['bkk_header'], $this->selectedProject);
     }
 
-    public function resetData() : void {
+    public function resetData(): void
+    {
         $this->reset('selectedKas');
         $this->reset('selectedKasId');
         $this->emit('refresh');
