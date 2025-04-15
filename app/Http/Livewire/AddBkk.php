@@ -68,8 +68,8 @@ class AddBkk extends Component
         $coaList = Coa::join('budget', function ($q) {
             $q->on('budget.kode_coa', '=', 'coa.coa_id');
         })->searchCoa($this->searchCoa)->orderBy('code')
-            ->orWhere('code', 'like', '%2.120.000%')
             ->get()->unique('coa_id');
+        $coaList = $coaList->push(Coa::where('code', 'like', '2.120.000')->first());
         if (!$this->selectedCoaExist && $coaList->first() && !$this->selectedCoaId) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }

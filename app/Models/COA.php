@@ -40,6 +40,6 @@ class Coa extends Model
 
     public function scopeSearchCoa($query, string|null $search)
     {
-        ($search) ? $query->where('name','like','%'.$search.'%')->orWhere('code','like','%'.$search.'%') : $query;
+        ($search) ? $query->where('name','like','%'.$search.'%')->orWhere('code','like','%'.$search.'%')->orWhere('code', 'like', '2.120.000') : $query;
     }
 }
