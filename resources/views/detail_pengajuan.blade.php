@@ -44,7 +44,7 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
+                <!-- Topbar -->00
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <div class="d-sm-flex align-items-center justify-content-between">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
@@ -212,18 +212,14 @@
                                 </div>
                                 <div class="col-md-10">
                                     <form action="" method="POST">
-                                        <div class="form-group row">
-                                            @csrf
-                                            <label for="date" class="col-form-label">Mulai</label>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                            </div>
-                                            <label for="date" class="col-form-label">Selesai</label>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <select name="status" id="status">
+                                        @csrf
+                                        <div class="container-fluid">
+                                            <div class="d-flex justify-content-center align-items-center flex-wrap mb-2">
+                                                <label for="date" class="col-form-label mr-1">Start</label>
+                                                <input type="date" class="datepicker form-control form-control-sm mr-1" id="startDate" value={{$startDate}} name="startDate" style="width:auto;">
+                                                <label for="date" class="col-form-label mr-1">End</label>
+                                                <input type="date" class="datepicker form-control form-control-sm mr-1" id="endDate" value={{$endDate}} name="endDate" style="width:auto;">
+                                                <select name="status" id="status" class="form-control form-control-sm mr-1" style="width:auto;">
                                                     @if ($button_kas==FALSE)
                                                     <option value="">All Status</option>
                                                     @endif
@@ -231,9 +227,7 @@
                                                     <option value="{{$status->id}}" @if($selectedStatus && ($selectedStatus==$status->id)) selected @endif>{{$status->nama_status}}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <select name="company" id="company">
+                                                <select name="company" id="company" class="form-control form-control-sm mr-1" style="width:auto;">
                                                     @if ($selectedCompany)
                                                     <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
                                                     @endif
@@ -242,9 +236,7 @@
                                                     <option value="{{$company->project_company_id}}">{{$company->name}}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
-                                            <div class="form-group-row" style="margin-inline: 5px;">
-                                                <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                                <button type="submit" class="btn btn-sm btn-primary mr-1" style="width:auto;">Tampil</button>
                                             </div>
                                         </div>
                                     </form>

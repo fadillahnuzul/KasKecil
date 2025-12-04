@@ -63,7 +63,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($kas as $item)
+            @forelse ($kas as $item)
             <tr>
                 <td><input type="checkbox" value="{{$item->id}}" wire:model="selectedKasId"></td>
                 <td class="font-weight-bold text-dark">{{\Carbon\Carbon::parse($item->tanggal)->format('d-m-Y')}}</td>
@@ -83,10 +83,11 @@
                 <td class="font-weight-bold text-dark">{{$item->bkk_header_id}}</td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($item->jumlah,2,",", ".")}}</td>
             </tr>
-            @endforeach
+            {{$kas->links()}}
+            @empty
+            @endforelse
         </tbody>
     </table>
-    {{$kas->links()}}
     @if (session()->has('message_overbudget'))
     <div class="alert alert-danger">
         {{ session('message_overbudget') }}
@@ -198,7 +199,7 @@
             Tanggal BKK
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
-            <input wire:model="tanggalBkk" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK">
+            <input wire:model="tanggalBkk" class="form-select form-control-sm" type="date" id="tanggal" name="tanggal" required placeholder="Tanggal BKK">
         </div>
         <div class="col-sm form-group-row" style="margin-right: 5px">
             <button style="float:right;" class="btn-sm btn-primary" wire:click="createBKK" wire:loading.remove>Create BKK</button>

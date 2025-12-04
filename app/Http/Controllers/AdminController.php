@@ -17,6 +17,7 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use App\Exports\KasKecilExport;
 use App\Services\HitungSaldoService;
 use App\Services\HitungTransaksiService;
 use App\Services\HitungPengajuanService;
@@ -246,6 +247,15 @@ class AdminController extends Controller
             ->get();
         (new PengeluaranController)->set_tanggal($startDate, $endDate);
         return view('/admin/kas', compact('title', 'startDate', 'endDate', 'company', 'userList', 'dataKas', 'Saldo', 'totalKeluar', 'totalKlaim', 'sisa', 'laporan', 'status', 'selectedStatus', 'selectedCompany', 'selectedUser'));
+    }
+
+    public function export(Request $request)
+    {
+        $startDate = ($request->startDate) ? $request->startDate : $request->session()->get('startDate');
+        $endDate = ($request->endDate) ? $request->endDate : $request->session()->get('endDate');
+        $company = $request->session()->get('company');
+
+        return (new KasKecilExport($startDate,$endDate,$company))->download("Laporan_Kas_Kecil" . Carbon::parse($startDate)->format('d-m-Y') . Carbon::parse($endDate)->format('d-m-Y') . ".xlsx");
     }
 
 

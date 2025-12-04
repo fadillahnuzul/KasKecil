@@ -73,22 +73,26 @@ class AddBkk extends Component
         if (!$this->selectedCoaExist && $coaList->first() && !$this->selectedCoaId) {
             $this->selectedCoaId = $coaList->first()->coa_id;
         }
-        if (Auth::user()->kk_access == 1) {
-            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
-                ->searchByDateRange($this->startDate, $this->endDate)
-                ->searchByCompany($this->selectedCompany)
-                ->searchByUnit($this->selectedUnit)
-                ->notPribadi()
-                // ->searchByProject($this->selectedProject)
-                ->paginate(10);
-        } elseif (Auth::user()->kk_access == 2) {
-            $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->where('user_id', Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
-                ->searchByDateRange($this->startDate, $this->endDate)
-                ->searchByCompany($this->selectedCompany)
-                ->searchByUnit($this->selectedUnit)
-                ->notPribadi()
-                // ->searchByProject($this->selectedProject)
-                ->paginate(10);
+
+        $kas = collect();
+        if($this->selectedCompany && $this->selectedProject) {
+            if (Auth::user()->kk_access == 1) {
+                $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+                    ->searchByDateRange($this->startDate, $this->endDate)
+                    ->searchByCompany($this->selectedCompany)
+                    ->searchByUnit($this->selectedUnit)
+                    ->notPribadi()
+                    ->searchByProject($this->selectedProject)
+                    ->paginate(10);
+            } elseif (Auth::user()->kk_access == 2) {
+                $kas = Pengeluaran::with('COA', 'project')->whereIn('status', [8, 10])->where('user_id', Auth::user()->id)->bukanPengembalianSaldo()->searchByCoa($this->selectedCoaId)
+                    ->searchByDateRange($this->startDate, $this->endDate)
+                    ->searchByCompany($this->selectedCompany)
+                    ->searchByUnit($this->selectedUnit)
+                    ->notPribadi()
+                    ->searchByProject($this->selectedProject)
+                    ->paginate(10);
+            }
         }
 
         $this->selectedCoaExist = false;

@@ -168,11 +168,11 @@
                                     <form action="" method="POST">
                                         <div class="form-group row">
                                             @csrf
-                                            <label for="date" class="col-form-label">Mulai</label>
+                                            <label for="date" class="col-form-label">Start</label>
                                             <div class="form-group-row" style="margin-inline: 5px;">
                                                 <input type="date" class="form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
                                             </div>
-                                            <label for="date" class="col-form-label">Selesai</label>
+                                            <label for="date" class="col-form-label">End</label>
                                             <div class="form-group-row" style="margin-inline: 5px;">
                                                 <input type="date" class="form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
                                             </div>

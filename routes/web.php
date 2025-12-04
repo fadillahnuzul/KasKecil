@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     //Download
     Route::match(['GET', 'POST'],'/pengeluaran.export', [PengeluaranController::class, 'export'])->name('pengeluaran.export');
     Route::get('/export_pengajuan/{id}', [PengajuanController::class, 'export_pdf']);
-
+    Route::match(['GET', 'POST'],'/admin_export', [AdminController::class, 'export'])->name('admin_export');
 
     //Halaman Bank
     Route::match(['GET', 'POST'],'/home_bank', [BankController::class, 'index'])->name('home_bank');

@@ -30,19 +30,20 @@
                 <th>PERIODE {{$startDate}} s/d {{$endDate}}</th>
             </tr>
             <tr>
-            <th style="border: 2px solid;"><strong>Tanggal</strong></th>
-            <th style="border: 2px solid;"><strong>Keterangan</strong></th>
-            <th style="border: 2px solid;"><strong>No. COA</strong></th>
-            <th style="border: 2px solid;"><strong>Nama COA</strong></th>
-            <th style="border: 2px solid;"><strong>Pembebanan</strong></th>
-            <th style="border: 2px solid;"><strong>Dibayarkan pada</strong></th>
-            <th style="border: 2px solid;"><strong>Kas Keluar</strong></th>
+                <th style="border: 2px solid;"><strong>Tanggal</strong></th>
+                <th style="border: 2px solid;"><strong>Keterangan</strong></th>
+                <th style="border: 2px solid;"><strong>No. COA</strong></th>
+                <th style="border: 2px solid;"><strong>Nama COA</strong></th>
+                <th style="border: 2px solid;"><strong>Pembebanan</strong></th>
+                <th style="border: 2px solid;"><strong>Dibayarkan pada</strong></th>
+                <th style="border: 2px solid;"><strong>Debit</strong></th>
+                <th style="border: 2px solid;"><strong>Kredit</strong></th>
             </tr>
         </thead>
         <tbody>
-            <?php $no=1;?>
+            <?php $no = 1; ?>
             @foreach ($data_pengeluaran as $row)
-                <tr style="border-right: 2px solid; border-left:2px solid;">
+            <tr style="border-right: 2px solid; border-left:2px solid;">
                 <td>{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                 <td>{{$row->deskripsi}}</td>
                 <td>@if ($row->coa)
@@ -62,17 +63,18 @@
                     @endif
                 </td>
                 <td>{{$row->jumlah}}</td>
-                </tr>
-                <?php $no++ ;?>
-            @endforeach 
+                <td>{{$row->jumlah}}</td>
+            </tr>
+            <?php $no++; ?>
+            @endforeach
             <tr style="border-top: 2px solid;">
                 <th style="border-left: 2px solid;"></th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
                 <th style="border: 2px solid;"><strong>Total Pengeluaran</strong></th>
+                <th style="border: 2px solid;"><strong>{{$data_pengeluaran->total}}</strong></th>
                 <th style="border: 2px solid;"><strong>{{$data_pengeluaran->total}}</strong></th>
             </tr>
             <tr>
@@ -81,19 +83,19 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
                 <th style="border: 2px solid;">Proses Pengajuan Klaim</th>
                 <th style="border: 2px solid;">{{$data_pengeluaran->belum_diklaim}}</th>
+                <th></th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid;"></th>
-                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th style="border: 2px solid;">Sisa pengajuan belum terpakai</th>
                 <th style="border: 2px solid;">{{$data_pengeluaran->sisa}}</th>
+                <th></th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid;"></th>
@@ -101,9 +103,9 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
                 <th style="border: 2px solid;">Saldo Kas Kecil</th>
                 <th style="border: 2px solid;">{{$data_pengeluaran->saldo}}</th>
+                <th></th>
             </tr>
             <tr>
                 <th style="border-left: 2px solid; border-bottom: 2px solid;"></th>
@@ -111,8 +113,8 @@
                 <th style="border-bottom: 2px solid;"></th>
                 <th style="border-bottom: 2px solid;"></th>
                 <th style="border-bottom: 2px solid;"></th>
-                <th style="border-bottom: 2px solid;"></th>
                 <th style="border: 2px solid;">Total</th>
+                <th style="border: 2px solid;">{{$data_pengeluaran->total_all}}</th>
                 <th style="border: 2px solid;">{{$data_pengeluaran->total_all}}</th>
             </tr>
         </tbody>

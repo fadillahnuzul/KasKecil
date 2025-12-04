@@ -28,7 +28,7 @@
         </div>
         <div class="form-group">
             <label for="unit">Unit :</label>
-            <select wire:model="selectedUnit" class="form-control">
+            <select wire:model="selectedUnit" class="form-control" required>
                 <option value="">--</option>
                 @foreach ($unitList as $unit)
                 @if(isset($selectedUnit) && ($unit->id == $selectedUnit))
@@ -40,7 +40,7 @@
         </div>
         <div class="form-group">
             <label for="company">Company :</label>
-            <select wire:model="selectedCompany" class="form-control">
+            <select wire:model="selectedCompany" class="form-control" required>
                 <option value="">--</option>
                 @foreach ($companyList as $Company)
                 <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
@@ -49,7 +49,7 @@
         </div>
         <div class="form-group">
             <label for="project">Project :</label>
-            <select wire:model.defer="selectedProject" class="form-control">
+            <select wire:model="selectedProject" class="form-control" required>
                 <option value="">--</option>
                 @foreach ($projectList as $project)
                 <option value="{{$project->project_id}}">{{$project->name}}</option>

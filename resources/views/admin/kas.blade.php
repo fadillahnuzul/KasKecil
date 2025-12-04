@@ -158,55 +158,42 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Cetak</a> -->
                             <!-- @endif -->
                             <div class="container">
-                                <div class="row">
-                                    <form action="" method="POST">
-                                        @csrf
-                                        <div class="container-fluid">
-                                            <div class="form-group row">
-                                                <label for="date" class="col-form-label">Mulai</label>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <input type="date" class="datepicker form-control input-sm" id="startDate" value={{$startDate}} name="startDate">
-                                                </div>
-                                                <label for="date" class="col-form-label">Selesai</label>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <input type="date" class="datepicker form-control input-sm" id="endDate" value={{$endDate}} name="endDate">
-                                                </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="status" id="status">
-                                                        <option value="">All Status</option>
-                                                        @foreach ($status as $status)
-                                                        <option value="{{$status->id}}" @if ($selectedStatus && ($selectedStatus==$status->id)) selected @endif>{{$status->nama_status}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="company" id="company-dropdown">
-                                                        <option value="">All Company</option>
-                                                        @foreach ($company as $company)
-                                                        <option value="{{$company->project_company_id}}" @if ($selectedCompany && ($selectedCompany->project_company_id == $company->project_company_id)) selected @endif>{{$company->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <!-- <div class="form-group-row" style="margin-inline: 5px;">
+                                <form action="" method="POST">
+                                    @csrf
+                                    <div class="container-fluid">
+                                        <div class="d-flex justify-content-center align-items-center flex-wrap mb-2">
+                                            <label for="date" class="col-form-label mr-1">Start</label>
+                                            <input type="date" class="datepicker form-control form-control-sm mr-1" id="startDate" value={{$startDate}} name="startDate" style="width:auto;">
+                                            <label for="date" class="col-form-label mr-1">End</label>
+                                            <input type="date" class="datepicker form-control form-control-sm mr-1" id="endDate" value={{$endDate}} name="endDate" style="width:auto;">
+                                            <select name="status" id="status" style="width:auto;" class="form-control form-control-sm mr-1">
+                                                <option value="">All Status</option>
+                                                @foreach ($status as $status)
+                                                <option value="{{$status->id}}" @if ($selectedStatus && ($selectedStatus==$status->id)) selected @endif>{{$status->nama_status}}</option>
+                                                @endforeach
+                                            </select>
+                                            <select name="company" id="company-dropdown" style="width:auto;" class="form-control form-control-sm mr-1">
+                                                <option value="">All Company</option>
+                                                @foreach ($company as $company)
+                                                <option value="{{$company->project_company_id}}" @if ($selectedCompany && ($selectedCompany->project_company_id == $company->project_company_id)) selected @endif>{{$company->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <!-- <div class="form-group-row" style="margin-inline: 5px;">
                                                     <select name="project" id="project-dropdown">
                                                         <option value="">All Project</option>
                                                     </select>
                                                 </div> -->
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="user" id="user">
-                                                        <option value="">All User</option>
-                                                        @foreach ($userList as $user)
-                                                        <option value="{{$user->id}}" @if($selectedUser && ($selectedUser==$user->id)) selected @endif>{{$user->username}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <button style="margin-left:5px; margin-right:5px;" type="submit" class="btn btn-sm btn-primary">Tampil</button>
-                                                </div>
-                                            </div>
+                                            <select name="user" id="user" style="width:auto;" class="form-control form-control-sm mr-1">
+                                                <option value="">All User</option>
+                                                @foreach ($userList as $user)
+                                                <option value="{{$user->id}}" @if($selectedUser && ($selectedUser==$user->id)) selected @endif>{{$user->username}}</option>
+                                                @endforeach
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary mr-1">Tampil</button>
+                                            
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body">
