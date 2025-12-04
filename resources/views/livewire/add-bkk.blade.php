@@ -83,11 +83,13 @@
                 <td class="font-weight-bold text-dark">{{$item->bkk_header_id}}</td>
                 <td class="font-weight-bold text-dark" style="text-align:right">Rp. {{number_format($item->jumlah,2,",", ".")}}</td>
             </tr>
-            {{$kas->links()}}
             @empty
             @endforelse
         </tbody>
     </table>
+    @if(count($kas))
+    {{$kas->links()}}
+    @endif
     @if (session()->has('message_overbudget'))
     <div class="alert alert-danger">
         {{ session('message_overbudget') }}
