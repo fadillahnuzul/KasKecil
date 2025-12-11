@@ -40,7 +40,7 @@ class CreateKas extends Component
 
     public function render()
     {
-        $projectList = Project::notPribadi()->where('project_company_id', $this->selectedCompany)->get();
+        $projectList = Project::notPribadi()->where('project_company_id', $this->selectedCompany)->get()->sortBy('name');
         // $coaList = DB::table('coa')->select('coa.*')->join('budget', 'coa.coa_id', '=', 'budget.kode_coa')->get();
         // $coaList = Coa::where('status', '!=', 0)->searchCoa($this->searchCoa)->orderBy('code')->get();
         $coaList = Coa::join('budget', function ($q) {

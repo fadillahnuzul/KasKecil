@@ -22,7 +22,7 @@
             <select wire:model="selectedProject" required class="form-control form-control-sm" style="color:black;">
                 <option value="">Input project</option>
                 @foreach ($projectList as $item)
-                <option value="{{$item->project_id}}">{{$item->name}}</option>
+                <option value="{{$item->project_id}}">{{$item->name}} - {{$item->city}}</option>
                 @endforeach
             </select>
         </div>

@@ -63,7 +63,7 @@ class AddBkk extends Component
 
     public function render()
     {
-        $projectList = Project::where('project_company_id', $this->selectedCompany)->notPribadi()->get();
+        $projectList = Project::where('project_company_id', $this->selectedCompany)->notPribadi()->get()->sortBy('name');
         $rekeningList = Rekening::where('company_id', $this->selectedCompany)->get();
         $coaList = Coa::join('budget', function ($q) {
             $q->on('budget.kode_coa', '=', 'coa.coa_id');

@@ -44,7 +44,7 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->00
+                <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <div class="d-sm-flex align-items-center justify-content-between">
                         <h1 class="h3 mb-2 text-gray-800">{{$title}}</h1>
