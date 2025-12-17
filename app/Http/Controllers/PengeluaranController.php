@@ -43,7 +43,7 @@ class PengeluaranController extends Controller
 
     public function fetchProject(Request $request)
     {
-        $project = Project::where('project_company_id', $request->project_company_id)->get();
+        $project = Project::where('project_company_id', $request->project_company_id)->get()->sortBy('name');
         return response()->json($project);
     }
 
@@ -51,7 +51,7 @@ class PengeluaranController extends Controller
     {
         $companySelected = $this->companySelected;
         $pengajuan = ($id) ? Pengajuan::find($id) : null;
-        $company = Company::notPribadi()->get();
+        $company = Company::notPribadi()->get()->sortBy('name');
         $button_kas = TRUE;
         $title = "Kas Keluar";
         $startDate = ($request->startDate) ? $request->startDate : $this->startDate;
@@ -107,7 +107,7 @@ class PengeluaranController extends Controller
         $title = "Laporan Pengeluaran Kas Kecil";
         $saldoAwal = (new HitungPengajuanService)->hitung_pengajuan(Auth::user()->id, null, null, null, $request->company);
         $saldo = (new HitungSaldoService)->hitung_saldo_user(Auth::user()->id, $request->company);
-        $company = Company::get();
+        $company = Company::get()->sortBy('name');
         $totalPengeluaran = (new HitungTransaksiService)->hitung_belum_klaim(Auth::user()->id, null, null, $request->company);
         $totalKlaim = (new HitungTransaksiService)->hitung_klaim(Auth::user()->id,  null, null, $request->company);
         $transaksiLuarTanggal = Pengeluaran::where('tanggal' ,'<', $startDate)->whereIn('status', [4,7])->searchByUser(Auth::user()->id)->get()->sum('jumlah');

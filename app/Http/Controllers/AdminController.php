@@ -37,7 +37,7 @@ class AdminController extends Controller
     {
         $this->startDate = Carbon::now()->startOfYear('d-m-Y');
         $this->endDate = Carbon::now()->endOfYear('d-m-Y');
-        $this->company = Company::notPribadi()->get();
+        $this->company = Company::notPribadi()->get()->sortBy('name');
         $this->userList = DB::table('user')->join('pettycash_pengajuan', 'user.id', '=', 'pettycash_pengajuan.user_id')->select('user.*')->get()->unique('id');
     }
 
