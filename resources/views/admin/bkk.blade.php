@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
-
+    <style>
+        .text-darker {
+            color: #000000;
+        }
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -102,16 +106,16 @@
                                         @csrf
                                         <div class="container-fluid">
                                             <div class="form-group row">
-                                                <label for="date" class="col-form-label">Mulai</label>
+                                                <label for="date" class="col-form-label px-0">Mulai</label>
                                                 <div class="col-sm">
-                                                    <input type="date" class="form-control input-sm" id="startDate" class="date-input" value={{$startDate}} name="startDate">
+                                                    <input type="date" class="form-control input-sm px-1" id="startDate" class="date-input" value={{$startDate}} name="startDate">
                                                 </div>
-                                                <label for="date" class="col-form-label">Selesai</label>
+                                                <label for="date" class="col-form-label px-0">Selesai</label>
                                                 <div class="col-sm">
-                                                    <input type="date" class="form-control input-sm" id="endDate" class="date-input" value={{$endDate}} name="endDate">
+                                                    <input type="date" class="form-control input-sm px-1" id="endDate" class="date-input" value={{$endDate}} name="endDate">
                                                 </div>
-                                                <div class="form-group-row" style="margin-inline: 5px;">
-                                                    <select name="company" id="company-dropdown">
+                                                <div class="form-group-row px-1">
+                                                    <select name="company" id="company-dropdown" class="form-control form-select">
                                                         @if ($selectedCompany)
                                                         <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
                                                         @endif
@@ -121,11 +125,12 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-sm">
-                                                    <input type="text" class="form-control input-sm" id="barcode" name="barcode" value="{{$barcode}}" placeholder="Barcode">
+                                                <div class="col-sm px-1">
+                                                    <input type="text" class="form-control input-sm p-1" id="barcode" name="barcode" value="{{$barcode}}" placeholder="Barcode">
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col-sm px-1">
                                                     <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                                    <a class="btn btn-sm btn-warning">Reset</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,27 +143,27 @@
                                 <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         @if ($selectedCompany)
-                                        <tr class="font-weight-bold text-dark">{{$selectedCompany->name}}</tr>
+                                        <tr class="font-weight-bold text-darker">{{$selectedCompany->name}}</tr>
                                         @endif
                                         <tr>
-                                            <th class="font-weight-bold text-dark">No</th>
-                                            <th class="font-weight-bold text-dark">Barcode</th>
-                                            <th class="font-weight-bold text-dark">Company</th>
-                                            <th class="font-weight-bold text-dark">Project</th>
-                                            <th class="font-weight-bold text-dark">Tanggal</th>
-                                            <th></th>
-                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
+                                            <th class="font-weight-bold text-darker text-center" style="width: max-content;">No</th>
+                                            <th class="font-weight-bold text-darker text-center">Barcode</th>
+                                            <th class="font-weight-bold text-darker text-center">Company</th>
+                                            <th class="font-weight-bold text-darker text-center">Project</th>
+                                            <th class="font-weight-bold text-darker text-center">Tanggal Dibuat</th>
+                                            <th style="width: max-content;"></th>
+                                            <!-- <th class="font-weight-bold text-darker">Aksi</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataBkk as $row)
                                         <tr>
-                                            <td class="font-weight-bold text-dark">{{$loop->iteration}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->id}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->project->company->name}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->project->name}}</td>
-                                            <td class="font-weight-bold text-dark">@if($row->created_at) {{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}} @endif</td>
-                                            <td class="font-weight-bold text-dark">
+                                            <td class="font-weight-bold text-darker text-center p-1">{{$loop->iteration}}</td>
+                                            <td class="font-weight-bold text-darker  text-center p-1">{{$row->id}}</td>
+                                            <td class="font-weight-bold text-darker p-1">{{$row->project->company->name}}</td>
+                                            <td class="font-weight-bold text-darker p-1">{{$row->project->name}}</td>
+                                            <td class="font-weight-bold text-darker text-center p-1">@if($row->created_at) {{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}} @endif</td>
+                                            <td class="font-weight-bold text-darker text-center p-1">
                                                 <a href="/bkk_detail/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/print_bkk/{{$row->id}}" target="__blank" class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
                                                 <a href="/print_detail_bkk/{{$row->id}}" target="__blank" class="btn btn-success btn-sm">Print Detail <i class="fas fa-print fa-sm"></i></a>
@@ -168,7 +173,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
