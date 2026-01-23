@@ -1,4 +1,9 @@
 <div>
+    <style>
+        .text-darker {
+            color: #000000;
+        }
+    </style>
     <div class="container-fluid">
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -44,27 +49,27 @@
                     <table class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                             @if ($selectedCompany)
-                            <tr class="font-weight-bold text-dark">{{$selectedCompany->name}}</tr>
+                            <tr class="font-weight-bold text-darker">{{$selectedCompany->name}}</tr>
                             @endif
                             <tr>
                                 <th><input type="checkbox" id="head-cb"></th>
-                                <th class="font-weight-bold text-dark">Barcode</th>
-                                <th class="font-weight-bold text-dark">Company</th>
-                                <th class="font-weight-bold text-dark">Project</th>
-                                <th class="font-weight-bold text-dark">Tanggal</th>
+                                <th class="font-weight-bold text-darker">Barcode</th>
+                                <th class="font-weight-bold text-darker">Company</th>
+                                <th class="font-weight-bold text-darker">Project</th>
+                                <th class="font-weight-bold text-darker">Tanggal</th>
                                 <th></th>
-                                <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
+                                <!-- <th class="font-weight-bold text-darker">Aksi</th> -->
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($dataBkk as $row)
                             <tr>
                                 <td><input type="checkbox" class="cb-child" value="{{$row->id}}"></td>
-                                <td class="font-weight-bold text-dark">{{$row->id}}</td>
-                                <td class="font-weight-bold text-dark">{{$row->project->company->name}}</td>
-                                <td class="font-weight-bold text-dark">{{$row->project->name}}</td>
-                                <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}}</td>
-                                <td class="font-weight-bold text-dark">
+                                <td class="font-weight-bold text-darker">{{$row->id}}</td>
+                                <td class="font-weight-bold text-darker">{{$row->project->company->name}}</td>
+                                <td class="font-weight-bold text-darker">{{$row->project->name}}</td>
+                                <td class="font-weight-bold text-darker">{{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}}</td>
+                                <td class="font-weight-bold text-darker">
                                     <button wire:click="$emitTo('detail-bkk', 'showBkkDetail')" class="btn btn-primary btn-sm">Detail</button>
                                     <button class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></button>
                                 </td>

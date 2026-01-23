@@ -118,7 +118,7 @@ class AddBkk extends Component
         // }
 
         $this->totalKas = $this->selectedKas->sum('jumlah');
-        $this->selectedKas = $this->selectedKas->sortBy('coa')->groupBy(['coa', 'divisi_id'])->toBase();
+        $this->selectedKas = $this->selectedKas->sortBy('coa_id')->groupBy(['coa_id', 'divisi_id'])->toBase();
         // $statusCoa = $this->cekJumlahCoa();
         // if ($statusCoa == false) {
         //     session()->flash('message_coa', 'Gagal menambahkan transaksi, COA yang dipilih lebih dari 5');
@@ -238,7 +238,7 @@ class AddBkk extends Component
 
         if ($this->bkk) {
             collect($this->bkk["bkk_detail"])->map(function ($item) {
-                Pengeluaran::where('coa', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
+                Pengeluaran::where('coa_id', $item->coa_id)->whereIn('id', $this->selectedKasId)->update(['id_bkk' => $item->id, 'bkk_header_id' => $item->bkk_header_id]);
             });
             session()->flash('message_save', 'BKK berhasil dibuat');
         } else {

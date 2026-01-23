@@ -100,7 +100,7 @@ class CreateKas extends Component
             'date' => $this->selectedDate,
             'deskripsi' => $this->deskripsi,
             'jumlah' => $this->jumlah,
-            'coa' => $this->selectedCoa,
+            'coa_id' => $this->selectedCoa,
             'company' => $this->selectedCompany,
             'project' => $this->selectedProject,
             'pic' => $this->pic,

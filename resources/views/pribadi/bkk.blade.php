@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
-
+    <style>
+        .text-darker {
+            color: #000000;
+        }
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -98,7 +102,7 @@
                         <div class="card-header pb-0">
                             <div class="container">
                                 <div class="row">
-                                <form action="" method="POST">
+                                    <form action="" method="POST">
                                         @csrf
                                         <div class="container-fluid">
                                             <div class="form-group row">
@@ -138,27 +142,27 @@
                                 <table id="myTable" class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         @if ($selectedCompany)
-                                        <tr class="font-weight-bold text-dark">{{$selectedCompany->name}}</tr>
+                                        <tr class="font-weight-bold text-darker">{{$selectedCompany->name}}</tr>
                                         @endif
                                         <tr>
-                                            <th class="font-weight-bold text-dark">No</th>
-                                            <th class="font-weight-bold text-dark">Barcode</th>
-                                            <th class="font-weight-bold text-dark">Company</th>
-                                            <th class="font-weight-bold text-dark">Project</th>
-                                            <th class="font-weight-bold text-dark">Tanggal</th>
+                                            <th class="font-weight-bold text-darker">No</th>
+                                            <th class="font-weight-bold text-darker">Barcode</th>
+                                            <th class="font-weight-bold text-darker">Company</th>
+                                            <th class="font-weight-bold text-darker">Project</th>
+                                            <th class="font-weight-bold text-darker">Tanggal</th>
                                             <th></th>
-                                            <!-- <th class="font-weight-bold text-dark">Aksi</th> -->
+                                            <!-- <th class="font-weight-bold text-darker">Aksi</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($dataBkk as $row)
                                         <tr>
-                                            <td class="font-weight-bold text-dark">{{$loop->iteration}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->id}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->project->company->name}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->project->name}}</td>
-                                            <td class="font-weight-bold text-dark">@if($row->created_at) {{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}} @endif</td>
-                                            <td class="font-weight-bold text-dark">
+                                            <td class="font-weight-bold text-darker">{{$loop->iteration}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->id}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->project->company->name}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->project->name}}</td>
+                                            <td class="font-weight-bold text-darker">@if($row->created_at) {{Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}} @endif</td>
+                                            <td class="font-weight-bold text-darker">
                                                 <a href="/bkk_detail_pribadi/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/print_bkk/{{$row->id}}" class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
                                             </td>

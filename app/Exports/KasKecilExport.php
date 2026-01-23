@@ -100,7 +100,7 @@ class KasKecilExport implements FromView, WithHeadings, WithMapping, WithStyles
         return [
             \Carbon\Carbon::parse($pengeluaran['tanggal'])->format('d/m/Y'),
             str_ireplace('\/', '/', substr($pengeluaran['pengajuan'], 10, -3)),
-            substr($pengeluaran['coa'], 10, -3),
+            substr($pengeluaran['coa_id'], 10, -3),
             substr($pengeluaran['nama_coa'], 10, -3),
             $pengeluaran['user'],
             substr($pengeluaran['divisi'], 10, -3),

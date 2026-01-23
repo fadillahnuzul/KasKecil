@@ -46,12 +46,12 @@
             <tr style="border-right: 2px solid; border-left:2px solid;">
                 <td>{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
                 <td>{{$row->deskripsi}}</td>
-                <td>@if ($row->coa)
-                    {{$row->COA->code}}
+                <td>@if ($row->coa_id)
+                    {{$row->coa->code}}
                     @endif
                 </td>
-                <td>@if ($row->coa)
-                    {{$row->COA->name}}
+                <td>@if ($row->coa_id)
+                    {{$row->coa->name}}
                     @endif
                 </td>
                 <td>@if ($row->pembebanan)

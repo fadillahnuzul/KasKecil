@@ -161,6 +161,7 @@
                                             <td class="font-weight-bold text-dark">
                                                 <a href="/bkk_detail/{{$row->id}}" class="btn btn-primary btn-sm">Detail</a>
                                                 <a href="/print_bkk/{{$row->id}}" target="__blank" class="btn btn-success btn-sm"><i class="fas fa-print fa-sm"></i></a>
+                                                <a href="/print_detail_bkk/{{$row->id}}" target="__blank" class="btn btn-success btn-sm">Print Detail <i class="fas fa-print fa-sm"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach

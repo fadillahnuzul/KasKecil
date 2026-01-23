@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\BKK;
 use App\Models\BKKHeader;
+use App\Models\Pengeluaran;
 use App\Models\Project;
 use App\Services\PrintBkk;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Services\TerbilangNominal;
+use App\Exports\BkkTransaksiExport;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BKKController extends Controller
 {
@@ -35,7 +38,7 @@ class BKKController extends Controller
         $totalPpn = $bkkDetail->sum('ppn');
         $totalPph = $bkkDetail->sum('pph');
         $startDate = ($request->startDate) ? $request->startDate  : $this->startDate;
-        $endDate = ($request->endDate) ? $request->endDate : $this->endDate; 
+        $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         return view('admin/bkk_detail', compact('title', 'bkkHeader', 'bkkDetail', 'totalPayment', 'totalDpp', 'totalPph', 'totalPpn', 'startDate', 'endDate'));
     }
 
@@ -60,6 +63,16 @@ class BKKController extends Controller
         $bkkHeader = BKKHeader::find($id);
         $bkkDetail = BKK::where('bkk_header_id', $id)->get();
         $tipe = "spi";
-        (new PrintBkk)->printBkk( $bkkHeader, $bkkDetail, $tipe);
+        (new PrintBkk)->printBkk($bkkHeader, $bkkDetail, $tipe);
+    }
+
+    public function printDetailTransaksiBkk($bkkId)
+    {
+        $bkk = BKKHeader::with('bank')->find($bkkId);
+        $kasBkk = Pengeluaran::with('coa','User','Divisi')->where('bkk_header_id', $bkkId)->get()->groupBy('coa_id');
+        return Excel::download(
+            new BkkTransaksiExport($kasBkk, $bkk),
+            'bkk-'.$bkk->id.'-pettycash.xlsx'
+        );
     }
 }

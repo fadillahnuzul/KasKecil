@@ -220,9 +220,9 @@
                                             <td class="font-weight-bold text-dark">{{$row->deskripsi}}</td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                             <td class="font-weight-bold text-dark">Rp. {{number_format($row->jumlah,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">@if ($row->coa)
-                                                {{$row->COA->code}} <br>
-                                                {{$row->COA->name}}
+                                            <td class="font-weight-bold text-dark">@if ($row->coa_id)
+                                                {{$row->coa->code}} <br>
+                                                {{$row->coa->name}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)

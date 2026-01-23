@@ -69,7 +69,7 @@ class EditKas extends Component
     {
         $this->selectedCompany = $this->kas->pembebanan;
         $this->selectedProject = $this->kas->project_id;
-        $this->selectedCoa = $this->kas->coa;
+        $this->selectedCoa = $this->kas->coa_id;
         $this->selectedDate = Carbon::parse($this->kas->tanggal)->format('d-m-Y');
         $this->deskripsi = $this->kas->deskripsi;
         $this->jumlah = $this->kas->jumlah;
@@ -112,7 +112,7 @@ class EditKas extends Component
             'date' => $this->selectedDate,
             'deskripsi' => $this->deskripsi,
             'jumlah' => $this->jumlah,
-            'coa' => $this->selectedCoa,
+            'coa_id' => $this->selectedCoa,
             'company' => $this->selectedCompany,
             'project' => $this->selectedProject,
             'pic' => $this->pic,

@@ -366,8 +366,8 @@
                                             </td>
                                             <td class="font-weight-bold text-dark">{{$row->User->username}}</td>
                                             <td class="font-weight-bold text-dark">{{number_format($row->jumlah ,2, ",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">@if ($row->coa)
-                                                {{$row->COA->code}} {{$row->COA->name}}
+                                            <td class="font-weight-bold text-dark">@if ($row->coa_id)
+                                                {{$row->coa->code}} {{$row->coa->name}}
                                                 @endif
                                             </td>
                                             <td class="font-weight-bold text-dark">@if ($row->pembebanan)

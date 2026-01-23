@@ -100,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
 
     //BKK
     Route::get('/print_bkk/{id}', [BKKController::class, 'print']);
+    Route::get('/print_detail_bkk/{id}', [BKKController::class, 'printDetailTransaksiBkk']);
     Route::match(['GET', 'POST'], '/list_bkk', [BKKHeaderController::class, 'index'])->name('list_bkk');
     Route::get('/create_bkk', [BKKController::class, 'create'])->name('create_bkk');
     Route::post('/save_bkk', [BKKController::class, 'save']);

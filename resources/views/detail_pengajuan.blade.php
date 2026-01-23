@@ -30,6 +30,9 @@
             padding: 3px;
             box-sizing: border-box;
         }
+        .text-darker {
+            color: #000000;
+        }
     </style>
 </head>
 
@@ -246,23 +249,42 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
-                                    <thead>
+                                    <thead class="thead-title">
                                         <tr>
                                             @if ($button_kas==TRUE)
                                             <th><input type="checkbox" id="head-cb"></th>
                                             @endif
-                                            <th class="font-weight-bold text-dark">Tanggal</th>
-                                            <th class="font-weight-bold text-dark">Keterangan</th>
-                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
-                                            <th class="font-weight-bold text-dark">COA</th>
-                                            <th class="font-weight-bold text-dark">Unit</th>
-                                            <th class="font-weight-bold text-dark">Pembebanan</th>
-                                            <th class="font-weight-bold text-dark">Project</th>
-                                            <th class="font-weight-bold text-dark">Nota Tujuan</th>
-                                            <th class="font-weight-bold text-dark">PIC</th>
-                                            <th class="font-weight-bold text-dark">Status</th>
-                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
-                                            <th class="font-weight-bold text-dark">Aksi</th>
+                                            <th class="font-weight-bold text-darker">Tanggal</th>
+                                            <th class="font-weight-bold text-darker">Keterangan</th>
+                                            <th class="font-weight-bold text-darker">Kas Keluar</th>
+                                            <th class="font-weight-bold text-darker">COA</th>
+                                            <th class="font-weight-bold text-darker">Unit</th>
+                                            <th class="font-weight-bold text-darker">Pembebanan</th>
+                                            <th class="font-weight-bold text-darker">Project</th>
+                                            <th class="font-weight-bold text-darker">Nota Tujuan</th>
+                                            <th class="font-weight-bold text-darker">PIC</th>
+                                            <th class="font-weight-bold text-darker">Status</th>
+                                            <th class="font-weight-bold text-darker">Tanggal Respon</th>
+                                            <th class="font-weight-bold text-darker">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <thead class="thead-filter">
+                                        <tr>
+                                            @if ($button_kas==TRUE)
+                                            <th></th>
+                                            @endif
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
+                                            <th class="font-weight-bold text-darker p-1"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -271,41 +293,41 @@
                                             @if ($button_kas==TRUE)
                                             <td><input type="checkbox" class="cb-child" value="{{$row->id}}"></td>
                                             @endif
-                                            <td class="font-weight-bold text-dark">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->deskripsi}}
+                                            <td class="font-weight-bold text-darker">{{Carbon\Carbon::parse($row->tanggal)->format('d-m-Y')}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->deskripsi}}
                                                 @if($row->in_budget==1)
                                                 <span class="badge bg-danger text-white">Overbudget</span>
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">{{number_format($row->jumlah,2,",", ".")}}</td>
-                                            <td class="font-weight-bold text-dark">@if ($row->coa)
-                                                {{$row->COA->code}} {{$row->COA->name}}
+                                            <td class="font-weight-bold text-darker">{{number_format($row->jumlah,2,",", ".")}}</td>
+                                            <td class="font-weight-bold text-darker">@if ($row->coa_id)
+                                                {{$row->coa->code}} {{$row->coa->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark" style="font-size: 11pt;">@if ($row->divisi_id)
+                                            <td class="font-weight-bold text-darker" style="font-size: 11pt;">@if ($row->divisi_id)
                                                 {{strtolower($row->unit->name)}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">@if($row->pembebanan)
+                                            <td class="font-weight-bold text-darker">@if($row->pembebanan)
                                                 {{$row->Pembebanan->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">@if ($row->project_id)
+                                            <td class="font-weight-bold text-darker">@if ($row->project_id)
                                                 {{$row->Project->name}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">@if ($row->tujuan)
+                                            <td class="font-weight-bold text-darker">@if ($row->tujuan)
                                                 {{$row->tujuan}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">{{$row->pic}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->Status->nama_status}}</td>
-                                            <td class="font-weight-bold text-dark">
+                                            <td class="font-weight-bold text-darker">{{$row->pic}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->Status->nama_status}}</td>
+                                            <td class="font-weight-bold text-darker">
                                                 @if ($row->tanggal_respon)
                                                 {{Carbon\Carbon::parse($row->tanggal_respon)->format('d-m-Y')}}
                                                 @endif
                                             </td>
-                                            <td class="font-weight-bold text-dark">
+                                            <td class="font-weight-bold text-darker">
                                                 @if ($row->status != 6)
                                                 <a href="/edit_kas_keluar/{{$row->id}}" class="btn btn-primary btn-sm">
                                                     Edit</a>
@@ -320,25 +342,6 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            @if ($button_kas==TRUE)
-                                            <th><input type="checkbox" id="head-cb"></th>
-                                            @endif
-                                            <th class="font-weight-bold text-dark">Tanggal</th>
-                                            <th class="font-weight-bold text-dark">Keterangan</th>
-                                            <th class="font-weight-bold text-dark">Kas Keluar</th>
-                                            <th class="font-weight-bold text-dark">COA</th>
-                                            <th class="font-weight-bold text-dark">Unit</th>
-                                            <th class="font-weight-bold text-dark">Pembebanan</th>
-                                            <th class="font-weight-bold text-dark">Project</th>
-                                            <th class="font-weight-bold text-dark">Nota Tujuan</th>
-                                            <th class="font-weight-bold text-dark">PIC</th>
-                                            <th class="font-weight-bold text-dark">Status</th>
-                                            <th class="font-weight-bold text-dark">Tanggal Respon</th>
-                                            <th class="font-weight-bold text-dark">Aksi</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                                 @if ($button_kas==TRUE)
                                 <button id="button-set-bkk" type="button" disabled onclick="done()" class="btn btn-sm btn-success">Selesai</button>
@@ -557,6 +560,35 @@
                             });
                         });
                 },
+                initComplete: function() {
+                    let api = this.api();
+
+                    // Ambil thead kedua
+                    let filterHead = $('#myTable thead.thead-filter tr');
+
+                    api.columns().every(function(i) {
+                        let column = this;
+                        let title = $('#myTable thead.thead-title th').eq(i).text().trim();
+
+                        // Skip checkbox column
+                        if (i === 0) {
+                            filterHead.find('th').eq(i).html('');
+                            return;
+                        }
+
+                        let input = document.createElement('input');
+                        input.placeholder = 'Cari ' + title;
+                        input.className = 'form-control form-control-sm';
+
+                        $(input).appendTo(filterHead.find('th').eq(i));
+
+                        $(input).on('keyup change clear', function() {
+                            if (column.search() !== this.value) {
+                                column.search(this.value).draw();
+                            }
+                        });
+                    });
+                },
                 dom: 'Bfrtip',
                 buttons: [{
                     extend: 'excelHtml5',
@@ -612,6 +644,35 @@
                                 }
                             });
                         });
+                },
+                initComplete: function() {
+                    let api = this.api();
+
+                    // Ambil thead kedua
+                    let filterHead = $('#myTable thead.thead-filter tr');
+
+                    api.columns().every(function(i) {
+                        let column = this;
+                        let title = $('#myTable thead.thead-title th').eq(i).text().trim();
+
+                        // Skip checkbox column
+                        if (i === 0) {
+                            filterHead.find('th').eq(i).html('');
+                            return;
+                        }
+
+                        let input = document.createElement('input');
+                        input.placeholder = 'Cari ' + title;
+                        input.className = 'form-control form-control-sm';
+
+                        $(input).appendTo(filterHead.find('th').eq(i));
+
+                        $(input).on('keyup change clear', function() {
+                            if (column.search() !== this.value) {
+                                column.search(this.value).draw();
+                            }
+                        });
+                    });
                 },
                 dom: 'Bfrtip',
                 buttons: [{

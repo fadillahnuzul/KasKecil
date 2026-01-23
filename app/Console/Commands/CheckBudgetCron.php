@@ -36,10 +36,10 @@ class CheckBudgetCron extends Command
             //Get data se coa
             $startMonth = Carbon::createFromFormat('F Y', $item->tanggal->format('M') . ' ' . $item->tanggal->format('Y'))->firstOfMonth();
             $endMonth = Carbon::createFromFormat('F Y', $item->tanggal->format('M') . ' ' . $item->tanggal->format('Y'))->endOfMonth();
-            $kasCoa = Pengeluaran::where('coa', $item->coa)->whereBetween('tanggal', [$startMonth, $endMonth])->get();
+            $kasCoa = Pengeluaran::where('coa_id', $item->coa_id)->whereBetween('tanggal', [$startMonth, $endMonth])->get();
 
             //Checkbudget
-            $budgetCOA = $budget->getBudget($item->company, $item->coa, $item->date);
+            $budgetCOA = $budget->getBudget($item->company, $item->coa_id, $item->date);
             if ($budgetCOA) {
                 $isInBudget = $budget->isInBudget($budgetCOA[0]['budgetbulan'], $budgetCOA[0]['budgettahun'], $kasCoa->sum('jumlah'));
             } else {

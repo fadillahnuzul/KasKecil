@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
-
+    <style>
+        .text-darker {
+            color: #000000;
+        }
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -99,7 +103,7 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <table class="font-weight-bold text-dark">
+                                        <table class="font-weight-bold text-darker">
                                             <tbody>
                                                 <tr>
                                                     <td>Barcode</td>
@@ -120,7 +124,7 @@
                                         </table>
                                     </div>
                                     <div class="col-md-6">
-                                        <table class="font-weight-bold text-dark">
+                                        <table class="font-weight-bold text-darker">
                                             <tbody>
                                                 <tr>
                                                     <td>Tanggal</td>
@@ -144,39 +148,39 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <h6 class="font-weight-bold text-dark">Detail BKK</h6>
+                            <h6 class="font-weight-bold text-darker">Detail BKK</h6>
                             <div class="table-responsive">
                                 <table class="table table-bordered" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th class="font-weight-bold text-dark">Barcode</th>
-                                            <th class="font-weight-bold text-dark">Pekerjaan</th>
-                                            <th class="font-weight-bold text-dark">COA</th>
-                                            <th class="font-weight-bold text-dark">Unit</th>
-                                            <th class="font-weight-bold text-dark">DPP</th>
-                                            <th class="font-weight-bold text-dark">PPN</th>
-                                            <th class="font-weight-bold text-dark">PPH</th>
-                                            <th class="font-weight-bold text-dark">Payment</th>
+                                            <th class="font-weight-bold text-darker">Barcode</th>
+                                            <th class="font-weight-bold text-darker">Pekerjaan</th>
+                                            <th class="font-weight-bold text-darker">COA</th>
+                                            <th class="font-weight-bold text-darker">Unit</th>
+                                            <th class="font-weight-bold text-darker">DPP</th>
+                                            <th class="font-weight-bold text-darker">PPN</th>
+                                            <th class="font-weight-bold text-darker">PPH</th>
+                                            <th class="font-weight-bold text-darker">Payment</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($bkkDetail as $row)
                                         <tr>
-                                            <td class="font-weight-bold text-dark">{{$row->id}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->pekerjaan}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->coa->code}} {{$row->coa->name}}</td>
-                                            <td class="font-weight-bold text-dark">@if($row->unit) {{$row->unit->name}} @endif</td>
-                                            <td class="font-weight-bold text-dark">{{$row->dpp}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->ppn}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->pph}}</td>
-                                            <td class="font-weight-bold text-dark">{{$row->payment}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->id}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->pekerjaan}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->coa->code}} {{$row->coa->name}}</td>
+                                            <td class="font-weight-bold text-darker">@if($row->unit) {{$row->unit->name}} @endif</td>
+                                            <td class="font-weight-bold text-darker">{{$row->dpp}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->ppn}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->pph}}</td>
+                                            <td class="font-weight-bold text-darker">{{$row->payment}}</td>
                                         </tr>
                                         @empty
                                         <tr>
                                             <td colspan="5"></td>
                                         </tr>
                                         @endforelse
-                                        <tr class="font-weight-bold text-dark">
+                                        <tr class="font-weight-bold text-darker">
                                             <td colspan="4">Total</td>
                                             <td>{{$totalDpp}}</td>
                                             <td>{{$totalPpn}}</td>

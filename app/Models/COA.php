@@ -20,7 +20,7 @@ class Coa extends Model
 
     public function pengeluaran()
     {
-        return $this->hasMany(Pengeluaran::class, 'coa', 'coa_id');
+        return $this->hasMany(Pengeluaran::class, 'coa_id', 'coa_id');
     }
 
     public function budgets()

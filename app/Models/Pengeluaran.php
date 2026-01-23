@@ -16,7 +16,7 @@ class Pengeluaran extends Model
         'jumlah',
         'divisi_id',
         'status',
-        'coa',
+        'coa_id',
         'pic',
         'pembebanan',
         'tujuan',
@@ -61,7 +61,7 @@ class Pengeluaran extends Model
 
     public function coa()
     {
-        return $this->belongsTo(Coa::class, 'coa', 'coa_id');
+        return $this->belongsTo(Coa::class, 'coa_id', 'coa_id');
     }
 
     public function project()
@@ -116,7 +116,7 @@ class Pengeluaran extends Model
 
     public function scopeGetCoaId($query)
     {
-        return $query->select('coa')->groupBy('coa');
+        return $query->select('coa_id')->groupBy('coa_id');
     }
 
     public function scopeSearchByDateRange($query, string|null $start = null, string|null $end = null)
@@ -148,7 +148,7 @@ class Pengeluaran extends Model
 
     public function scopeSearchByCoa($query, string|null $coa)
     {
-        return ($coa) ? $query->where('coa', $coa) : $query;
+        return ($coa) ? $query->where('coa_id', $coa) : $query;
     }
 
     public function scopeSearchByProject($query, string|null $project)
