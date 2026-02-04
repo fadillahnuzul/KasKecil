@@ -43,11 +43,11 @@
     <div class="row" style="margin-top: 10px;">
         <label for="date" class="col-form-label">Mulai</label>
         <div class="col-md-2" x-data="datepicker()">
-            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker" required>
+            <input wire:model="startDate" class="datepicker form-control form-control-sm" type="text" x-ref="startDatepicker">
         </div>
         <label for="date" class="col-form-label">Selesai</label>
         <div class="col-md-2" x-data="datepicker2()">
-            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker" required>
+            <input wire:model="endDate" id="endDate" class="datepicker form-control form-control-sm" type="text" x-ref="endDatepicker">
         </div>
     </div>
     <!-- Filter COA & Tanggal -->

@@ -90,6 +90,7 @@ class CreateKas extends Component
         return true;
     }
 
+
     public function createPettyCash()
     {
         $this->jumlah = preg_replace("/[^0-9]/", "", $this->jumlah);

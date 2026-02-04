@@ -1,4 +1,5 @@
 <div>
+    <form wire:submit.prevent="createPettyCash">
         <div class="form-group">
             <label for="tanggal">Tanggal Pengeluaran :</label>
             <input type="date" wire:model.defer="selectedDate" class="datepicker form-control" placeholder="Tanggal Pengeluaran" id="tanggal" name="tanggal" required>
@@ -28,7 +29,7 @@
         </div>
         <div class="form-group">
             <label for="company">Company :</label>
-            <select wire:model="selectedCompany" class="form-control">
+            <select wire:model="selectedCompany" class="form-control" required>
                 <option value="">--</option>
                 @foreach ($companyList as $Company)
                 <option value="{{$Company->project_company_id}}">{{$Company->name}}</option>
@@ -37,7 +38,7 @@
         </div>
         <div class="form-group">
             <label for="project">Project :</label>
-            <select wire:model.defer="selectedProject" class="form-control">
+            <select wire:model.defer="selectedProject" class="form-control" required>
                 <option value="">--</option>
                 @foreach ($projectList as $project)
                 <option value="{{$project->project_id}}">{{$project->name}}</option>
@@ -50,7 +51,7 @@
         </div>
         <div class="form-group">
             <label for="pic">PIC :</label>
-            <input wire:model.defer="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic">
+            <input wire:model.defer="pic" autocomplete="on" type="text" class="form-control" placeholder="PIC" id="pic" name="pic" required>
         </div>
         @if (session()->has('message_kas'))
         <div class="alert alert-danger">
@@ -67,32 +68,33 @@
             {{ session('budget_kurang') }}
         </div>
         @endif
-        <button wire:click="createPettyCash" class="btn btn-primary" id="btnSubmit">Submit</button>
-        <div wire:loading wire:target="getCompanyProject">
-            Create Kas...
-        </div>
+        <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
+    </form>
+    <div wire:loading wire:target="getCompanyProject">
+        Create Kas...
     </div>
-    @once
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#coa").select2({
-                placeholder: 'Masukkan kode atau nama COA',
-            });
-        })
-    </script>
-    @endonce
-    @once
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        flatpickr(".datepicker", {
-            mode: "single"
+</div>
+@once
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#coa").select2({
+            placeholder: 'Masukkan kode atau nama COA',
         });
+    })
+</script>
+@endonce
+@once
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr(".datepicker", {
+        mode: "single"
+    });
 
-        function getCoa() {
-            Livewire.emit('getSelectedCoaInput', document.getElementById("selectedCoaFromInput").value)
-        }
-    </script>
-    @endonce
+    function getCoa() {
+        Livewire.emit('getSelectedCoaInput', document.getElementById("selectedCoaFromInput").value)
+    }
+</script>
+@endonce
