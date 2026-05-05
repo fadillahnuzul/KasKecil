@@ -105,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/create_bkk', [BKKController::class, 'create'])->name('create_bkk');
     Route::post('/save_bkk', [BKKController::class, 'save']);
     Route::get('/bkk_detail/{id}',[BKKController::class, 'index']);
+    Route::post('/export_report_cashflow', [BkkController::class, 'exportReport'])->name('export.cashflow');
 
     //Pribadi
     Route::match(['GET', 'POST'], '/kas_keluar_pribadi', [AdminPribadiController::class, 'kas_keluar'])->name('kas_keluar_pribadi');

@@ -19,25 +19,28 @@ class BKKHeaderController extends Controller
 
     public function __construct()
     {
-        $this->startDate = Carbon::now()->startOfMonth('d-m-Y');
-        $this->endDate = Carbon::now()->endOfMonth('d-m-Y');
+        $this->startDate = Carbon::now()->startOfYear('d-m-Y');
+        $this->endDate = Carbon::now()->endOfYear('d-m-Y');
         $this->selectedCompany = null;
     }
 
-    public function index(Request $request) : View {
-        $companyList = DB::table('project_company')->join('pettycash_pengeluaran', 'project_company.project_company_id', '=', 'pettycash_pengeluaran.pembebanan')->select('project_company.*')->whereNotIn('project_id', [111,112])->get()->unique('project_company_id');
+    public function index(Request $request): View
+    {
+        $companyList = DB::table('project_company')->join('pettycash_pengeluaran', 'project_company.project_company_id', '=', 'pettycash_pengeluaran.pembebanan')->select('project_company.*')->whereNotIn('project_id', [111, 112])->get()->unique('project_company_id');
         $title = "List BKK";
         $selectedCompany = Company::find(($request->company)) ?? $this->selectedCompany;
+        $selectedCompanyId = $selectedCompany ? $selectedCompany->project_company_id : null;
         $startDate = ($request->startDate) ? $request->startDate  : $this->startDate;
         $endDate = ($request->endDate) ? $request->endDate : $this->endDate;
         $barcode = $request->barcode;
-        $dataBkk = BKKHeader::where('status',1)->where('project_id', '!=', null)->searchByBarcode($barcode)->whereBetween('tanggal', [$startDate, $endDate])->notPribadi()->orderByDesc('created_at')->get();
+        $dataBkk = BKKHeader::where('status', 1)->where('project_id', '!=', null)->searchByBarcode($barcode)->whereBetween('tanggal', [$startDate, $endDate])->notPribadi()->orderByDesc('created_at')->get();
         if ($selectedCompany) {
-            $dataBkk = $dataBkk->filter(function($item) use ($selectedCompany) {
-                return $item->project->project_company_id == $selectedCompany->project_company_id;
+            $dataBkk = $dataBkk->filter(function ($item) use ($selectedCompanyId) {
+                return $item->project->project_company_id == $selectedCompanyId;
             });
         }
-        return view('admin/bkk',compact('title','companyList','dataBkk','selectedCompany','startDate','endDate', 'barcode'));
+        // dd($this->selectedCompany);
+        return view('admin/bkk', compact('title', 'companyList', 'dataBkk', 'selectedCompany', 'selectedCompanyId', 'startDate', 'endDate', 'barcode'));
     }
     public function store($bkk_header_data)
     {

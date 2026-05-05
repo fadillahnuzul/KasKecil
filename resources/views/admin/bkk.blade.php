@@ -100,42 +100,50 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header pb-0">
-                            <div class="container">
-                                <div class="row">
-                                    <form action="" method="POST">
-                                        @csrf
-                                        <div class="container-fluid">
-                                            <div class="form-group row">
-                                                <label for="date" class="col-form-label px-0">Mulai</label>
-                                                <div class="col-sm">
-                                                    <input type="date" class="form-control input-sm px-1" id="startDate" class="date-input" value={{$startDate}} name="startDate">
-                                                </div>
-                                                <label for="date" class="col-form-label px-0">Selesai</label>
-                                                <div class="col-sm">
-                                                    <input type="date" class="form-control input-sm px-1" id="endDate" class="date-input" value={{$endDate}} name="endDate">
-                                                </div>
-                                                <div class="form-group-row px-1">
-                                                    <select name="company" id="company-dropdown" class="form-control form-select">
-                                                        @if ($selectedCompany)
-                                                        <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
-                                                        @endif
-                                                        <option value="">All Company</option>
-                                                        @foreach ($companyList as $company)
-                                                        <option value="{{$company->project_company_id}}">{{$company->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm px-1">
-                                                    <input type="text" class="form-control input-sm p-1" id="barcode" name="barcode" value="{{$barcode}}" placeholder="Barcode">
-                                                </div>
-                                                <div class="col-sm px-1">
-                                                    <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
-                                                    <a class="btn btn-sm btn-warning">Reset</a>
-                                                </div>
+                            <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
+                                <form action="" method="POST">
+                                    @csrf
+                                    <div class="container-fluid mb-0">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                            <label for="date" class="col-form-label px-0">Mulai</label>
+                                            <div class="col-sm">
+                                                <input type="date" class="form-control input-sm px-1" id="startDate" class="date-input" value={{$startDate}} name="startDate">
+                                            </div>
+                                            <label for="date" class="col-form-label px-0">Selesai</label>
+                                            <div class="col-sm">
+                                                <input type="date" class="form-control input-sm px-1" id="endDate" class="date-input" value={{$endDate}} name="endDate">
+                                            </div>
+                                            <div class="form-group-row px-1">
+                                                <select name="company" id="company-dropdown" class="form-control form-select">
+                                                    @if ($selectedCompany)
+                                                    <option selected value="{{$selectedCompany->project_company_id}}">{{$selectedCompany->name}}</option>
+                                                    @endif
+                                                    <option value="">All Company</option>
+                                                    @foreach ($companyList as $company)
+                                                    <option value="{{$company->project_company_id}}">{{$company->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-sm px-1">
+                                                <input type="text" class="form-control input-sm p-1" id="barcode" name="barcode" value="{{$barcode}}" placeholder="Barcode">
+                                            </div>
+                                            <div class="col-sm px-1">
+                                                <button type="submit" class="btn btn-sm btn-primary">Tampil</button>
+                                                <a class="btn btn-sm btn-warning">Reset</a>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
+                                <form action="{{ url('/export_report_cashflow') }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="company" value="{{ $selectedCompanyId }}">
+                                    <input type="hidden" name="start_date" value="{{ $startDate }}">
+                                    <input type="hidden" name="end_date" value="{{ $endDate }}">
+
+                                    <button type="submit" class="btn btn-sm btn-success" style="float: right;" @if($selectedCompanyId == null || !isset($startDate) || !isset($endDate)) disabled aria-disabled="true" @endif>
+                                        <i class="fas fa-print fa-sm"></i> Print Laporan
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body">
