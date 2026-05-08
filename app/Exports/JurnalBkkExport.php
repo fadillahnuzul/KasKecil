@@ -128,7 +128,6 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
                 $sheet->getStyle("F5:F{$lastRow}")
                     ->getNumberFormat()
                     ->setFormatCode('#,##0');
-
                 // ======================
                 // ALIGNMENT
                 // ======================
