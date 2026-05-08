@@ -83,10 +83,10 @@ class BKKController extends Controller
 
     public function exportReport(Request $request)
     {
-        $company = $request->company;
+        $company = Company::find($request->company);
         // $saldoAwal = (new HitungSaldoService)->hitung_saldo_all_user($company);
         $saldoAwal = 10000000;
-        $companyName = Company::find($company)->name;
+        $companyName = $company->name;
         $startDate = $request->start_date;
         $endDate = $request->end_date;
 
@@ -94,14 +94,14 @@ class BKKController extends Controller
         $bkk = BKK::query()
             ->selectRaw('bkk_header.created_at as tanggal, bkk_header.id as bkk_header_id, bkk_header.name as no_bukti, CONCAT(bkk_header.partner," ", pekerjaan) as keterangan, 1 as jenis, payment as nominal')
             ->join('bkk_header', 'bkk_header.id', '=', 'bkk.bkk_header_id')
-            ->join('project', 'project.project_id', '=', 'bkk_header.project_id')
-            ->join('project_company', 'project_company.project_company_id', '=', 'project.project_company_id')
+            ->join('__abdael_property.project', 'project.project_id', '=', 'bkk_header.project_id')
+            ->join('__abdael_property.project_company', 'project_company.project_company_id', '=', 'project.project_company_id')
             ->whereBetween('bkk_header.created_at', [$startDate, $endDate])
-            ->where('project_company.project_company_id', $company)
+            ->where('project_company.project_company_id', $company->project_company_id)
             ->where('bkk_header.partner', 'like', '%Pettycash%')->get();
 
         $bank = DB::table('bank')
-            ->where('company_id', $company)
+            ->where('company_id', $company->project_company_id)
             ->pluck('bank_id');
         $dataMutasi = collect();
         foreach ($bank as $rekening) {
@@ -123,6 +123,6 @@ class BKKController extends Controller
         $dataMutasi = $dataMutasi->flatten();
         $data = $bkk->concat($dataMutasi)->sortBy('tanggal');
 
-        return Excel::download(new JurnalBkkExport($data, $companyName, $startDate, $endDate, $saldoAwal), 'Mutasi Kas Kecil ' . Carbon::parse($startDate)->format('d-m-Y') . ' to ' . Carbon::parse($endDate)->format('d-m-Y') . '.xlsx');
+        return Excel::download(new JurnalBkkExport($data, $companyName, $startDate, $endDate, $saldoAwal), 'Mutasi Kas Kecil '. $company->initial . ' ' . Carbon::parse($startDate)->format('d-m-Y') . ' to ' . Carbon::parse($endDate)->format('d-m-Y') . '.xlsx');
     }
 }

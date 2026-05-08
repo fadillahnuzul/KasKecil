@@ -34,10 +34,10 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
         $rows->push([]);
 
         // HEADER TABLE (PERHATIKAN STRUKTUR KOLOM)
-        $rows->push(['Tanggal', 'Keterangan', 'Debet', '', 'Kredit', 'Saldo']);
+        $rows->push(['Tanggal', 'No Bukti', 'Keterangan', 'Debet', '', 'Kredit', 'Saldo']);
 
         // SALDO AWAL
-        $rows->push(['', 'Saldo Awal', '', '', '', $saldo]);
+        $rows->push(['', '', 'Saldo Awal', '', '', '', $saldo]);
 
         foreach ($this->dataJurnal as $item) {
 
@@ -53,6 +53,7 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
 
             $rows->push([
                 Carbon::parse($item->tanggal)->translatedFormat('d-M-y'),
+                $item->no_bukti,
                 $item->keterangan,
                 $debet,
                 '',
@@ -75,14 +76,9 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
                 // ======================
                 // MERGE HEADER ATAS
                 // ======================
-                $sheet->mergeCells('A1:F1');
-                $sheet->mergeCells('A2:F2');
-                $sheet->mergeCells('A3:F3');
-
-                // ======================
-                // MERGE KOLOM DEBET
-                // ======================
-                $sheet->mergeCells('C5:D5');
+                $sheet->mergeCells('A1:G1');
+                $sheet->mergeCells('A2:G2');
+                $sheet->mergeCells('A3:G3');
 
                 // ======================
                 // STYLE HEADER ATAS
@@ -92,24 +88,24 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
                 // ======================
                 // HEADER TABLE
                 // ======================
-                $sheet->getStyle('A4:F4')->getFont()->setBold(true);
-                $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A4:G4')->getFont()->setBold(true);
+                $sheet->getStyle('A4:G4')->getAlignment()->setHorizontal('center');
 
                 // BACKGROUND HEADER
-                $sheet->getStyle('A4:F4')->getFill()
+                $sheet->getStyle('A4:G4')->getFill()
                     ->setFillType('solid')
                     ->getStartColor()->setARGB('D9D9D9');
 
                 // ======================
                 // BORDER LUAR TEBAL
                 // ======================
-                $sheet->getStyle("A4:F{$lastRow}")
+                $sheet->getStyle("A4:G{$lastRow}")
                     ->getBorders()
                     ->getOutline()
                     ->setBorderStyle('medium');
 
                 // BORDER DALAM TIPIS
-                $sheet->getStyle("A4:F{$lastRow}")
+                $sheet->getStyle("A4:G{$lastRow}")
                     ->getBorders()
                     ->getVertical()
                     ->setBorderStyle('thin');
@@ -117,7 +113,7 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
                 // ======================
                 // FORMAT ANGKA
                 // ======================
-                $sheet->getStyle("C5:C{$lastRow}")
+                $sheet->getStyle("D5:D{$lastRow}")
                     ->getNumberFormat()
                     ->setFormatCode('#,##0');
 
@@ -128,17 +124,20 @@ class JurnalBkkExport implements FromCollection, ShouldAutoSize, WithEvents
                 $sheet->getStyle("F5:F{$lastRow}")
                     ->getNumberFormat()
                     ->setFormatCode('#,##0');
+                $sheet->getStyle("G5:G{$lastRow}")
+                    ->getNumberFormat()
+                    ->setFormatCode('#,##0');
                 // ======================
                 // ALIGNMENT
                 // ======================
-                $sheet->getStyle("C5:F{$lastRow}")
+                $sheet->getStyle("D5:F{$lastRow}")
                     ->getAlignment()
                     ->setHorizontal('right');
 
                 // ======================
                 // SALDO AWAL BOLD
                 // ======================
-                $sheet->getStyle('B5:F5')->getFont()->setBold(true);
+                $sheet->getStyle('B5:G5')->getFont()->setBold(true);
 
                 // ======================
                 // AUTO HEIGHT
