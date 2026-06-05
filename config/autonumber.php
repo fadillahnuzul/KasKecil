@@ -19,4 +19,6 @@ return [
      */
     'onUpdate' => false,
 
+    'table_name' => 'pettycash_auto_numbers',
+
 ];
